@@ -2,7 +2,7 @@
 
 ## Useful Commands
 
-`npm setup` - Install global and local dependencies  
+`npm run setup` - Install global and local dependencies  
 `npm start` - Start the Node.js server  
 `npm stop` - Stop the Node.js server  
 `pm2 list` - Check the status of the server process  

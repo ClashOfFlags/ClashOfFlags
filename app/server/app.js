@@ -1,25 +1,17 @@
 require('dotenv').config();
 
+const port = process.env.PORT || 80;
 const express = require('express');
 const app = express();
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
-const mongoose = require('mongoose');
+const socketio = require('./socketio');
+const mongoose = require('./mongoose');
 
 app.use(express.static('public'));
+socketio.init(server);
 
-server.listen(8000);
-
-io.on('connection', socket => {
-    socket.emit('hello world', { hello: 'Greetings!' });
+console.log('Waiting for MongoDB connection...');
+mongoose.then(() => {
+    server.listen(port);
+    console.log('Server listening on port', port);
 });
-
-mongoose.connect('mongodb://localhost/clash-of-flags');
-
-const db = mongoose.connection;
-
-db.on('error', err => console.error(err));
-
-db.once('open', () => {
-    console.log('Connected to MongoDB!');
-})
