@@ -13,5 +13,5 @@ socketio.init(server);
 console.log('Waiting for MongoDB connection...');
 mongoose.then(() => {
     server.listen(port);
-    console.log('Server listening on port', port);
+    console.log(`Server listening on port ${ port }!`);
 });
