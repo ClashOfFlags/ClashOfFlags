@@ -5,7 +5,8 @@
   "main": "app/server/app.js",
   "scripts": {
     "setup": "sudo npm install -g pm2 && npm install",
-    "start": "pm2 start pm2.json"
+    "start": "pm2 start pm2.json",
+    "stop": "pm2 stop all"
   },
   "dependencies": {
     "express": "^4.13.4",
