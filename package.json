@@ -4,7 +4,12 @@
   "description": "Clash of Flags - The Game",
   "main": "app/server/app.js",
   "license": "MIT",
-  "author": [ "Simon Schneider", "Philipp Schemel", "Jochen Walther", "Marc Vornetran" ],
+  "author": [
+    "Simon Schneider",
+    "Philipp Schemel",
+    "Jochen Walther",
+    "Marc Vornetran"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ClashOfFlags/ClashOfFlags.git"
