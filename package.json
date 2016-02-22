@@ -9,6 +9,7 @@
     "stop": "pm2 stop all"
   },
   "dependencies": {
+    "dotenv": "^2.0.0",
     "express": "^4.13.4",
     "mongoose": "^4.4.4",
     "socket.io": "^1.4.5"
@@ -35,6 +36,6 @@
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"
   },
-  "author": "Simon Schneider",
-  "license": "commercial"
+  "author": [ "Simon Schneider", "Philipp Schemel", "Jochen Walther", "Marc Vornetran" ],
+  "license": "MIT"
 }
