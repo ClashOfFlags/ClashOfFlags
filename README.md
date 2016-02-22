@@ -5,6 +5,7 @@
 `npm run setup` - Install global and local dependencies  
 `npm start` - Start the Node.js server  
 `npm stop` - Stop the Node.js server  
+`pm2 logs` - Display server logs in realtime  
 `pm2 list` - Check the status of the server process  
 `pm2 monit`- Monitor server status  
 
