@@ -15,7 +15,7 @@
     "url": "https://github.com/ClashOfFlags/ClashOfFlags.git"
   },
   "scripts": {
-    "setup": "sudo npm install -g pm2 && npm install && cp .env.example .env",
+    "setup": "sudo npm install -g pm2 bower && npm install && bower install && cp .env.example .env",
     "start": "pm2 start pm2.json",
     "stop": "pm2 stop all"
   },
