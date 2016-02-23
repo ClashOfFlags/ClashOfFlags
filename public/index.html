@@ -15,15 +15,11 @@
         </style>
     </head>
     <body>
+        <test></test>
         <!-- include the main game file -->
-        <script src="distribution/javascript/app.js"></script>
+        <script src="/components/vue/dist/vue.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <script>
-            var socket = io.connect();
-
-            socket.on('hello world', function(data) {
-                console.log(data);
-            });
-        </script>
+        <script src="distribution/javascript/app.js"></script>
+        <script src="/distribution/javascript/app-vue.js"></script>
     </body>
 </html>
