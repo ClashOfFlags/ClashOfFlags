@@ -1,33 +1,17 @@
 <!doctype html>
-<html>
+<html lang="en">
     <head>
-        <meta charset="utf-8" />
+        <meta charset="utf-8"/>
         <title>Clash of Flags</title>
-
-        <script type="text/javascript" src="components/bottlejs/dist/bottle.js"></script>
-        <script type="text/javascript" src="components/phaser/build/phaser.js"></script>
-
-        <style>
-            * {
-                padding: 0px;
-                margin: 0px;
-            }
-        </style>
     </head>
     <body>
-        <test></test>
-        <!-- include the main game file -->
+        <app></app>
         <script src="/components/vue/dist/vue.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <script>
-            var socket = io.connect();
-
-            socket.on('hello world', function(data) {
-                console.log(data);
-            });
-
-        </script>
-        <script src="distribution/javascript/app.js"></script>
         <script src="/distribution/javascript/app-vue.js"></script>
+
+        <script src="/components/bottlejs/dist/bottle.js"></script>
+        <script src="/components/phaser/build/phaser.js"></script>
+        <script src="/distribution/javascript/app.js"></script>
     </body>
 </html>

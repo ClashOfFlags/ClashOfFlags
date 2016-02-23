@@ -50,16 +50,16 @@
 	
 	var _vue2 = _interopRequireDefault(_vue);
 	
-	var _testComponent = __webpack_require__(2);
+	var _App = __webpack_require__(2);
 	
-	var _testComponent2 = _interopRequireDefault(_testComponent);
+	var _App2 = _interopRequireDefault(_App);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	new _vue2.default({
 	    el: 'body',
 	    components: {
-	        test: _testComponent2.default
+	        App: _App2.default
 	    }
 	});
 
@@ -74,12 +74,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_script__ = __webpack_require__(3)
-	if (__vue_script__ &&
-	    __vue_script__.__esModule &&
-	    Object.keys(__vue_script__).length > 1) {
-	  console.warn("[vue-loader] app/client/testComponent.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(4)
+	__vue_template__ = __webpack_require__(6)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -89,7 +84,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/home/vagrant/GitHub/ClashOfFlags/app/client/testComponent.vue"
+	  var id = "/Users/Marc/GitHub/ClashOfFlags/app/client/components/App.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -98,24 +93,13 @@
 	})()}
 
 /***/ },
-/* 3 */
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */
 /***/ function(module, exports) {
 
-	'use strict';
-	
-	// <template>
-	//     <div>This is my design!</div>
-	// </template>
-	//
-	// <script lang="babel">
-	console.log('Hell fucking yes');
-	// </script>
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div>This is my design!</div>\n";
+	module.exports = "\n<div>Hello from the vue side!</div>\n";
 
 /***/ }
 /******/ ]);
