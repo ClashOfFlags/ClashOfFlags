@@ -99,7 +99,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div>Hello from the vue side!</div>\n";
+	module.exports = "\n<h1 class=\"display-4\">Clash of Flags</h1>\n";
 
 /***/ }
 /******/ ]);

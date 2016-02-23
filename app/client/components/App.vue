@@ -1,3 +1,3 @@
 <template>
-    <div>Hello from the vue side!</div>
+    <h1 class="display-4">Clash of Flags</h1>
 </template>
