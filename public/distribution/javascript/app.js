@@ -81,7 +81,7 @@ exports.default = PathService;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -98,6 +98,10 @@ var _TestCup = require('./../objects/TestCup');
 
 var _TestCup2 = _interopRequireDefault(_TestCup);
 
+var _Item = require('./../objects/Item');
+
+var _Item2 = _interopRequireDefault(_Item);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -107,88 +111,217 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var GameState = function (_State) {
-    _inherits(GameState, _State);
+  _inherits(GameState, _State);
 
-    function GameState(game, $container) {
-        _classCallCheck(this, GameState);
+  function GameState(game, $container) {
+    _classCallCheck(this, GameState);
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameState).call(this));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameState).call(this));
 
-        _this.player = {};
+    _this.player = {};
 
-        _this.inputs = $container.InputService;
-        _this.paths = $container.PathService;
-        _this.objects = $container.ObjectsService;
+    _this.inputs = $container.InputService;
+    _this.paths = $container.PathService;
+    _this.objects = $container.ObjectsService;
 
-        return _this;
+    return _this;
+  }
+
+  _createClass(GameState, [{
+    key: 'preload',
+    value: function preload() {
+
+      this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+      this.load.tilemap('map', 'assets/tilemaps/map.json', null, Phaser.Tilemap.TILED_JSON);
+      this.load.image('gameTiles', 'assets/images/dungeon_tileset_32.png');
+      this.game.load.image('player', this.paths.image('player.png'));
+      this.game.load.image('cup', this.paths.image('bluecup.png'));
+    }
+  }, {
+    key: 'create',
+    value: function create() {
+
+      /***************************
+      ****    create map    *****
+      ***************************/
+      this.createMap();
+
+      /***************************
+      ****    create player  *****
+      ***************************/
+      this.createPlayer();
+
+      /***************************
+      *****    controls    ******
+      ***************************/
+      this.createControls();
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+
+      this.game.physics.arcade.collide(this.player, this.blockedLayer);
+      this.game.physics.arcade.collide(this.objects.cups, this.blockedLayer, this.destroy, null, this);
+      this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
+      this.game.physics.arcade.overlap(this.objects.cups, this.items, this.destroy, null, this);
+      this.game.physics.arcade.overlap(this.player, this.waterAreas, this.handleWater, null, this);
+
+      this.player.body.velocity.x = 0;
+
+      this.game.input.enabled = true;
+
+      if (this.cursors.up.isDown || this.wasd.up.isDown) {
+        if (this.player.body.velocity.y == 0) this.player.body.velocity.y -= this.player.getSpeed();
+      } else if (this.cursors.down.isDown || this.wasd.down.isDown) {
+        if (this.player.body.velocity.y == 0) this.player.body.velocity.y += this.player.getSpeed();
+      } else {
+        this.player.body.velocity.y = 0;
+      }
+      if (this.cursors.left.isDown || this.wasd.left.isDown) {
+        this.player.body.velocity.x -= this.player.getSpeed();
+      } else if (this.cursors.right.isDown || this.wasd.right.isDown) {
+        this.player.body.velocity.x += this.player.getSpeed();
+      }
+    }
+  }, {
+    key: 'collect',
+    value: function collect(player, item) {
+      item.kill();
+    }
+  }, {
+    key: 'handleWater',
+    value: function handleWater(player, water) {
+      player.reset(100, 100);
+    }
+  }, {
+    key: 'destroy',
+    value: function destroy(cup, door) {
+      cup.kill();
+    }
+  }, {
+    key: 'createMap',
+    value: function createMap() {
+      this.map = this.game.add.tilemap('map');
+      //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
+      this.map.addTilesetImage('dungeon_tileset_32', 'gameTiles');
+
+      //create layer
+      this.backgroundlayer = this.map.createLayer('backgroundLayer');
+      this.blockedLayer = this.map.createLayer('blockedLayer');
+
+      //collision on blockedLayer
+      this.map.setCollisionBetween(1, 2000, true, 'blockedLayer');
+
+      /***************************
+      ******     items     ******
+      ***************************/
+      this.createItems();
+      this.createWaterAreas();
+    }
+  }, {
+    key: 'createPlayer',
+    value: function createPlayer() {
+      var _this2 = this;
+
+      var playerStartPos = this.findObjectsByType('playerStart', this.map, 'objectsLayer');
+      this.player = new _Hero2.default(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
+      this.player.scale.x = 2;
+      this.player.scale.y = 2;
+
+      /***************************
+      ******     cups     ******
+      ***************************/
+
+      this.objects.cups = this.game.add.group();
+
+      var cups = this.objects.cups;
+      cups.enableBody = true;
+      cups.physicsBodyType = Phaser.Physics.ARCADE;
+
+      cups.createMultiple(50, 'cup');
+      cups.setAll('checkWorldBounds', true);
+      cups.setAll('outOfBoundsKill', true);
+
+      this.game.input.onDown.add(function () {
+        var cup = cups.getFirstDead();
+
+        cup.reset(_this2.player.body.x, _this2.player.body.y);
+        _this2.game.physics.arcade.moveToPointer(cup, 300);
+      });
+    }
+  }, {
+    key: 'createItems',
+    value: function createItems() {
+      this.items = this.game.add.group();
+      this.items.enableBody = true;
+      var result = this.findObjectsByType('item', this.map, 'objectsLayer');
+      result.forEach(function (element) {
+        this.createFromTiledObject(element, this.items);
+      }, this);
+    }
+  }, {
+    key: 'createWaterAreas',
+    value: function createWaterAreas() {
+      this.waterAreas = this.game.add.group();
+      this.waterAreas.enableBody = true;
+      var result = this.findObjectsByType('water', this.map, 'objectsLayer');
+      result.forEach(function (element) {
+        this.createFromTiledObject(element, this.waterAreas);
+      }, this);
     }
 
-    _createClass(GameState, [{
-        key: 'preload',
-        value: function preload() {
+    //find objects in a Tiled layer that containt a property called "type" equal to a certain value
 
-            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-
-            this.game.load.image('player', this.paths.image('player.png'));
-            this.game.load.image('cup', this.paths.image('bluecup.png'));
+  }, {
+    key: 'findObjectsByType',
+    value: function findObjectsByType(type, map, layer) {
+      var result = [];
+      map.objects[layer].forEach(function (element) {
+        if (element.properties.type === type) {
+          result.push(element);
         }
-    }, {
-        key: 'create',
-        value: function create() {
-            var _this2 = this;
+      });
+      return result;
+    }
 
-            this.player = new _Hero2.default(this.game, 10, 10, 'player');
+    //create a sprite from an object
 
-            this.cursors = this.inputs.cursorKeys();
+  }, {
+    key: 'createFromTiledObject',
+    value: function createFromTiledObject(element, group) {
+      var sprite = group.create(element.x, element.y, element.properties.sprite);
 
-            this.game.input.onDown.add(function () {
-                var cup = cups.getFirstDead();
+      if (!element.properties.sprite) {
+        sprite.body.setSize(element.width, element.height);
+      }
 
-                cup.reset(_this2.player.body.x, _this2.player.body.y);
-                _this2.game.physics.arcade.moveToPointer(cup, 300);
-            });
+      //copy all properties to the sprite
+      Object.keys(element.properties).forEach(function (key) {
+        sprite[key] = element.properties[key];
+      });
+    }
+  }, {
+    key: 'createControls',
+    value: function createControls() {
+      this.cursors = this.inputs.cursorKeys();
+      this.wasd = {
+        up: this.game.input.keyboard.addKey(Phaser.Keyboard.W),
+        down: this.game.input.keyboard.addKey(Phaser.Keyboard.S),
+        left: this.game.input.keyboard.addKey(Phaser.Keyboard.A),
+        right: this.game.input.keyboard.addKey(Phaser.Keyboard.D)
+      };
 
-            this.objects.cups = this.game.add.group();
+      this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
+    }
+  }]);
 
-            var cups = this.objects.cups;
-            cups.enableBody = true;
-            cups.physicsBodyType = Phaser.Physics.ARCADE;
-
-            cups.createMultiple(50, 'cup');
-            cups.setAll('checkWorldBounds', true);
-            cups.setAll('outOfBoundsKill', true);
-
-            this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
-        }
-    }, {
-        key: 'update',
-        value: function update() {
-
-            this.player.body.velocity.x = 0;
-
-            this.game.input.enabled = true;
-
-            if (this.cursors.up.isDown) {
-                if (this.player.body.velocity.y == 0) this.player.body.velocity.y -= 50;
-            } else if (this.cursors.down.isDown) {
-                if (this.player.body.velocity.y == 0) this.player.body.velocity.y += 50;
-            } else {
-                this.player.body.velocity.y = 0;
-            }
-            if (this.cursors.left.isDown) {
-                this.player.body.velocity.x -= 50;
-            } else if (this.cursors.right.isDown) {
-                this.player.body.velocity.x += 50;
-            }
-        }
-    }]);
-
-    return GameState;
+  return GameState;
 }(_State3.default);
 
 exports.default = GameState;
 
-},{"./../objects/Hero":7,"./../objects/TestCup":9,"./State":5}],5:[function(require,module,exports){
+},{"./../objects/Hero":7,"./../objects/Item":8,"./../objects/TestCup":10,"./State":5}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -243,7 +376,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var game = game || {};
 
-game = new Phaser.Game(160, 160, Phaser.AUTO, '');
+game = new Phaser.Game(640, 640, Phaser.AUTO, '');
 
 var player,
     cursors,
@@ -302,6 +435,11 @@ var Hero = function (_Sprite) {
             this.enableArcadePhysics();
             this.body.collideWorldBounds = true;
         }
+    }, {
+        key: 'getSpeed',
+        value: function getSpeed() {
+            return 200;
+        }
     }]);
 
     return Hero;
@@ -309,7 +447,54 @@ var Hero = function (_Sprite) {
 
 exports.default = Hero;
 
-},{"./Sprite":8}],8:[function(require,module,exports){
+},{"./Sprite":9}],8:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Sprite2 = require('./Sprite');
+
+var _Sprite3 = _interopRequireDefault(_Sprite2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Item = function (_Sprite) {
+  _inherits(Item, _Sprite);
+
+  function Item() {
+    _classCallCheck(this, Item);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Item).apply(this, arguments));
+  }
+
+  _createClass(Item, [{
+    key: 'setProperty',
+    value: function setProperty(key, prop) {
+      // this.property[key] = prop;
+    }
+  }, {
+    key: 'getProperty',
+    value: function getProperty() {
+      return this.property[key];
+    }
+  }]);
+
+  return Item;
+}(_Sprite3.default);
+
+exports.default = Item;
+
+},{"./Sprite":9}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -360,7 +545,7 @@ var Sprite = function (_Phaser$Sprite) {
 
 exports.default = Sprite;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -381,7 +566,7 @@ var TestCup = function TestCup() {
 
 exports.default = TestCup;
 
-},{"./Sprite":8}]},{},[6])
+},{"./Sprite":9}]},{},[6])
 
 
 //# sourceMappingURL=app.js.map

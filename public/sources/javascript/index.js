@@ -5,7 +5,7 @@ import ObjectsService from './Services/ObjectsService';
 
 var game = game || {};
 
-game = new Phaser.Game(160, 160, Phaser.AUTO, '');
+game = new Phaser.Game(640, 640, Phaser.AUTO, '');
 
 var player, cursors, cups, keys = {};
 
@@ -21,4 +21,3 @@ bottle.service('GameState', GameState, 'game', '$container');
 
 game.state.add('Game', bottle.container.GameState);
 game.state.start('Game');
-
