@@ -1,6 +1,7 @@
 import State from './State';
-import Hero from './../objects/Hero';
-import TestCup from './../objects/TestCup';
+import Hero from './../objects/sprites/Hero';
+import TestCup from './../objects/sprites/TestCup';
+import Tilemap from './../objects/maps/Tilemap';
 
 export default class GameState extends State {
     constructor(game, $container) {
@@ -12,6 +13,7 @@ export default class GameState extends State {
         this.paths = $container.PathService;
         this.objects = $container.ObjectsService;
 
+
     }
 
     preload() {
@@ -20,11 +22,16 @@ export default class GameState extends State {
 
         this.game.load.image('player', this.paths.image('player.png'));
         this.game.load.image('cup', this.paths.image('bluecup.png'));
+
+
+        this.load.tilemap('level1', 'assets/tilemaps/level1.json', null, Phaser.Tilemap.TILED_JSON);
+        this.load.image('gameTiles', 'assets/images/tiles.png');
     }
 
     create() {
         this.player = new Hero(this.game, 10, 10, 'player');
 
+        this.map = new Tilemap(this.game, 32, 32);
 
         this.cursors = this.inputs.cursorKeys();
 

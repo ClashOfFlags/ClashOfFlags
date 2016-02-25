@@ -5,7 +5,7 @@ import ObjectsService from './Services/ObjectsService';
 
 var game = game || {};
 
-game = new Phaser.Game(160, 160, Phaser.AUTO, '');
+game = new Phaser.Game(600, 400, Phaser.AUTO, '');
 
 var player, cursors, cups, keys = {};
 

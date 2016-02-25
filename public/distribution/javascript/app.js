@@ -90,11 +90,11 @@ var _State2 = require('./State');
 
 var _State3 = _interopRequireDefault(_State2);
 
-var _Hero = require('./../objects/Hero');
+var _Hero = require('./../objects/sprites/Hero');
 
 var _Hero2 = _interopRequireDefault(_Hero);
 
-var _TestCup = require('./../objects/TestCup');
+var _TestCup = require('./../objects/sprites/TestCup');
 
 var _TestCup2 = _interopRequireDefault(_TestCup);
 
@@ -188,7 +188,7 @@ var GameState = function (_State) {
 
 exports.default = GameState;
 
-},{"./../objects/Hero":7,"./../objects/TestCup":9,"./State":5}],5:[function(require,module,exports){
+},{"./../objects/sprites/Hero":7,"./../objects/sprites/TestCup":9,"./State":5}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -200,8 +200,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var State = function () {
-    function State() {
+    function State(game, $container) {
         _classCallCheck(this, State);
+
+        this.game = game;
+        this.$container = $container;
     }
 
     _createClass(State, [{
@@ -243,7 +246,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var game = game || {};
 
-game = new Phaser.Game(160, 160, Phaser.AUTO, '');
+game = new Phaser.Game(600, 400, Phaser.AUTO, '');
 
 var player,
     cursors,
