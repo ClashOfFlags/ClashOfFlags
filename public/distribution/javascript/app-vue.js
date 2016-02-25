@@ -178,6 +178,11 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
+	__vue_script__ = __webpack_require__(25)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] app/client/components/views/Game.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(17)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -200,7 +205,7 @@
 /* 17 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div>Game</div>\n";
+	module.exports = "\n<div id=\"game\"></div>\n";
 
 /***/ },
 /* 18 */
@@ -355,6 +360,14 @@
 	
 	    return router;
 	}
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	window.startGame();
 
 /***/ }
 /******/ ]);

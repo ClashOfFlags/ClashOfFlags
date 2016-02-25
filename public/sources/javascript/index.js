@@ -3,21 +3,25 @@ import InputService from './Services/InputService';
 import PathService from './Services/PathService';
 import ObjectsService from './Services/ObjectsService';
 
-var game = game || {};
+window.startGame = startGame;
 
-game = new Phaser.Game(640, 640, Phaser.AUTO, '');
+function startGame() {
+    var game = game || {};
 
-var player, cursors, cups, keys = {};
+    game = new Phaser.Game(640, 640, Phaser.AUTO, 'game');
 
-var bottle = new Bottle();
+    var player, cursors, cups, keys = {};
 
-bottle.service('$container', () => bottle.container);
-bottle.service('game', () => game);
-bottle.service('InputService', InputService, 'game');
-bottle.service('PathService', PathService);
-bottle.service('ObjectsService', ObjectsService, 'game');
-bottle.service('GameState', GameState, 'game', '$container');
+    var bottle = new Bottle();
+
+    bottle.service('$container', () => bottle.container);
+    bottle.service('game', () => game);
+    bottle.service('InputService', InputService, 'game');
+    bottle.service('PathService', PathService);
+    bottle.service('ObjectsService', ObjectsService, 'game');
+    bottle.service('GameState', GameState, 'game', '$container');
 
 
-game.state.add('Game', bottle.container.GameState);
-game.state.start('Game');
+    game.state.add('Game', bottle.container.GameState);
+    game.state.start('Game');
+}
