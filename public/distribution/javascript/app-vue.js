@@ -157,7 +157,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<nav class=\"navbar navbar-full navbar-light bg-faded\">\n    <a class=\"navbar-brand\" v-link=\"{ path: '/' }\">Clash of Flags</a>\n    <div class=\"nav navbar-nav\">\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/' }\">Play</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/login' }\">Login</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/register' }\">Register</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/about' }\">About</a>\n    </div>\n</nav>\n";
+	module.exports = "\n<nav class=\"navbar navbar-full navbar-light bg-faded\">\n    <a class=\"navbar-brand\" v-link=\"{ path: '/', exact: true }\">Clash of Flags</a>\n    <div class=\"nav navbar-nav\">\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/', exact: true }\">Play</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/login' }\">Login</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/register' }\">Register</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/about' }\">About</a>\n    </div>\n</nav>\n";
 
 /***/ },
 /* 7 */
@@ -183,7 +183,6 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app/client/components/views/Game.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(17)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -202,12 +201,7 @@
 	})()}
 
 /***/ },
-/* 17 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<div id=\"game\"></div>\n";
-
-/***/ },
+/* 17 */,
 /* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -365,9 +359,23 @@
 /* 25 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 	
-	window.startGame();
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = {
+	    route: {
+	        activate: function activate() {
+	            setTimeout(function () {
+	                $('#game').show();
+	            }, 1);
+	        },
+	        deactivate: function deactivate() {
+	            $('#game').hide();
+	        }
+	    }
+	};
 
 /***/ }
 /******/ ]);

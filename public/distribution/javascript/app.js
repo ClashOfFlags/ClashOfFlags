@@ -456,7 +456,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var game = game || {};
 
-game = new Phaser.Game(640, 640, Phaser.AUTO, '');
+game = new Phaser.Game(640, 640, Phaser.AUTO, 'game');
 
 var player,
     cursors,
