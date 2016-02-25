@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="64" tileheight="64" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="64" tileheight="64" nextobjectid="18">
  <tileset firstgid="1" name="dungeon_tileset_64" tilewidth="64" tileheight="64" tilecount="88" columns="8">
   <image source="../images/dungeon_tileset_64.png" width="512" height="704"/>
  </tileset>
@@ -425,5 +425,16 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="Object" offsetx="-22.7879" offsety="144.788"/>
+ <objectgroup name="Object" offsetx="-22.7879" offsety="144.788">
+  <object id="1" name="spawn_blue_1" x="2464.79" y="5873.21" width="132" height="128"/>
+  <object id="2" name="spawn_blue_2" x="2778.79" y="5299.21" width="130" height="126"/>
+  <object id="3" name="spawn_blue_3" x="3154.79" y="5431.21" width="144" height="128"/>
+  <object id="4" name="spawn_blue_4" x="3486.79" y="5295.21" width="154" height="142"/>
+  <object id="8" name="spawn_blue_5" x="3672.79" y="5875.21" width="162" height="144"/>
+  <object id="9" name="spawn_red_1" x="2528.79" y="115.212" width="140" height="134"/>
+  <object id="11" name="spawn_red_2" x="2838.79" y="689.212" width="138" height="126"/>
+  <object id="12" name="spawn_red_3" x="3152.79" y="561.212" width="146" height="126"/>
+  <object id="13" name="spawn_red_4" x="3490.79" y="693.212" width="134" height="130"/>
+  <object id="14" name="spawn_red_5" x="3728.79" y="117.212" width="140" height="134"/>
+ </objectgroup>
 </map>
