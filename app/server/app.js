@@ -11,7 +11,7 @@ app.use(express.static('public'));
 socketIo.init(server);
 
 console.log('Waiting for MongoDB connection...');
-mongoose.then(() => {
+// mongoose.then(() => {
     server.listen(port);
     console.log(`Server listening on port ${ port }!`);
-});
+// });
