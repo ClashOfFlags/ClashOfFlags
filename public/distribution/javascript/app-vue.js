@@ -74,7 +74,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_template__ = __webpack_require__(6)
+	__vue_script__ = __webpack_require__(4)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] app/client/components/App.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(3)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -93,13 +98,59 @@
 	})()}
 
 /***/ },
-/* 3 */,
-/* 4 */,
-/* 5 */,
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<navbar></navbar>\n";
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _Navbar = __webpack_require__(5);
+	
+	var _Navbar2 = _interopRequireDefault(_Navbar);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    components: { Navbar: _Navbar2.default }
+	};
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_template__ = __webpack_require__(6)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/Users/Marc/GitHub/ClashOfFlags/app/client/components/Navbar.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<h1 class=\"display-4\">Clash of Flags</h1>\n";
+	module.exports = "\n<nav class=\"navbar navbar-full navbar-light bg-faded\">\n    <a class=\"navbar-brand\" href=\"/\">Clash of Flags</a>\n    <div class=\"nav navbar-nav\">\n        <a class=\"nav-item nav-link active\" href=\"/\">Play</a>\n        <a class=\"nav-item nav-link\" href=\"/login\">Login</a>\n        <a class=\"nav-item nav-link\" href=\"/register\">Register</a>\n        <a class=\"nav-item nav-link\" href=\"/about\">About</a>\n    </div>\n</nav>\n";
 
 /***/ }
 /******/ ]);

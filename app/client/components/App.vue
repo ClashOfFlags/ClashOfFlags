@@ -1,3 +1,11 @@
 <template>
-    <h1 class="display-4">Clash of Flags</h1>
+    <navbar></navbar>
 </template>
+
+<script>
+    import Navbar from './Navbar.vue';
+
+    export default {
+        components: { Navbar }
+    };
+</script>
