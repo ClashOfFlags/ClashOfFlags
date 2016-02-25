@@ -1,7 +1,15 @@
 <template>
     <navbar></navbar>
-    <router-view></router-view>
+    <div class="container">
+        <router-view></router-view>
+    </div>
 </template>
+
+<style>
+    .container {
+        margin-top: 20px;
+    }
+</style>
 
 <script>
     import Navbar from './Navbar.vue';
