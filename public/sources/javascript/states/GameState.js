@@ -113,6 +113,8 @@ export default class GameState extends State {
         this.player.scale.x = 2;
         this.player.scale.y = 2;
 
+        this.game.camera.follow(this.player);
+
         /***************************
          ******     cups     ******
          ***************************/
