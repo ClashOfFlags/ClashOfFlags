@@ -199,9 +199,12 @@ var GameState = function (_State) {
             this.load.image('gameTiles', 'assets/images/dungeon_tileset_32.png');
             this.game.load.image('player', this.paths.image('player.png'));
             this.game.load.image('cup', this.paths.image('bluecup.png'));
+            this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
+            this.game.load.atlasJSONHash('explosion', 'assets/images/onfireanimation.png', 'assets/images/onfireanimation.json');
             this.game.load.spritesheet('fire', 'assets/images/fire.png', 32, 32);
             this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
             this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
+            this.game.load.spritesheet('switch', 'assets/images/switch.png', 32, 40);
         }
     }, {
         key: 'create',
@@ -230,7 +233,6 @@ var GameState = function (_State) {
             this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
             this.game.physics.arcade.overlap(this.player, this.fire, this.fireOn, null, this);
             this.game.physics.arcade.overlap(this.player, this.waterAreas, this.handleWater, null, this);
-            this.game.physics.arcade.overlap(this.objects.cups, this.items, this.destroy, null, this);
 
             this.player.body.velocity.x = 0;
 
@@ -256,7 +258,20 @@ var GameState = function (_State) {
         }
     }, {
         key: 'destroy',
-        value: function destroy(cup, door) {
+        value: function destroy(cup, obstacle) {
+
+            this.explosion = this.game.add.sprite(cup.x, cup.y, 'explosion');
+            this.explosion.animations.add('fire', Phaser.Animation.generateFrameNames('onfire_000', 1, 9), 800, false);
+            this.explosion.scale.x = 0.7;
+            this.explosion.scale.y = 0.7;
+            this.explosion.x = this.explosion.x - this.explosion.width / 2;
+            this.explosion.y = this.explosion.y - this.explosion.height / 2;
+            this.explosion.animations.play('fire');
+
+            this.explosion.animations.currentAnim.onComplete.add(function () {
+                this.explosion.kill();
+            }, this);
+
             cup.kill();
         }
     }, {
@@ -308,15 +323,24 @@ var GameState = function (_State) {
             cups.enableBody = true;
             cups.physicsBodyType = Phaser.Physics.ARCADE;
 
-            cups.createMultiple(50, 'cup');
+            cups.createMultiple(50, 'bullet');
             cups.setAll('checkWorldBounds', true);
             cups.setAll('outOfBoundsKill', true);
 
             this.game.input.onDown.add(function () {
                 var cup = cups.getFirstDead();
 
-                cup.reset(_this2.player.body.x, _this2.player.body.y);
+                cup.reset(_this2.player.body.x - cup.width / 2, _this2.player.body.y - cup.height / 2);
                 _this2.game.physics.arcade.moveToPointer(cup, 300);
+
+                var targetAngle = _this2.game.math.angleBetween(cup.x + cup.width / 2, cup.y + cup.height / 2, _this2.game.input.activePointer.x, _this2.game.input.activePointer.y);
+
+                cup.rotation = targetAngle;
+                cup.pivot.x = cup.width * 0.5;
+                cup.pivot.y = cup.height * 0.5;
+
+                cup.x = cup.x + cup.width / 2 + _this2.player.width / 2;
+                cup.y = cup.y + cup.height / 2 + _this2.player.height / 2;
             });
         }
     }, {

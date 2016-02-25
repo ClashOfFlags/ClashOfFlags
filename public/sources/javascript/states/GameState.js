@@ -22,6 +22,8 @@ export default class GameState extends State {
         this.load.image('gameTiles', 'assets/images/dungeon_tileset_32.png');
         this.game.load.image('player', this.paths.image('player.png'));
         this.game.load.image('cup', this.paths.image('bluecup.png'));
+        this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
+        this.game.load.atlasJSONHash('explosion', 'assets/images/onfireanimation.png', 'assets/images/onfireanimation.json');
         this.game.load.spritesheet('fire', 'assets/images/fire.png', 32, 32);
         this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
         this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
@@ -51,7 +53,6 @@ export default class GameState extends State {
         this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
         this.game.physics.arcade.overlap(this.player, this.fire, this.fireOn, null, this);
         this.game.physics.arcade.overlap(this.player, this.waterAreas, this.handleWater, null, this);
-        this.game.physics.arcade.overlap(this.objects.cups, this.items, this.destroy, null, this);
 
         this.player.body.velocity.x = 0;
 
@@ -74,7 +75,20 @@ export default class GameState extends State {
       fire.animations.play('on');
     }
 
-    destroy(cup, door) {
+    destroy(cup, obstacle) {
+
+        this.explosion = this.game.add.sprite(cup.x, cup.y, 'explosion');
+        this.explosion.animations.add('fire', Phaser.Animation.generateFrameNames('onfire_000', 1, 9), 500, true);
+        this.explosion.scale.x = 0.7;
+        this.explosion.scale.y = 0.7;
+        this.explosion.x = this.explosion.x - this.explosion.width / 2;
+        this.explosion.y = this.explosion.y - this.explosion.height / 2;
+        this.explosion.animations.play('fire');
+
+        this.explosion.animations.currentAnim.onComplete.add(function () {
+          this.explosion.kill();
+        }, this);
+
         cup.kill();
     }
 
@@ -123,15 +137,24 @@ export default class GameState extends State {
         cups.enableBody = true;
         cups.physicsBodyType = Phaser.Physics.ARCADE;
 
-        cups.createMultiple(50, 'cup');
+        cups.createMultiple(50, 'bullet');
         cups.setAll('checkWorldBounds', true);
         cups.setAll('outOfBoundsKill', true);
 
         this.game.input.onDown.add(() => {
             var cup = cups.getFirstDead();
 
-            cup.reset(this.player.body.x, this.player.body.y);
+            cup.reset(this.player.body.x - cup.width / 2, this.player.body.y - cup.height / 2);
             this.game.physics.arcade.moveToPointer(cup, 300);
+
+            var targetAngle = this.game.math.angleBetween(cup.x + cup.width/2, cup.y + cup.height/2, this.game.input.activePointer.x, this.game.input.activePointer.y);
+
+            cup.rotation = targetAngle;
+            cup.pivot.x = cup.width * 0.5;
+            cup.pivot.y = cup.height * 0.5;
+
+            cup.x = cup.x  + cup.width / 2 + this.player.width / 2;
+            cup.y = cup.y  + cup.height / 2 + this.player.height / 2;
       });
     }
 
