@@ -1,24 +1,28 @@
 export default class ObjectsService {
-    constructor(game){
-        this.objects = {};
+    constructor(game) {
+        this.collection = {};
     }
 
-    set(name, value){
-        this.objects[name] = value;
+    set(name, value) {
+        this.collection[name] = value;
     }
 
     byType(type, layer) {
         var result = [];
-        this.map().objects[layer].forEach(function(element){
-            if(element.properties.type === type) {
+        this.map().objects[layer].forEach(function (element) {
+            if (element.properties.type === type) {
                 result.push(element);
             }
         });
         return result;
     }
 
-    map(){
-        return this.objects.map;
+    get(name){
+        return this.collection[name];
+    }
+
+    map() {
+        return this.get('map');
     }
 
 }

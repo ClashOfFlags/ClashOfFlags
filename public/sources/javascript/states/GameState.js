@@ -56,24 +56,7 @@ export default class GameState extends State {
 
         this.game.input.enabled = true;
 
-        if (this.cursors.up.isDown || this.wasd.up.isDown) {
-            if (this.player.body.velocity.y == 0)
-                this.player.body.velocity.y -= this.player.getSpeed();
-        }
-        else if (this.cursors.down.isDown || this.wasd.down.isDown) {
-            if (this.player.body.velocity.y == 0)
-                this.player.body.velocity.y += this.player.getSpeed();
-        }
-        else {
-            this.player.body.velocity.y = 0;
-        }
-        if (this.cursors.left.isDown || this.wasd.left.isDown) {
-            this.player.body.velocity.x -= this.player.getSpeed();
-        }
-        else if (this.cursors.right.isDown || this.wasd.right.isDown) {
-            this.player.body.velocity.x += this.player.getSpeed();
-        }
-
+        this.inputs.applyToPlayer(this.player);
 
     }
 
@@ -90,8 +73,9 @@ export default class GameState extends State {
     }
 
     createMap() {
-        this.objects.map = this.game.add.tilemap('map');
-        this.map = this.objects.map;
+        this.objects.set('map', this.game.add.tilemap('map'));
+        this.map = this.objects.get('map');
+
         //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
         this.map.addTilesetImage('dungeon_tileset_32', 'gameTiles');
 
@@ -157,9 +141,6 @@ export default class GameState extends State {
         }, this);
     }
 
-    //find objects in a Tiled layer that containt a property called "type" equal to a certain value
-
-
     //create a sprite from an object
     createFromTiledObject(element, group) {
         var sprite = group.create(element.x, element.y, element.properties.sprite);
@@ -176,12 +157,7 @@ export default class GameState extends State {
 
     createControls() {
         this.cursors = this.inputs.cursorKeys();
-        this.wasd = {
-            up: this.game.input.keyboard.addKey(Phaser.Keyboard.W),
-            down: this.game.input.keyboard.addKey(Phaser.Keyboard.S),
-            left: this.game.input.keyboard.addKey(Phaser.Keyboard.A),
-            right: this.game.input.keyboard.addKey(Phaser.Keyboard.D),
-        };
+        this.wasd = this.inputs.wasd();
 
         this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
     }
