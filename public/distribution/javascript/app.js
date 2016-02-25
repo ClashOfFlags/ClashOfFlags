@@ -206,20 +206,8 @@ var GameState = function (_State) {
     }, {
         key: 'create',
         value: function create() {
-
-            /***************************
-             ****    create map    *****
-             ***************************/
             this.createMap();
-
-            /***************************
-             ****    create player  *****
-             ***************************/
             this.createPlayer();
-
-            /***************************
-             *****    controls    ******
-             ***************************/
             this.createControls();
         }
     }, {
