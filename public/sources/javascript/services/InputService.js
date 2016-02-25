@@ -11,6 +11,7 @@ export default class InputService {
             this.inputs.cursorKeys =  this.game.input.keyboard.createCursorKeys();
         }
 
+
         return this.inputs.cursorKeys;
     }
 }

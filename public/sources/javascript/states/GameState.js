@@ -1,7 +1,7 @@
 import State from './State';
-import Hero from './../objects/Hero';
-import TestCup from './../objects/TestCup';
-import Item from './../objects/Item';
+import Hero from './../objects/sprites/Hero';
+import TestCup from './../objects/sprites/TestCup';
+import Item from './../objects/sprites/Item';
 
 export default class GameState extends State {
     constructor(game, $container) {
