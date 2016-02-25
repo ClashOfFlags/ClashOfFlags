@@ -28,20 +28,8 @@ export default class GameState extends State {
     }
 
     create() {
-
-        /***************************
-         ****    create map    *****
-         ***************************/
         this.createMap();
-
-        /***************************
-         ****    create player  *****
-         ***************************/
         this.createPlayer();
-
-        /***************************
-         *****    controls    ******
-         ***************************/
         this.createControls();
     }
 
