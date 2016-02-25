@@ -1,23 +1,34 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-<head>
-    <meta charset="utf-8" />
-    <title>Learn Game Development at ZENVA.com</title>
+        <title>Clash of Flags</title>
 
-    <script type="text/javascript" src="components/bottlejs/dist/bottle.js"></script>
-    <script type="text/javascript" src="components/phaser/build/phaser.js"></script>
+        <!-- CSS Stylesheets -->
+        <link rel="stylesheet" href="/components/bootstrap/dist/css/bootstrap.min.css">
+        <!-- CSS Stylesheets -->
+    </head>
+    <body>
+        <!-- Vue.js App -->
+        <app></app>
+        <!-- Vue.js App -->
 
-    <style>
-        * {
-            padding: 0px;
-            margin: 0px;
-        }
-    </style>
-</head>
+        <!-- Client Scripts -->
+        <script src="/components/jquery/dist/jquery.min.js"></script>
+        <script src="/components/tether/dist/js/tether.min.js"></script>
+        <script src="/components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="/components/vue/dist/vue.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/distribution/javascript/app-vue.js"></script>
+        <!-- Client Scripts -->
 
-<body>
-<!-- include the main game file -->
-<script src="distribution/javascript/app.js"></script>
-</body>
+        <!-- Game Scripts -->
+        <script src="/components/bottlejs/dist/bottle.js"></script>
+        <script src="/components/phaser/build/phaser.js"></script>
+        <script src="/distribution/javascript/app.js"></script>
+        <!-- Game Scripts -->
+    </body>
 </html>
