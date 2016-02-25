@@ -30,20 +30,8 @@ export default class GameState extends State {
     }
 
     create() {
-
-        /***************************
-         ****    create map    *****
-         ***************************/
         this.createMap();
-
-        /***************************
-         ****    create player  *****
-         ***************************/
         this.createPlayer();
-
-        /***************************
-         *****    controls    ******
-         ***************************/
         this.createControls();
     }
 
@@ -77,16 +65,18 @@ export default class GameState extends State {
 
     destroy(cup, obstacle) {
 
-        this.explosion = this.game.add.sprite(cup.x, cup.y, 'explosion');
-        this.explosion.animations.add('fire', Phaser.Animation.generateFrameNames('onfire_000', 1, 9), 500, true);
-        this.explosion.scale.x = 0.7;
-        this.explosion.scale.y = 0.7;
-        this.explosion.x = this.explosion.x - this.explosion.width / 2;
-        this.explosion.y = this.explosion.y - this.explosion.height / 2;
-        this.explosion.animations.play('fire');
+        var singleExplosion = this.explosions.getFirstDead();
+        singleExplosion = this.explosions.create(cup.x, cup.y, 'explosion');
+        singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('onfire_000', 1, 9), 100, false);
+        singleExplosion.scale.x = 0.7;
+        singleExplosion.scale.y = 0.7;
+        singleExplosion.x = singleExplosion.x - singleExplosion.width / 2;
+        singleExplosion.y = singleExplosion.y - singleExplosion.height / 2;
+        singleExplosion.animations.play('fire');
+        singleExplosion.animations.play('fire');
 
-        this.explosion.animations.currentAnim.onComplete.add(function () {
-          this.explosion.kill();
+        singleExplosion.events.onAnimationComplete.add(function () {
+          singleExplosion.kill();
         }, this);
 
         cup.kill();
@@ -113,6 +103,9 @@ export default class GameState extends State {
       this.createItems();
       this.createWaterAreas();
 
+      this.explosions = this.game.add.group();
+      this.explosions.createMultiple(50, 'explsoion');
+
       this.fire = this.game.add.group();
       this.fire.enableBody = true;
       var singleFire = this.fire.create(200, 150, 'fire');
@@ -126,6 +119,8 @@ export default class GameState extends State {
         this.player = new Hero(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
         this.player.scale.x = 2;
         this.player.scale.y = 2;
+
+        this.game.camera.follow(this.player);
 
         /***************************
          ******     cups     ******

@@ -204,25 +204,12 @@ var GameState = function (_State) {
             this.game.load.spritesheet('fire', 'assets/images/fire.png', 32, 32);
             this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
             this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
-            this.game.load.spritesheet('switch', 'assets/images/switch.png', 32, 40);
         }
     }, {
         key: 'create',
         value: function create() {
-
-            /***************************
-             ****    create map    *****
-             ***************************/
             this.createMap();
-
-            /***************************
-             ****    create player  *****
-             ***************************/
             this.createPlayer();
-
-            /***************************
-             *****    controls    ******
-             ***************************/
             this.createControls();
         }
     }, {
@@ -260,16 +247,18 @@ var GameState = function (_State) {
         key: 'destroy',
         value: function destroy(cup, obstacle) {
 
-            this.explosion = this.game.add.sprite(cup.x, cup.y, 'explosion');
-            this.explosion.animations.add('fire', Phaser.Animation.generateFrameNames('onfire_000', 1, 9), 800, false);
-            this.explosion.scale.x = 0.7;
-            this.explosion.scale.y = 0.7;
-            this.explosion.x = this.explosion.x - this.explosion.width / 2;
-            this.explosion.y = this.explosion.y - this.explosion.height / 2;
-            this.explosion.animations.play('fire');
+            var singleExplosion = this.explosions.getFirstDead();
+            singleExplosion = this.explosions.create(cup.x, cup.y, 'explosion');
+            singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('onfire_000', 1, 9), 100, false);
+            singleExplosion.scale.x = 0.7;
+            singleExplosion.scale.y = 0.7;
+            singleExplosion.x = singleExplosion.x - singleExplosion.width / 2;
+            singleExplosion.y = singleExplosion.y - singleExplosion.height / 2;
+            singleExplosion.animations.play('fire');
+            singleExplosion.animations.play('fire');
 
-            this.explosion.animations.currentAnim.onComplete.add(function () {
-                this.explosion.kill();
+            singleExplosion.events.onAnimationComplete.add(function () {
+                singleExplosion.kill();
             }, this);
 
             cup.kill();
@@ -296,6 +285,9 @@ var GameState = function (_State) {
             this.createItems();
             this.createWaterAreas();
 
+            this.explosions = this.game.add.group();
+            this.explosions.createMultiple(50, 'explsoion');
+
             this.fire = this.game.add.group();
             this.fire.enableBody = true;
             var singleFire = this.fire.create(200, 150, 'fire');
@@ -312,6 +304,8 @@ var GameState = function (_State) {
             this.player = new _Hero2.default(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
             this.player.scale.x = 2;
             this.player.scale.y = 2;
+
+            this.game.camera.follow(this.player);
 
             /***************************
              ******     cups     ******
@@ -480,7 +474,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var game = game || {};
 
-game = new Phaser.Game(640, 640, Phaser.AUTO, '');
+game = new Phaser.Game(640, 640, Phaser.AUTO, 'game');
 
 var player,
     cursors,

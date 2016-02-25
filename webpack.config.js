@@ -5,7 +5,8 @@ module.exports = {
         filename: 'app-vue.js'
     },
     externals: {
-        vue: 'Vue'
+        vue: 'Vue',
+        'vue-router': 'VueRouter'
     },
     module: {
         loaders: [
