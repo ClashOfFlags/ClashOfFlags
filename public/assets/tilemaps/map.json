@@ -1,7 +1,7 @@
 { "height":20,
  "layers":[
         {
-         "data":[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 9, 9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 17, 17, 17, 17, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 17, 17, 17, 17, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+         "data":[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
          "height":20,
          "name":"backgroundLayer",
          "opacity":1,
@@ -94,25 +94,6 @@
                  "y":200.541
                 }, 
                 {
-                 "height":91.5578,
-                 "id":6,
-                 "name":"",
-                 "properties":
-                    {
-                     "type":"water"
-                    },
-                 "propertytypes":
-                    {
-                     "type":"string"
-                    },
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":127.912,
-                 "x":258.516,
-                 "y":418.742
-                }, 
-                {
                  "gid":3307,
                  "height":16,
                  "id":8,
@@ -151,8 +132,8 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":548.903572891272,
-                 "y":361.242537055095
+                 "x":548.904,
+                 "y":361.243
                 }, 
                 {
                  "gid":2875,
@@ -173,8 +154,272 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":94.2473076548025,
-                 "y":575.772034861043
+                 "x":94.2473,
+                 "y":575.772
+                }, 
+                {
+                 "gid":17,
+                 "height":32,
+                 "id":18,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"water",
+                     "type":"water"
+                    },
+                 "propertytypes":
+                    {
+                     "sprite":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"water",
+                 "visible":true,
+                 "width":32,
+                 "x":256,
+                 "y":480
+                }, 
+                {
+                 "gid":17,
+                 "height":32,
+                 "id":19,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"water",
+                     "type":"water"
+                    },
+                 "propertytypes":
+                    {
+                     "sprite":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"water",
+                 "visible":true,
+                 "width":32,
+                 "x":288,
+                 "y":480
+                }, 
+                {
+                 "gid":17,
+                 "height":32,
+                 "id":20,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"water",
+                     "type":"water"
+                    },
+                 "propertytypes":
+                    {
+                     "sprite":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"water",
+                 "visible":true,
+                 "width":32,
+                 "x":320,
+                 "y":480
+                }, 
+                {
+                 "gid":17,
+                 "height":32,
+                 "id":21,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"water",
+                     "type":"water"
+                    },
+                 "propertytypes":
+                    {
+                     "sprite":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"water",
+                 "visible":true,
+                 "width":32,
+                 "x":352,
+                 "y":480
+                }, 
+                {
+                 "gid":17,
+                 "height":32,
+                 "id":22,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"water",
+                     "type":"water"
+                    },
+                 "propertytypes":
+                    {
+                     "sprite":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"water",
+                 "visible":true,
+                 "width":32,
+                 "x":256,
+                 "y":512
+                }, 
+                {
+                 "gid":17,
+                 "height":32,
+                 "id":23,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"water",
+                     "type":"water"
+                    },
+                 "propertytypes":
+                    {
+                     "sprite":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"water",
+                 "visible":true,
+                 "width":32,
+                 "x":288,
+                 "y":512
+                }, 
+                {
+                 "gid":17,
+                 "height":32,
+                 "id":24,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"water",
+                     "type":"water"
+                    },
+                 "propertytypes":
+                    {
+                     "sprite":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"water",
+                 "visible":true,
+                 "width":32,
+                 "x":320,
+                 "y":512
+                }, 
+                {
+                 "gid":17,
+                 "height":32,
+                 "id":25,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"water",
+                     "type":"water"
+                    },
+                 "propertytypes":
+                    {
+                     "sprite":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"water",
+                 "visible":true,
+                 "width":32,
+                 "x":352,
+                 "y":512
+                }, 
+                {
+                 "gid":9,
+                 "height":32,
+                 "id":26,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"waterStone",
+                     "type":"water"
+                    },
+                 "propertytypes":
+                    {
+                     "sprite":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"waterStone",
+                 "visible":true,
+                 "width":32,
+                 "x":256,
+                 "y":448
+                }, 
+                {
+                 "gid":9,
+                 "height":32,
+                 "id":27,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"waterStone",
+                     "type":"water"
+                    },
+                 "propertytypes":
+                    {
+                     "sprite":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"waterStone",
+                 "visible":true,
+                 "width":32,
+                 "x":288,
+                 "y":448
+                }, 
+                {
+                 "gid":9,
+                 "height":32,
+                 "id":28,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"waterStone",
+                     "type":"water"
+                    },
+                 "propertytypes":
+                    {
+                     "sprite":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"waterStone",
+                 "visible":true,
+                 "width":32,
+                 "x":320,
+                 "y":448
+                }, 
+                {
+                 "gid":9,
+                 "height":32,
+                 "id":29,
+                 "name":"",
+                 "properties":
+                    {
+                     "sprite":"waterStone",
+                     "type":"water"
+                    },
+                 "propertytypes":
+                    {
+                     "sprite":"string",
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"waterStone",
+                 "visible":true,
+                 "width":32,
+                 "x":352,
+                 "y":448
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -183,7 +428,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":11,
+ "nextobjectid":30,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":32,
@@ -204,11 +449,11 @@
         {
          "columns":44,
          "firstgid":89,
-         "image":"..\/images\/tiles_old.png",
+         "image":"..\/images\/tiles.png",
          "imageheight":1280,
          "imagewidth":705,
          "margin":0,
-         "name":"tiles_old",
+         "name":"tiles",
          "spacing":0,
          "tilecount":3520,
          "tileheight":16,

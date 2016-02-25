@@ -27,6 +27,36 @@ var InputService = function () {
 
             return this.inputs.cursorKeys;
         }
+    }, {
+        key: "wasd",
+        value: function wasd() {
+            if (!this.inputs.wasd) {
+                this.inputs.wasd = {
+                    up: this.game.input.keyboard.addKey(Phaser.Keyboard.W),
+                    down: this.game.input.keyboard.addKey(Phaser.Keyboard.S),
+                    left: this.game.input.keyboard.addKey(Phaser.Keyboard.A),
+                    right: this.game.input.keyboard.addKey(Phaser.Keyboard.D)
+                };
+            }
+
+            return this.inputs.wasd;
+        }
+    }, {
+        key: "applyToPlayer",
+        value: function applyToPlayer(player) {
+            if (this.cursorKeys().up.isDown || this.wasd().up.isDown) {
+                if (player.body.velocity.y == 0) player.body.velocity.y -= player.getSpeed();
+            } else if (this.cursorKeys().down.isDown || this.wasd().down.isDown) {
+                if (player.body.velocity.y == 0) player.body.velocity.y += player.getSpeed();
+            } else {
+                player.body.velocity.y = 0;
+            }
+            if (this.cursorKeys().left.isDown || this.wasd().left.isDown) {
+                player.body.velocity.x -= player.getSpeed();
+            } else if (this.cursorKeys().right.isDown || this.wasd().right.isDown) {
+                player.body.velocity.x += player.getSpeed();
+            }
+        }
     }]);
 
     return InputService;
@@ -35,7 +65,7 @@ var InputService = function () {
 exports.default = InputService;
 
 },{}],2:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -49,16 +79,16 @@ var ObjectsService = function () {
     function ObjectsService(game) {
         _classCallCheck(this, ObjectsService);
 
-        this.objects = {};
+        this.collection = {};
     }
 
     _createClass(ObjectsService, [{
-        key: "set",
+        key: 'set',
         value: function set(name, value) {
-            this.objects[name] = value;
+            this.collection[name] = value;
         }
     }, {
-        key: "byType",
+        key: 'byType',
         value: function byType(type, layer) {
             var result = [];
             this.map().objects[layer].forEach(function (element) {
@@ -69,9 +99,14 @@ var ObjectsService = function () {
             return result;
         }
     }, {
-        key: "map",
+        key: 'get',
+        value: function get(name) {
+            return this.collection[name];
+        }
+    }, {
+        key: 'map',
         value: function map() {
-            return this.objects.map;
+            return this.get('map');
         }
     }]);
 
@@ -121,17 +156,13 @@ var _State2 = require('./State');
 
 var _State3 = _interopRequireDefault(_State2);
 
-var _Hero = require('./../objects/Hero');
+var _Hero = require('./../objects/sprites/Hero');
 
 var _Hero2 = _interopRequireDefault(_Hero);
 
-var _TestCup = require('./../objects/TestCup');
+var _TestCup = require('./../objects/sprites/TestCup');
 
 var _TestCup2 = _interopRequireDefault(_TestCup);
-
-var _Item = require('./../objects/Item');
-
-var _Item2 = _interopRequireDefault(_Item);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -168,62 +199,60 @@ var GameState = function (_State) {
             this.load.image('gameTiles', 'assets/images/dungeon_tileset_32.png');
             this.game.load.image('player', this.paths.image('player.png'));
             this.game.load.image('cup', this.paths.image('bluecup.png'));
+            this.game.load.spritesheet('fire', 'assets/images/fire.png', 32, 32);
+            this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
+            this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
         }
     }, {
         key: 'create',
         value: function create() {
 
             /***************************
-            ****    create map    *****
-            ***************************/
+             ****    create map    *****
+             ***************************/
             this.createMap();
 
             /***************************
-            ****    create player  *****
-            ***************************/
+             ****    create player  *****
+             ***************************/
             this.createPlayer();
 
             /***************************
-            *****    controls    ******
-            ***************************/
+             *****    controls    ******
+             ***************************/
             this.createControls();
         }
     }, {
         key: 'update',
         value: function update() {
-
             this.game.physics.arcade.collide(this.player, this.blockedLayer);
             this.game.physics.arcade.collide(this.objects.cups, this.blockedLayer, this.destroy, null, this);
             this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
-            this.game.physics.arcade.overlap(this.objects.cups, this.items, this.destroy, null, this);
+            this.game.physics.arcade.overlap(this.player, this.fire, this.fireOn, null, this);
             this.game.physics.arcade.overlap(this.player, this.waterAreas, this.handleWater, null, this);
+            this.game.physics.arcade.overlap(this.objects.cups, this.items, this.destroy, null, this);
 
             this.player.body.velocity.x = 0;
 
             this.game.input.enabled = true;
 
-            if (this.cursors.up.isDown || this.wasd.up.isDown) {
-                if (this.player.body.velocity.y == 0) this.player.body.velocity.y -= this.player.getSpeed();
-            } else if (this.cursors.down.isDown || this.wasd.down.isDown) {
-                if (this.player.body.velocity.y == 0) this.player.body.velocity.y += this.player.getSpeed();
-            } else {
-                this.player.body.velocity.y = 0;
-            }
-            if (this.cursors.left.isDown || this.wasd.left.isDown) {
-                this.player.body.velocity.x -= this.player.getSpeed();
-            } else if (this.cursors.right.isDown || this.wasd.right.isDown) {
-                this.player.body.velocity.x += this.player.getSpeed();
-            }
+            this.inputs.applyToPlayer(this.player);
         }
     }, {
         key: 'collect',
         value: function collect(player, item) {
+            this.player.setSpeed(this.player.getSpeed() + 100);
             item.kill();
         }
     }, {
         key: 'handleWater',
         value: function handleWater(player, water) {
             player.reset(100, 100);
+        }
+    }, {
+        key: 'fireOn',
+        value: function fireOn(player, fire) {
+            fire.animations.play('on');
         }
     }, {
         key: 'destroy',
@@ -233,7 +262,9 @@ var GameState = function (_State) {
     }, {
         key: 'createMap',
         value: function createMap() {
-            this.map = this.game.add.tilemap('map');
+            this.objects.set('map', this.game.add.tilemap('map'));
+            this.map = this.objects.get('map');
+
             //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
             this.map.addTilesetImage('dungeon_tileset_32', 'gameTiles');
 
@@ -244,13 +275,18 @@ var GameState = function (_State) {
             //collision on blockedLayer
             this.map.setCollisionBetween(1, 2000, true, 'blockedLayer');
 
-            this.objects.set('map', this.map);
-
             /***************************
             ******     items     ******
             ***************************/
             this.createItems();
             this.createWaterAreas();
+
+            this.fire = this.game.add.group();
+            this.fire.enableBody = true;
+            var singleFire = this.fire.create(200, 150, 'fire');
+            singleFire.animations.add('on', [0, 1, 2, 3], 10, true);
+            singleFire.animations.add('off', [4], 0, false);
+            singleFire.animations.play('off');
         }
     }, {
         key: 'createPlayer',
@@ -263,8 +299,8 @@ var GameState = function (_State) {
             this.player.scale.y = 2;
 
             /***************************
-            ******     cups     ******
-            ***************************/
+             ******     cups     ******
+             ***************************/
 
             this.objects.cups = this.game.add.group();
 
@@ -298,13 +334,42 @@ var GameState = function (_State) {
         value: function createWaterAreas() {
             this.waterAreas = this.game.add.group();
             this.waterAreas.enableBody = true;
-            var result = this.objects.byType('water', 'objectsLayer');
+            var result = this.findObjectsByType('water', this.map, 'objectsLayer');
             result.forEach(function (element) {
-                this.createFromTiledObject(element, this.waterAreas);
+                this.createWaterObject(element, this.waterAreas);
             }, this);
         }
 
+        //create a sprite from an object
+
+    }, {
+        key: 'createWaterObject',
+        value: function createWaterObject(element, group) {
+            var sprite = group.create(element.x, element.y, element.properties.sprite);
+
+            sprite.animations.add('on', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+            sprite.animations.play('on');
+
+            //copy all properties to the sprite
+            Object.keys(element.properties).forEach(function (key) {
+                sprite[key] = element.properties[key];
+            });
+        }
+
         //find objects in a Tiled layer that containt a property called "type" equal to a certain value
+
+    }, {
+        key: 'findObjectsByType',
+        value: function findObjectsByType(type, map, layer) {
+            var result = [];
+            map.objects[layer].forEach(function (element) {
+                if (element.properties.type === type) {
+                    element.y -= map.tileHeight;
+                    result.push(element);
+                }
+            });
+            return result;
+        }
 
         //create a sprite from an object
 
@@ -312,10 +377,6 @@ var GameState = function (_State) {
         key: 'createFromTiledObject',
         value: function createFromTiledObject(element, group) {
             var sprite = group.create(element.x, element.y, element.properties.sprite);
-
-            if (!element.properties.sprite) {
-                sprite.body.setSize(element.width, element.height);
-            }
 
             //copy all properties to the sprite
             Object.keys(element.properties).forEach(function (key) {
@@ -326,12 +387,7 @@ var GameState = function (_State) {
         key: 'createControls',
         value: function createControls() {
             this.cursors = this.inputs.cursorKeys();
-            this.wasd = {
-                up: this.game.input.keyboard.addKey(Phaser.Keyboard.W),
-                down: this.game.input.keyboard.addKey(Phaser.Keyboard.S),
-                left: this.game.input.keyboard.addKey(Phaser.Keyboard.A),
-                right: this.game.input.keyboard.addKey(Phaser.Keyboard.D)
-            };
+            this.wasd = this.inputs.wasd();
 
             this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
         }
@@ -342,7 +398,7 @@ var GameState = function (_State) {
 
 exports.default = GameState;
 
-},{"./../objects/Hero":7,"./../objects/Item":8,"./../objects/TestCup":10,"./State":5}],5:[function(require,module,exports){
+},{"./../objects/sprites/Hero":7,"./../objects/sprites/TestCup":9,"./State":5}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -354,8 +410,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var State = function () {
-    function State() {
+    function State(game, $container) {
         _classCallCheck(this, State);
+
+        this.game = game;
+        this.$container = $container;
     }
 
     _createClass(State, [{
@@ -453,13 +512,19 @@ var Hero = function (_Sprite) {
     _createClass(Hero, [{
         key: 'boot',
         value: function boot() {
+            this.speed = 100;
             this.enableArcadePhysics();
             this.body.collideWorldBounds = true;
         }
     }, {
         key: 'getSpeed',
         value: function getSpeed() {
-            return 200;
+            return this.speed;
+        }
+    }, {
+        key: 'setSpeed',
+        value: function setSpeed(newSpeed) {
+            this.speed = newSpeed;
         }
     }]);
 
@@ -468,40 +533,7 @@ var Hero = function (_Sprite) {
 
 exports.default = Hero;
 
-},{"./Sprite":9}],8:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Sprite2 = require('./Sprite');
-
-var _Sprite3 = _interopRequireDefault(_Sprite2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Item = function (_Sprite) {
-  _inherits(Item, _Sprite);
-
-  function Item() {
-    _classCallCheck(this, Item);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Item).apply(this, arguments));
-  }
-
-  return Item;
-}(_Sprite3.default);
-
-exports.default = Item;
-
-},{"./Sprite":9}],9:[function(require,module,exports){
+},{"./Sprite":8}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -552,7 +584,7 @@ var Sprite = function (_Phaser$Sprite) {
 
 exports.default = Sprite;
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -573,7 +605,7 @@ var TestCup = function TestCup() {
 
 exports.default = TestCup;
 
-},{"./Sprite":9}]},{},[6])
+},{"./Sprite":8}]},{},[6])
 
 
 //# sourceMappingURL=app.js.map
