@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="64" tileheight="64" nextobjectid="1">
  <tileset firstgid="1" name="dungeon_tileset_64" tilewidth="64" tileheight="64" tilecount="88" columns="8">
-  <image source="../../../../../Users/Philipp/Dropbox/Studium/TINF13B4 - Schatzkiste/Semester 6/Games und Gaming/Tilemap/dungeon_tileset_64.png" width="512" height="704"/>
+  <image source="../images/dungeon_tileset_64.png" width="512" height="704"/>
  </tileset>
  <tileset firstgid="89" name="floor_shadow_tileset_64" tilewidth="64" tileheight="64" tilecount="28" columns="4">
-  <image source="../../../../../Users/Philipp/Dropbox/Studium/TINF13B4 - Schatzkiste/Semester 6/Games und Gaming/Tilemap/floor_shadow_tileset_64.png" width="256" height="448"/>
+  <image source="../images/floor_shadow_tileset_64.png" width="256" height="448"/>
  </tileset>
  <tileset firstgid="117" name="objects_tilset_64" tilewidth="64" tileheight="64" tilecount="130" columns="10">
-  <image source="../../../../../Users/Philipp/Dropbox/Studium/TINF13B4 - Schatzkiste/Semester 6/Games und Gaming/Tilemap/objects_tilset_64.png" width="640" height="832"/>
+  <image source="../images/objects_tilset_64.png" width="640" height="832"/>
  </tileset>
  <layer name="background" width="100" height="100">
   <data encoding="csv">

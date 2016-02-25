@@ -70,7 +70,7 @@
         {
          "columns":8,
          "firstgid":1,
-         "image":"..\/..\/..\/..\/..\/Users\/Philipp\/Dropbox\/Studium\/TINF13B4 - Schatzkiste\/Semester 6\/Games und Gaming\/Tilemap\/dungeon_tileset_64.png",
+         "image":"..\/images\/dungeon_tileset_64.png",
          "imageheight":704,
          "imagewidth":512,
          "margin":0,
@@ -87,7 +87,7 @@
         {
          "columns":4,
          "firstgid":89,
-         "image":"..\/..\/..\/..\/..\/Users\/Philipp\/Dropbox\/Studium\/TINF13B4 - Schatzkiste\/Semester 6\/Games und Gaming\/Tilemap\/floor_shadow_tileset_64.png",
+         "image":"..\/images\/floor_shadow_tileset_64.png",
          "imageheight":448,
          "imagewidth":256,
          "margin":0,
@@ -104,7 +104,7 @@
         {
          "columns":10,
          "firstgid":117,
-         "image":"..\/..\/..\/..\/..\/Users\/Philipp\/Dropbox\/Studium\/TINF13B4 - Schatzkiste\/Semester 6\/Games und Gaming\/Tilemap\/objects_tilset_64.png",
+         "image":"..\/images\/objects_tilset_64.png",
          "imageheight":832,
          "imagewidth":640,
          "margin":0,
