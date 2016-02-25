@@ -157,7 +157,7 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<nav class=\"navbar navbar-full navbar-light bg-faded\">\n    <a class=\"navbar-brand\" v-link=\"{ path: '/' }\">Clash of Flags</a>\n    <div class=\"nav navbar-nav\">\n        <a class=\"nav-item nav-link active\" v-link=\"{ path: '/' }\">Play</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/login' }\">Login</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/register' }\">Register</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/about' }\">About</a>\n    </div>\n</nav>\n";
+	module.exports = "\n<nav class=\"navbar navbar-full navbar-light bg-faded\">\n    <a class=\"navbar-brand\" v-link=\"{ path: '/' }\">Clash of Flags</a>\n    <div class=\"nav navbar-nav\">\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/' }\">Play</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/login' }\">Login</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/register' }\">Register</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/about' }\">About</a>\n    </div>\n</nav>\n";
 
 /***/ },
 /* 7 */
@@ -328,7 +328,13 @@
 	
 	
 	function createRouter() {
-	    var router = new _vueRouter2.default();
+	    var routerOptions = {
+	        hashbang: false,
+	        history: true,
+	        linkActiveClass: 'active',
+	        saveScrollPosition: true
+	    };
+	    var router = new _vueRouter2.default(routerOptions);
 	
 	    /* Routes */
 	    router.map({

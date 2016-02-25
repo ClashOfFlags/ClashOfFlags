@@ -10,7 +10,13 @@ import About from './components/views/About.vue';
 export default createRouter;
 
 function createRouter() {
-    const router = new VueRouter();
+    const routerOptions = {
+        hashbang: false,
+        history: true,
+        linkActiveClass: 'active',
+        saveScrollPosition: true
+    };
+    const router = new VueRouter(routerOptions);
 
     /* Routes */
     router.map({
