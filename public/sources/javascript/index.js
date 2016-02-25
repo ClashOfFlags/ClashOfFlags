@@ -15,7 +15,7 @@ bottle.service('$container', () => bottle.container);
 bottle.service('game', () => game);
 bottle.service('InputService', InputService, 'game');
 bottle.service('PathService', PathService);
-bottle.service('ObjectsService', ObjectsService);
+bottle.service('ObjectsService', ObjectsService, 'game');
 bottle.service('GameState', GameState, 'game', '$container');
 
 

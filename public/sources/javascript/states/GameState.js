@@ -101,6 +101,8 @@ export default class GameState extends State {
       //collision on blockedLayer
       this.map.setCollisionBetween(1, 2000, true, 'blockedLayer');
 
+      this.objects.set('map', this.map);
+
       /***************************
       ******     items     ******
       ***************************/
@@ -109,7 +111,7 @@ export default class GameState extends State {
     }
 
     createPlayer() {
-      var playerStartPos = this.findObjectsByType('playerStart', this.map, 'objectsLayer');
+      var playerStartPos = this.objects.byType('playerStart', 'objectsLayer');
       this.player = new Hero(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
       this.player.scale.x = 2;
       this.player.scale.y = 2;
@@ -140,7 +142,7 @@ export default class GameState extends State {
     createItems() {
       this.items = this.game.add.group();
       this.items.enableBody = true;
-      var result = this.findObjectsByType('item', this.map, 'objectsLayer');
+      var result = this.objects.byType('item', 'objectsLayer');
       result.forEach(function(element){
         this.createFromTiledObject(element, this.items);
       }, this);
@@ -149,22 +151,14 @@ export default class GameState extends State {
     createWaterAreas() {
       this.waterAreas = this.game.add.group();
       this.waterAreas.enableBody = true;
-      var result = this.findObjectsByType('water', this.map, 'objectsLayer');
+      var result = this.objects.byType('water', 'objectsLayer');
       result.forEach(function(element){
         this.createFromTiledObject(element, this.waterAreas);
       }, this);
     }
 
     //find objects in a Tiled layer that containt a property called "type" equal to a certain value
-    findObjectsByType(type, map, layer) {
-      var result = [];
-      map.objects[layer].forEach(function(element){
-        if(element.properties.type === type) {
-          result.push(element);
-        }
-      });
-      return result;
-    }
+
 
     //create a sprite from an object
     createFromTiledObject(element, group) {
