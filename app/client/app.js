@@ -1,12 +1,10 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from './components/App.vue';
+import createRouter from './routes';
 
 Vue.use(VueRouter);
 
-new Vue({
-    el: 'body',
-    components: {
-        App
-    }
-});
+const router = createRouter();
+
+router.start(App, 'app');

@@ -58,16 +58,17 @@
 	
 	var _App2 = _interopRequireDefault(_App);
 	
+	var _routes = __webpack_require__(24);
+	
+	var _routes2 = _interopRequireDefault(_routes);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	_vue2.default.use(_vueRouter2.default);
 	
-	new _vue2.default({
-	    el: 'body',
-	    components: {
-	        App: _App2.default
-	    }
-	});
+	var router = (0, _routes2.default)();
+	
+	router.start(_App2.default, 'app');
 
 /***/ },
 /* 1 */
@@ -156,13 +157,198 @@
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<nav class=\"navbar navbar-full navbar-light bg-faded\">\n    <a class=\"navbar-brand\" href=\"/\">Clash of Flags</a>\n    <div class=\"nav navbar-nav\">\n        <a class=\"nav-item nav-link active\" href=\"/\">Play</a>\n        <a class=\"nav-item nav-link\" href=\"/login\">Login</a>\n        <a class=\"nav-item nav-link\" href=\"/register\">Register</a>\n        <a class=\"nav-item nav-link\" href=\"/about\">About</a>\n    </div>\n</nav>\n";
+	module.exports = "\n<nav class=\"navbar navbar-full navbar-light bg-faded\">\n    <a class=\"navbar-brand\" v-link=\"{ path: '/' }\">Clash of Flags</a>\n    <div class=\"nav navbar-nav\">\n        <a class=\"nav-item nav-link active\" v-link=\"{ path: '/' }\">Play</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/login' }\">Login</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/register' }\">Register</a>\n        <a class=\"nav-item nav-link\" v-link=\"{ path: '/about' }\">About</a>\n    </div>\n</nav>\n";
 
 /***/ },
 /* 7 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<navbar></navbar>\n";
+	module.exports = "\n<navbar></navbar>\n<router-view></router-view>\n";
+
+/***/ },
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_template__ = __webpack_require__(17)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/Users/Marc/GitHub/ClashOfFlags/app/client/components/views/Game.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div>Game</div>\n";
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_template__ = __webpack_require__(19)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/Users/Marc/GitHub/ClashOfFlags/app/client/components/views/Login.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div>Login</div>\n";
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_template__ = __webpack_require__(21)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/Users/Marc/GitHub/ClashOfFlags/app/client/components/views/Register.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div>Register</div>\n";
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_script__, __vue_template__
+	__vue_template__ = __webpack_require__(23)
+	module.exports = __vue_script__ || {}
+	if (module.exports.__esModule) module.exports = module.exports.default
+	if (__vue_template__) {
+	(typeof module.exports === "function" ? (module.exports.options || (module.exports.options = {})) : module.exports).template = __vue_template__
+	}
+	if (false) {(function () {  module.hot.accept()
+	  var hotAPI = require("vue-hot-reload-api")
+	  hotAPI.install(require("vue"), true)
+	  if (!hotAPI.compatible) return
+	  var id = "/Users/Marc/GitHub/ClashOfFlags/app/client/components/views/About.vue"
+	  if (!module.hot.data) {
+	    hotAPI.createRecord(id, module.exports)
+	  } else {
+	    hotAPI.update(id, module.exports, __vue_template__)
+	  }
+	})()}
+
+/***/ },
+/* 23 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div>About</div>\n";
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _vueRouter = __webpack_require__(2);
+	
+	var _vueRouter2 = _interopRequireDefault(_vueRouter);
+	
+	var _Game = __webpack_require__(16);
+	
+	var _Game2 = _interopRequireDefault(_Game);
+	
+	var _Login = __webpack_require__(18);
+	
+	var _Login2 = _interopRequireDefault(_Login);
+	
+	var _Register = __webpack_require__(20);
+	
+	var _Register2 = _interopRequireDefault(_Register);
+	
+	var _About = __webpack_require__(22);
+	
+	var _About2 = _interopRequireDefault(_About);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* Views */
+	
+	/* Views */
+	exports.default = createRouter;
+	
+	
+	function createRouter() {
+	    var router = new _vueRouter2.default();
+	
+	    /* Routes */
+	    router.map({
+	        '/': {
+	            component: _Game2.default
+	        },
+	        '/login': {
+	            component: _Login2.default
+	        },
+	        '/register': {
+	            component: _Register2.default
+	        },
+	        '/about': {
+	            component: _About2.default
+	        }
+	    });
+	    /* Routes */
+	
+	    return router;
+	}
 
 /***/ }
 /******/ ]);
