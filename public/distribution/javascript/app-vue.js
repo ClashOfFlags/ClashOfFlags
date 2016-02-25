@@ -50,11 +50,17 @@
 	
 	var _vue2 = _interopRequireDefault(_vue);
 	
-	var _App = __webpack_require__(2);
+	var _vueRouter = __webpack_require__(2);
+	
+	var _vueRouter2 = _interopRequireDefault(_vueRouter);
+	
+	var _App = __webpack_require__(3);
 	
 	var _App2 = _interopRequireDefault(_App);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	_vue2.default.use(_vueRouter2.default);
 	
 	new _vue2.default({
 	    el: 'body',
@@ -71,6 +77,12 @@
 
 /***/ },
 /* 2 */
+/***/ function(module, exports) {
+
+	module.exports = VueRouter;
+
+/***/ },
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
@@ -79,7 +91,7 @@
 	    __vue_script__.__esModule &&
 	    Object.keys(__vue_script__).length > 1) {
 	  console.warn("[vue-loader] app/client/components/App.vue: named exports in *.vue files are ignored.")}
-	__vue_template__ = __webpack_require__(3)
+	__vue_template__ = __webpack_require__(7)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -96,12 +108,6 @@
 	    hotAPI.update(id, module.exports, __vue_template__)
 	  }
 	})()}
-
-/***/ },
-/* 3 */
-/***/ function(module, exports) {
-
-	module.exports = "\n<navbar></navbar>\n";
 
 /***/ },
 /* 4 */
@@ -151,6 +157,12 @@
 /***/ function(module, exports) {
 
 	module.exports = "\n<nav class=\"navbar navbar-full navbar-light bg-faded\">\n    <a class=\"navbar-brand\" href=\"/\">Clash of Flags</a>\n    <div class=\"nav navbar-nav\">\n        <a class=\"nav-item nav-link active\" href=\"/\">Play</a>\n        <a class=\"nav-item nav-link\" href=\"/login\">Login</a>\n        <a class=\"nav-item nav-link\" href=\"/register\">Register</a>\n        <a class=\"nav-item nav-link\" href=\"/about\">About</a>\n    </div>\n</nav>\n";
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<navbar></navbar>\n";
 
 /***/ }
 /******/ ]);
