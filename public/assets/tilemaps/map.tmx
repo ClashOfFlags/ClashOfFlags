@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="11">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" nextobjectid="30">
  <tileset firstgid="1" name="dungeon_tileset_32" tilewidth="32" tileheight="32" tilecount="88" columns="8">
   <image source="../images/dungeon_tileset_32.png" width="256" height="352"/>
  </tileset>
- <tileset firstgid="89" name="tiles_old" tilewidth="16" tileheight="16" tilecount="3520" columns="44">
-  <image source="../images/tiles_old.png" width="705" height="1280"/>
+ <tileset firstgid="89" name="tiles" tilewidth="16" tileheight="16" tilecount="3520" columns="44">
+  <image source="../images/tiles.png" width="705" height="1280"/>
   <tile id="2786">
    <properties>
     <property name="sprite" value="bluecup"/>
@@ -27,9 +27,9 @@
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,9,9,9,9,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,17,17,17,17,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,17,17,17,17,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -79,11 +79,6 @@
     <property name="type" value="item"/>
    </properties>
   </object>
-  <object id="6" x="258.516" y="418.742" width="127.912" height="91.5578">
-   <properties>
-    <property name="type" value="water"/>
-   </properties>
-  </object>
   <object id="8" gid="3307" x="74.1328" y="88.7863" width="16" height="16">
    <properties>
     <property name="type" value="playerStart"/>
@@ -99,6 +94,78 @@
    <properties>
     <property name="sprite" value="cup"/>
     <property name="type" value="item"/>
+   </properties>
+  </object>
+  <object id="18" type="water" gid="17" x="256" y="480" width="32" height="32">
+   <properties>
+    <property name="sprite" value="water"/>
+    <property name="type" value="water"/>
+   </properties>
+  </object>
+  <object id="19" type="water" gid="17" x="288" y="480" width="32" height="32">
+   <properties>
+    <property name="sprite" value="water"/>
+    <property name="type" value="water"/>
+   </properties>
+  </object>
+  <object id="20" type="water" gid="17" x="320" y="480" width="32" height="32">
+   <properties>
+    <property name="sprite" value="water"/>
+    <property name="type" value="water"/>
+   </properties>
+  </object>
+  <object id="21" type="water" gid="17" x="352" y="480" width="32" height="32">
+   <properties>
+    <property name="sprite" value="water"/>
+    <property name="type" value="water"/>
+   </properties>
+  </object>
+  <object id="22" type="water" gid="17" x="256" y="512" width="32" height="32">
+   <properties>
+    <property name="sprite" value="water"/>
+    <property name="type" value="water"/>
+   </properties>
+  </object>
+  <object id="23" type="water" gid="17" x="288" y="512" width="32" height="32">
+   <properties>
+    <property name="sprite" value="water"/>
+    <property name="type" value="water"/>
+   </properties>
+  </object>
+  <object id="24" type="water" gid="17" x="320" y="512" width="32" height="32">
+   <properties>
+    <property name="sprite" value="water"/>
+    <property name="type" value="water"/>
+   </properties>
+  </object>
+  <object id="25" type="water" gid="17" x="352" y="512" width="32" height="32">
+   <properties>
+    <property name="sprite" value="water"/>
+    <property name="type" value="water"/>
+   </properties>
+  </object>
+  <object id="26" type="waterStone" gid="9" x="256" y="448" width="32" height="32">
+   <properties>
+    <property name="sprite" value="waterStone"/>
+    <property name="type" value="water"/>
+   </properties>
+  </object>
+  <object id="27" type="waterStone" gid="9" x="288" y="448" width="32" height="32">
+   <properties>
+    <property name="sprite" value="waterStone"/>
+    <property name="type" value="water"/>
+   </properties>
+  </object>
+  <object id="28" type="waterStone" gid="9" x="320" y="448" width="32" height="32">
+   <properties>
+    <property name="sprite" value="waterStone"/>
+    <property name="type" value="water"/>
+   </properties>
+  </object>
+  <object id="29" type="waterStone" gid="9" x="352" y="448" width="32" height="32">
+   <properties>
+    <property name="sprite" value="waterStone"/>
+    <property name="type" value="water"/>
    </properties>
   </object>
  </objectgroup>

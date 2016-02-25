@@ -1,7 +1,6 @@
 import State from './State';
 import Hero from './../objects/Hero';
 import TestCup from './../objects/TestCup';
-import Item from './../objects/Item';
 
 export default class GameState extends State {
     constructor(game, $container) {
@@ -23,6 +22,9 @@ export default class GameState extends State {
         this.load.image('gameTiles', 'assets/images/dungeon_tileset_32.png');
         this.game.load.image('player', this.paths.image('player.png'));
         this.game.load.image('cup', this.paths.image('bluecup.png'));
+        this.game.load.spritesheet('fire', 'assets/images/fire.png', 32, 32);
+        this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
+        this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
     }
 
     create() {
@@ -47,6 +49,7 @@ export default class GameState extends State {
 
       this.game.physics.arcade.collide(this.player, this.blockedLayer);
       this.game.physics.arcade.collide(this.objects.cups, this.blockedLayer, this.destroy, null, this);
+      this.game.physics.arcade.overlap(this.player, this.fire, this.fireOn, null, this);
       this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
       this.game.physics.arcade.overlap(this.objects.cups, this.items, this.destroy, null, this);
       this.game.physics.arcade.overlap(this.player, this.waterAreas, this.handleWater, null, this);
@@ -78,11 +81,16 @@ export default class GameState extends State {
     }
 
     collect(player, item) {
+      this.player.setSpeed(this.player.getSpeed() + 100);
       item.kill();
     }
 
     handleWater(player, water) {
       player.reset(100, 100);
+    }
+
+    fireOn(player, fire) {
+      fire.animations.play('on');
     }
 
     destroy(cup, door) {
@@ -106,6 +114,13 @@ export default class GameState extends State {
       ***************************/
       this.createItems();
       this.createWaterAreas();
+
+      this.fire = this.game.add.group();
+      this.fire.enableBody = true;
+      var singleFire = this.fire.create(200, 150, 'fire');
+      singleFire.animations.add('on', [0, 1, 2, 3], 10, true);
+      singleFire.animations.add('off', [4], 0, false);
+      singleFire.animations.play('off');
     }
 
     createPlayer() {
@@ -133,7 +148,6 @@ export default class GameState extends State {
 
           cup.reset(this.player.body.x, this.player.body.y);
           this.game.physics.arcade.moveToPointer(cup, 300);
-
       });
     }
 
@@ -151,8 +165,21 @@ export default class GameState extends State {
       this.waterAreas.enableBody = true;
       var result = this.findObjectsByType('water', this.map, 'objectsLayer');
       result.forEach(function(element){
-        this.createFromTiledObject(element, this.waterAreas);
+        this.createWaterObject(element, this.waterAreas);
       }, this);
+    }
+
+    //create a sprite from an object
+    createWaterObject(element, group) {
+      var sprite = group.create(element.x, element.y, element.properties.sprite);
+
+      sprite.animations.add('on', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+      sprite.animations.play('on');
+
+      //copy all properties to the sprite
+      Object.keys(element.properties).forEach(function(key){
+        sprite[key] = element.properties[key];
+      });
     }
 
     //find objects in a Tiled layer that containt a property called "type" equal to a certain value
@@ -160,6 +187,7 @@ export default class GameState extends State {
       var result = [];
       map.objects[layer].forEach(function(element){
         if(element.properties.type === type) {
+          element.y -= map.tileHeight;
           result.push(element);
         }
       });
@@ -169,10 +197,6 @@ export default class GameState extends State {
     //create a sprite from an object
     createFromTiledObject(element, group) {
       var sprite = group.create(element.x, element.y, element.properties.sprite);
-
-      if(!element.properties.sprite){
-        sprite.body.setSize(element.width, element.height);
-      }
 
       //copy all properties to the sprite
       Object.keys(element.properties).forEach(function(key){

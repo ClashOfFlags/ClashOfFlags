@@ -98,10 +98,6 @@ var _TestCup = require('./../objects/TestCup');
 
 var _TestCup2 = _interopRequireDefault(_TestCup);
 
-var _Item = require('./../objects/Item');
-
-var _Item2 = _interopRequireDefault(_Item);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -137,6 +133,9 @@ var GameState = function (_State) {
       this.load.image('gameTiles', 'assets/images/dungeon_tileset_32.png');
       this.game.load.image('player', this.paths.image('player.png'));
       this.game.load.image('cup', this.paths.image('bluecup.png'));
+      this.game.load.spritesheet('fire', 'assets/images/fire.png', 32, 32);
+      this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
+      this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
     }
   }, {
     key: 'create',
@@ -163,6 +162,7 @@ var GameState = function (_State) {
 
       this.game.physics.arcade.collide(this.player, this.blockedLayer);
       this.game.physics.arcade.collide(this.objects.cups, this.blockedLayer, this.destroy, null, this);
+      this.game.physics.arcade.overlap(this.player, this.fire, this.fireOn, null, this);
       this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
       this.game.physics.arcade.overlap(this.objects.cups, this.items, this.destroy, null, this);
       this.game.physics.arcade.overlap(this.player, this.waterAreas, this.handleWater, null, this);
@@ -187,12 +187,18 @@ var GameState = function (_State) {
   }, {
     key: 'collect',
     value: function collect(player, item) {
+      this.player.setSpeed(this.player.getSpeed() + 100);
       item.kill();
     }
   }, {
     key: 'handleWater',
     value: function handleWater(player, water) {
       player.reset(100, 100);
+    }
+  }, {
+    key: 'fireOn',
+    value: function fireOn(player, fire) {
+      fire.animations.play('on');
     }
   }, {
     key: 'destroy',
@@ -218,6 +224,13 @@ var GameState = function (_State) {
       ***************************/
       this.createItems();
       this.createWaterAreas();
+
+      this.fire = this.game.add.group();
+      this.fire.enableBody = true;
+      var singleFire = this.fire.create(200, 150, 'fire');
+      singleFire.animations.add('on', [0, 1, 2, 3], 10, true);
+      singleFire.animations.add('off', [4], 0, false);
+      singleFire.animations.play('off');
     }
   }, {
     key: 'createPlayer',
@@ -267,8 +280,24 @@ var GameState = function (_State) {
       this.waterAreas.enableBody = true;
       var result = this.findObjectsByType('water', this.map, 'objectsLayer');
       result.forEach(function (element) {
-        this.createFromTiledObject(element, this.waterAreas);
+        this.createWaterObject(element, this.waterAreas);
       }, this);
+    }
+
+    //create a sprite from an object
+
+  }, {
+    key: 'createWaterObject',
+    value: function createWaterObject(element, group) {
+      var sprite = group.create(element.x, element.y, element.properties.sprite);
+
+      sprite.animations.add('on', [0, 1, 2, 3, 4, 5, 6, 7], 10, true);
+      sprite.animations.play('on');
+
+      //copy all properties to the sprite
+      Object.keys(element.properties).forEach(function (key) {
+        sprite[key] = element.properties[key];
+      });
     }
 
     //find objects in a Tiled layer that containt a property called "type" equal to a certain value
@@ -279,6 +308,7 @@ var GameState = function (_State) {
       var result = [];
       map.objects[layer].forEach(function (element) {
         if (element.properties.type === type) {
+          element.y -= map.tileHeight;
           result.push(element);
         }
       });
@@ -291,10 +321,6 @@ var GameState = function (_State) {
     key: 'createFromTiledObject',
     value: function createFromTiledObject(element, group) {
       var sprite = group.create(element.x, element.y, element.properties.sprite);
-
-      if (!element.properties.sprite) {
-        sprite.body.setSize(element.width, element.height);
-      }
 
       //copy all properties to the sprite
       Object.keys(element.properties).forEach(function (key) {
@@ -321,7 +347,7 @@ var GameState = function (_State) {
 
 exports.default = GameState;
 
-},{"./../objects/Hero":7,"./../objects/Item":8,"./../objects/TestCup":10,"./State":5}],5:[function(require,module,exports){
+},{"./../objects/Hero":7,"./../objects/TestCup":9,"./State":5}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -432,13 +458,19 @@ var Hero = function (_Sprite) {
     _createClass(Hero, [{
         key: 'boot',
         value: function boot() {
+            this.speed = 100;
             this.enableArcadePhysics();
             this.body.collideWorldBounds = true;
         }
     }, {
         key: 'getSpeed',
         value: function getSpeed() {
-            return 200;
+            return this.speed;
+        }
+    }, {
+        key: 'setSpeed',
+        value: function setSpeed(newSpeed) {
+            this.speed = newSpeed;
         }
     }]);
 
@@ -447,54 +479,7 @@ var Hero = function (_Sprite) {
 
 exports.default = Hero;
 
-},{"./Sprite":9}],8:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _Sprite2 = require('./Sprite');
-
-var _Sprite3 = _interopRequireDefault(_Sprite2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Item = function (_Sprite) {
-  _inherits(Item, _Sprite);
-
-  function Item() {
-    _classCallCheck(this, Item);
-
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(Item).apply(this, arguments));
-  }
-
-  _createClass(Item, [{
-    key: 'setProperty',
-    value: function setProperty(key, prop) {
-      // this.property[key] = prop;
-    }
-  }, {
-    key: 'getProperty',
-    value: function getProperty() {
-      return this.property[key];
-    }
-  }]);
-
-  return Item;
-}(_Sprite3.default);
-
-exports.default = Item;
-
-},{"./Sprite":9}],9:[function(require,module,exports){
+},{"./Sprite":8}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -545,7 +530,7 @@ var Sprite = function (_Phaser$Sprite) {
 
 exports.default = Sprite;
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -566,7 +551,7 @@ var TestCup = function TestCup() {
 
 exports.default = TestCup;
 
-},{"./Sprite":9}]},{},[6])
+},{"./Sprite":8}]},{},[6])
 
 
 //# sourceMappingURL=app.js.map
