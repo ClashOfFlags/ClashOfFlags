@@ -21,6 +21,7 @@
     "stop": "pm2 stop all"
   },
   "dependencies": {
+    "connect-history-api-fallback": "^1.1.0",
     "dotenv": "^2.0.0",
     "express": "^4.13.4",
     "mongoose": "^4.4.4",
