@@ -544,6 +544,11 @@ var Hero = function (_Sprite) {
         value: function setSpeed(newSpeed) {
             this.speed = newSpeed;
         }
+    }, {
+        key: 'collect',
+        value: function collect(item) {
+            item.kill();
+        }
     }]);
 
     return Hero;
