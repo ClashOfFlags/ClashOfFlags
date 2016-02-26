@@ -10,4 +10,9 @@ export default class Hero extends Sprite {
     getSpeed() {
       return 200;
     }
+
+    collect(item) {
+        item.kill();
+    }
+
 }

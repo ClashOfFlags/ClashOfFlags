@@ -47,22 +47,17 @@ export default class GameState extends State {
 
         this.game.physics.arcade.collide(this.player, this.blockedLayer);
         this.game.physics.arcade.collide(this.objects.cups, this.blockedLayer, this.destroy, null, this);
-        this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
+        this.game.physics.arcade.overlap(this.player, this.items, this.player.collect, null, this);
         this.game.physics.arcade.overlap(this.objects.cups, this.items, this.destroy, null, this);
         this.game.physics.arcade.overlap(this.player, this.waterAreas, this.handleWater, null, this);
-
 
         this.player.body.velocity.x = 0;
 
         this.game.input.enabled = true;
 
         this.inputs.applyToPlayer(this.player);
-
     }
 
-    collect(player, item) {
-        item.kill();
-    }
 
     handleWater(player, water) {
         player.reset(100, 100);

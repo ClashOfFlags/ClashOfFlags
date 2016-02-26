@@ -229,7 +229,7 @@ var GameState = function (_State) {
 
             this.game.physics.arcade.collide(this.player, this.blockedLayer);
             this.game.physics.arcade.collide(this.objects.cups, this.blockedLayer, this.destroy, null, this);
-            this.game.physics.arcade.overlap(this.player, this.items, this.collect, null, this);
+            this.game.physics.arcade.overlap(this.player, this.items, this.player.collect, null, this);
             this.game.physics.arcade.overlap(this.objects.cups, this.items, this.destroy, null, this);
             this.game.physics.arcade.overlap(this.player, this.waterAreas, this.handleWater, null, this);
 
@@ -238,11 +238,6 @@ var GameState = function (_State) {
             this.game.input.enabled = true;
 
             this.inputs.applyToPlayer(this.player);
-        }
-    }, {
-        key: 'collect',
-        value: function collect(player, item) {
-            item.kill();
         }
     }, {
         key: 'handleWater',
@@ -480,6 +475,11 @@ var Hero = function (_Sprite) {
         key: 'getSpeed',
         value: function getSpeed() {
             return 200;
+        }
+    }, {
+        key: 'collect',
+        value: function collect(item) {
+            item.kill();
         }
     }]);
 
