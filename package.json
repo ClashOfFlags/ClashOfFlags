@@ -15,12 +15,13 @@
     "url": "https://github.com/ClashOfFlags/ClashOfFlags.git"
   },
   "scripts": {
-    "setup": "sudo npm install -g pm2 bower gulp && npm install && bower install && cp .env.example .env",
-    "dev": "webpack --watch",
+    "setup": "sudo npm install -g pm2 bower gulp webpack && npm install && bower install && cp .env.example .env",
+    "watch": "concurrently --kill-others 'gulp watch' 'webpack --watch'",
     "start": "pm2 start pm2.json",
     "stop": "pm2 stop all"
   },
   "dependencies": {
+    "connect-history-api-fallback": "^1.1.0",
     "dotenv": "^2.0.0",
     "express": "^4.13.4",
     "mongoose": "^4.4.4",
@@ -34,6 +35,7 @@
     "babel-runtime": "^6.5.0",
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
+    "concurrently": "^2.0.0",
     "css-loader": "^0.23.1",
     "gulp": "^3.9.1",
     "gulp-apigen": "^0.1.4",
