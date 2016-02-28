@@ -321,11 +321,12 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="Object" offsetx="-22.7879" offsety="144.788">
+ <objectgroup name="objectsLayer" offsetx="-22.7879" offsety="144.788">
   <object id="1" name="spawn_blue_1" type="spawn" x="2464.79" y="5873.21" width="132" height="128">
    <properties>
     <property name="player" value="1"/>
     <property name="team" value="1"/>
+    <property name="type" value="playerStart"/>
    </properties>
   </object>
   <object id="2" name="spawn_blue_2" type="spawn" x="2778.79" y="5299.21" width="130" height="126">

@@ -3,7 +3,7 @@ import Sprite from './Sprite';
 export default class Hero extends Sprite {
 
     boot() {
-        this.speed = 100;
+        this.speed = 500;
         this.enableArcadePhysics();
         this.body.collideWorldBounds = true;
     }
