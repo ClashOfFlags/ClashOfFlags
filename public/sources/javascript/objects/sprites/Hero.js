@@ -15,4 +15,9 @@ export default class Hero extends Sprite {
     setSpeed(newSpeed) {
       this.speed = newSpeed;
     }
+
+    collect(item) {
+        item.kill();
+    }
+
 }
