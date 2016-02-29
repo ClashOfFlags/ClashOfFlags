@@ -58,17 +58,15 @@
 	
 	var _App2 = _interopRequireDefault(_App);
 	
-	var _routes = __webpack_require__(12);
+	var _router = __webpack_require__(25);
 	
-	var _routes2 = _interopRequireDefault(_routes);
+	var _router2 = _interopRequireDefault(_router);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	_vue2.default.use(_vueRouter2.default);
 	
-	var router = (0, _routes2.default)();
-	
-	router.start(_App2.default, 'app');
+	_router2.default.start(_App2.default, 'app');
 
 /***/ },
 /* 1 */
@@ -446,73 +444,7 @@
 	module.exports = "\n<navbar></navbar>\n<div class=\"container\">\n    <router-view></router-view>\n</div>\n";
 
 /***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _vueRouter = __webpack_require__(2);
-	
-	var _vueRouter2 = _interopRequireDefault(_vueRouter);
-	
-	var _Game = __webpack_require__(13);
-	
-	var _Game2 = _interopRequireDefault(_Game);
-	
-	var _Login = __webpack_require__(15);
-	
-	var _Login2 = _interopRequireDefault(_Login);
-	
-	var _Register = __webpack_require__(17);
-	
-	var _Register2 = _interopRequireDefault(_Register);
-	
-	var _About = __webpack_require__(19);
-	
-	var _About2 = _interopRequireDefault(_About);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/* Views */
-	
-	/* Views */
-	exports.default = createRouter;
-	
-	
-	function createRouter() {
-	    var routerOptions = {
-	        hashbang: false,
-	        history: true,
-	        linkActiveClass: 'active',
-	        saveScrollPosition: true
-	    };
-	    var router = new _vueRouter2.default(routerOptions);
-	
-	    /* Routes */
-	    router.map({
-	        '/': {
-	            component: _Game2.default
-	        },
-	        '/login': {
-	            component: _Login2.default
-	        },
-	        '/register': {
-	            component: _Register2.default
-	        },
-	        '/about': {
-	            component: _About2.default
-	        }
-	    });
-	    /* Routes */
-	
-	    return router;
-	}
-
-/***/ },
+/* 12 */,
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -729,6 +661,73 @@
 	
 	// exports
 
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _vueRouter = __webpack_require__(2);
+	
+	var _vueRouter2 = _interopRequireDefault(_vueRouter);
+	
+	var _Game = __webpack_require__(13);
+	
+	var _Game2 = _interopRequireDefault(_Game);
+	
+	var _Login = __webpack_require__(15);
+	
+	var _Login2 = _interopRequireDefault(_Login);
+	
+	var _Register = __webpack_require__(17);
+	
+	var _Register2 = _interopRequireDefault(_Register);
+	
+	var _About = __webpack_require__(19);
+	
+	var _About2 = _interopRequireDefault(_About);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* Views */
+	
+	/* Views */
+	var routerOptions = {
+	    hashbang: false,
+	    history: true,
+	    linkActiveClass: 'active',
+	    saveScrollPosition: true
+	};
+	var router = new _vueRouter2.default(routerOptions);
+	
+	exports.default = router;
+	
+	/* Routes */
+	
+	router.map({
+	    '/': {
+	        component: _Game2.default
+	    },
+	    '/login': {
+	        component: _Login2.default
+	    },
+	    '/register': {
+	        component: _Register2.default
+	    },
+	    '/about': {
+	        component: _About2.default
+	    }
+	});
+	
+	router.redirect({
+	    '*': '/'
+	});
+	/* Routes */
 
 /***/ }
 /******/ ]);
