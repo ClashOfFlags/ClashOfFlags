@@ -33,6 +33,10 @@ function createRouter() {
             component: About
         }
     });
+
+    router.redirect({
+        '*': '/'
+    });
     /* Routes */
 
     return router;
