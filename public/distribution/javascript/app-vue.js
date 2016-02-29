@@ -499,6 +499,11 @@
 
 	var __vue_script__, __vue_template__
 	__webpack_require__(21)
+	__vue_script__ = __webpack_require__(31)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] app/client/components/views/Login.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(16)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -529,6 +534,11 @@
 
 	var __vue_script__, __vue_template__
 	__webpack_require__(23)
+	__vue_script__ = __webpack_require__(26)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] app/client/components/views/Register.vue: named exports in *.vue files are ignored.")}
 	__vue_template__ = __webpack_require__(18)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -551,7 +561,7 @@
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"row\">\n    <div class=\"col-xs-4 center-block\">\n        <h1>Register</h1>\n        <div class=\"form-group\">\n            <label for=\"email\">Email</label>\n            <input id=\"email\" type=\"email\" class=\"form-control\" placeholder=\"name@domain.com\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"username\">Username</label>\n            <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"password\">Password</label>\n            <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n        </div>\n        <button type=\"button\" class=\"btn btn-primary btn-block\">Register</button>\n    </div>\n</div>\n";
+	module.exports = "\n<div class=\"row\">\n    <div class=\"col-xs-4 center-block\">\n        <h1>Register</h1>\n        <div class=\"form-group\">\n            <label for=\"email\">Email</label>\n            <input id=\"email\"\n                   type=\"email\"\n                   class=\"form-control\"\n                   placeholder=\"name@domain.com\"\n                   v-model=\"email\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"username\">Username</label>\n            <input id=\"username\"\n                   type=\"text\"\n                   class=\"form-control\"\n                   placeholder=\"Username\"\n                   v-model=\"username\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"password\">Password</label>\n            <input id=\"password\"\n                   type=\"password\"\n                   class=\"form-control\"\n                   placeholder=\"Password\"\n                   v-model=\"password\">\n        </div>\n        <button type=\"button\" class=\"btn btn-primary btn-block\" @click=\"register()\">Register</button>\n    </div>\n</div>\n";
 
 /***/ },
 /* 19 */
@@ -617,7 +627,7 @@
 	
 	
 	// module
-	exports.push([module.id, "\n.center-block {\n    float: none;\n}\n", "", {"version":3,"sources":["/./app/client/components/views/Login.vue?18cf2409"],"names":[],"mappings":";AAsBA;IACA,YAAA;CACA","file":"Login.vue","sourcesContent":["<template>\n    <div class=\"row\">\n        <div class=\"col-xs-4 center-block\">\n            <h1>Login</h1>\n            <div class=\"form-group\">\n                <label for=\"username\">Username</label>\n                <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"password\">Password</label>\n                <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n            </div>\n            <button type=\"button\" class=\"btn btn-primary btn-block\">Login</button>\n            <hr>\n            <a class=\"text-muted\" v-link=\"{ path: '/register' }\">Need an account?</a>\n            <br>\n            <a class=\"text-muted\" v-link=\"{ path: '/forgot/password' }\">Forgot your password?</a>\n        </div>\n    </div>\n</template>\n\n<style>\n    .center-block {\n        float: none;\n    }\n</style>"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n.center-block {\n    float: none;\n}\n", "", {"version":3,"sources":["/./app/client/components/views/Login.vue?0ea3fd74"],"names":[],"mappings":";AAsBA;IACA,YAAA;CACA","file":"Login.vue","sourcesContent":["<template>\n    <div class=\"row\">\n        <div class=\"col-xs-4 center-block\">\n            <h1>Login</h1>\n            <div class=\"form-group\">\n                <label for=\"username\">Username</label>\n                <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"password\">Password</label>\n                <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n            </div>\n            <button type=\"button\" class=\"btn btn-primary btn-block\">Login</button>\n            <hr>\n            <a class=\"text-muted\" v-link=\"{ path: '/register' }\">Need an account?</a>\n            <br>\n            <a class=\"text-muted\" v-link=\"{ path: '/forgot/password' }\">Forgot your password?</a>\n        </div>\n    </div>\n</template>\n\n<style>\n    .center-block {\n        float: none;\n    }\n</style>\n\n<script type=\"text/babel\">\n    import api from '../../api';\n\n    export default {\n        data() {\n            return {\n                username: '',\n                password: ''\n            };\n        },\n        methods: {\n            register() {\n                api.login(this.username, this.password);\n            }\n        }\n    };\n</script>"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
@@ -657,7 +667,7 @@
 	
 	
 	// module
-	exports.push([module.id, "\n.center-block {\n    float: none;\n}\n", "", {"version":3,"sources":["/./app/client/components/views/Register.vue?76f9cf75"],"names":[],"mappings":";AAsBA;IACA,YAAA;CACA","file":"Register.vue","sourcesContent":["<template>\n    <div class=\"row\">\n        <div class=\"col-xs-4 center-block\">\n            <h1>Register</h1>\n            <div class=\"form-group\">\n                <label for=\"email\">Email</label>\n                <input id=\"email\" type=\"email\" class=\"form-control\" placeholder=\"name@domain.com\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"username\">Username</label>\n                <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"password\">Password</label>\n                <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n            </div>\n            <button type=\"button\" class=\"btn btn-primary btn-block\">Register</button>\n        </div>\n    </div>\n</template>\n\n<style>\n    .center-block {\n        float: none;\n    }\n</style>"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n.center-block {\n    float: none;\n}\n", "", {"version":3,"sources":["/./app/client/components/views/Register.vue?ce9fe762"],"names":[],"mappings":";AAkCA;IACA,YAAA;CACA","file":"Register.vue","sourcesContent":["<template>\n    <div class=\"row\">\n        <div class=\"col-xs-4 center-block\">\n            <h1>Register</h1>\n            <div class=\"form-group\">\n                <label for=\"email\">Email</label>\n                <input id=\"email\"\n                       type=\"email\"\n                       class=\"form-control\"\n                       placeholder=\"name@domain.com\"\n                       v-model=\"email\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"username\">Username</label>\n                <input id=\"username\"\n                       type=\"text\"\n                       class=\"form-control\"\n                       placeholder=\"Username\"\n                       v-model=\"username\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"password\">Password</label>\n                <input id=\"password\"\n                       type=\"password\"\n                       class=\"form-control\"\n                       placeholder=\"Password\"\n                       v-model=\"password\">\n            </div>\n            <button type=\"button\" class=\"btn btn-primary btn-block\" @click=\"register()\">Register</button>\n        </div>\n    </div>\n</template>\n\n<style>\n    .center-block {\n        float: none;\n    }\n</style>\n\n<script type=\"text/babel\">\n    import api from '../../api';\n\n    export default {\n        data() {\n            return {\n                email: '',\n                username: '',\n                password: ''\n            };\n        },\n        methods: {\n            register() {\n                api.register(this.email, this.username, this.password);\n            }\n        }\n    };\n</script>"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
@@ -728,6 +738,174 @@
 	    '*': '/'
 	});
 	/* Routes */
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _api = __webpack_require__(27);
+	
+	var _api2 = _interopRequireDefault(_api);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            email: '',
+	            username: '',
+	            password: ''
+	        };
+	    },
+	
+	    methods: {
+	        register: function register() {
+	            _api2.default.register(this.email, this.username, this.password);
+	        }
+	    }
+	};
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _register2 = __webpack_require__(28);
+	
+	var _register3 = _interopRequireDefault(_register2);
+	
+	var _login2 = __webpack_require__(30);
+	
+	var _login3 = _interopRequireDefault(_login2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    register: function register(email, username, password) {
+	        return (0, _register3.default)(email, username, password);
+	    },
+	    login: function login(username, password) {
+	        return (0, _login3.default)(username, password);
+	    }
+	};
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _socket = __webpack_require__(29);
+	
+	var _socket2 = _interopRequireDefault(_socket);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = register;
+	
+	
+	function register(email, username, password) {
+	    return new Promise(function (resolve, reject) {
+	        var payload = {
+	            email: email,
+	            username: username,
+	            password: password
+	        };
+	
+	        _socket2.default.emit('register', payload, function (result) {
+	            return resolve(result);
+	        });
+	    });
+	}
+
+/***/ },
+/* 29 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = io();
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _socket = __webpack_require__(29);
+	
+	var _socket2 = _interopRequireDefault(_socket);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = login;
+	
+	
+	function login(username, password) {
+	    return new Promise(function (resolve, reject) {
+	        var payload = {
+	            username: username,
+	            password: password
+	        };
+	
+	        _socket2.default.emit('login', payload, function (result) {
+	            return resolve(result);
+	        });
+	    });
+	}
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _api = __webpack_require__(27);
+	
+	var _api2 = _interopRequireDefault(_api);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            username: '',
+	            password: ''
+	        };
+	    },
+	
+	    methods: {
+	        register: function register() {
+	            _api2.default.login(this.username, this.password);
+	        }
+	    }
+	};
 
 /***/ }
 /******/ ]);
