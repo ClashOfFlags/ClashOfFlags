@@ -589,13 +589,14 @@
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div class=\"row\">\n    <div class=\"col-xs-4 center-block\">\n        Test\n    </div>\n</div>\n<h1 class=\"display-4\">Login</h1>\n<div class=\"form-group\">\n    <label for=\"username\">Username</label>\n    <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n</div>\n<div class=\"form-group\">\n    <label for=\"password\">Password</label>\n    <input id=\"password\" type=\"password\" class=\"form-control\">\n</div>\n";
+	module.exports = "\n<div class=\"row\">\n    <div class=\"col-xs-4 center-block\">\n        <h1>Login</h1>\n        <div class=\"form-group\">\n            <label for=\"username\">Username</label>\n            <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"password\">Password</label>\n            <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n        </div>\n        <button type=\"button\" class=\"btn btn-primary btn-block\">Login</button>\n        <hr>\n        <a class=\"text-muted\" v-link=\"{ path: '/register' }\">Need an account?</a>\n        <br>\n        <a class=\"text-muted\" v-link=\"{ path: '/forgot/password' }\">Forgot your password?</a>\n    </div>\n</div>\n";
 
 /***/ },
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
+	__webpack_require__(23)
 	__vue_template__ = __webpack_require__(18)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
@@ -618,7 +619,7 @@
 /* 18 */
 /***/ function(module, exports) {
 
-	module.exports = "\n<div>Register</div>\n";
+	module.exports = "\n<div class=\"row\">\n    <div class=\"col-xs-4 center-block\">\n        <h1>Register</h1>\n        <div class=\"form-group\">\n            <label for=\"email\">Email</label>\n            <input id=\"email\" type=\"email\" class=\"form-control\" placeholder=\"name@domain.com\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"username\">Username</label>\n            <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"password\">Password</label>\n            <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n        </div>\n        <button type=\"button\" class=\"btn btn-primary btn-block\">Register</button>\n    </div>\n</div>\n";
 
 /***/ },
 /* 19 */
@@ -684,7 +685,47 @@
 	
 	
 	// module
-	exports.push([module.id, "\n.center-block {\n    float: none;\n}\n", "", {"version":3,"sources":["/./app/client/components/views/Login.vue?4ecaa614"],"names":[],"mappings":";AAkBA;IACA,YAAA;CACA","file":"Login.vue","sourcesContent":["<template>\n    <div class=\"row\">\n        <div class=\"col-xs-4 center-block\">\n            Test\n        </div>\n    </div>\n    <h1 class=\"display-4\">Login</h1>\n    <div class=\"form-group\">\n        <label for=\"username\">Username</label>\n        <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n    </div>\n    <div class=\"form-group\">\n        <label for=\"password\">Password</label>\n        <input id=\"password\" type=\"password\" class=\"form-control\">\n    </div>\n</template>\n\n<style>\n    .center-block {\n        float: none;\n    }\n</style>"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n.center-block {\n    float: none;\n}\n", "", {"version":3,"sources":["/./app/client/components/views/Login.vue?18cf2409"],"names":[],"mappings":";AAsBA;IACA,YAAA;CACA","file":"Login.vue","sourcesContent":["<template>\n    <div class=\"row\">\n        <div class=\"col-xs-4 center-block\">\n            <h1>Login</h1>\n            <div class=\"form-group\">\n                <label for=\"username\">Username</label>\n                <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"password\">Password</label>\n                <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n            </div>\n            <button type=\"button\" class=\"btn btn-primary btn-block\">Login</button>\n            <hr>\n            <a class=\"text-muted\" v-link=\"{ path: '/register' }\">Need an account?</a>\n            <br>\n            <a class=\"text-muted\" v-link=\"{ path: '/forgot/password' }\">Forgot your password?</a>\n        </div>\n    </div>\n</template>\n\n<style>\n    .center-block {\n        float: none;\n    }\n</style>"],"sourceRoot":"webpack://"}]);
+	
+	// exports
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(24);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(7)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./Register.vue", function() {
+				var newContent = require("!!./../../../../node_modules/css-loader/index.js?sourceMap!./../../../../node_modules/vue-loader/lib/style-rewriter.js!./../../../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./Register.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(6)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "\n.center-block {\n    float: none;\n}\n", "", {"version":3,"sources":["/./app/client/components/views/Register.vue?76f9cf75"],"names":[],"mappings":";AAsBA;IACA,YAAA;CACA","file":"Register.vue","sourcesContent":["<template>\n    <div class=\"row\">\n        <div class=\"col-xs-4 center-block\">\n            <h1>Register</h1>\n            <div class=\"form-group\">\n                <label for=\"email\">Email</label>\n                <input id=\"email\" type=\"email\" class=\"form-control\" placeholder=\"name@domain.com\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"username\">Username</label>\n                <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"password\">Password</label>\n                <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n            </div>\n            <button type=\"button\" class=\"btn btn-primary btn-block\">Register</button>\n        </div>\n    </div>\n</template>\n\n<style>\n    .center-block {\n        float: none;\n    }\n</style>"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
