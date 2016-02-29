@@ -283,8 +283,8 @@ var GameState = function (_State) {
                         // var playerStartPos = this.findObjectsByType('', this.map, 'objectsLayer');
                         // this.player = new Hero(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
                         this.player = new _Hero2.default(this.game, 100, 100, 'player');
-                        this.player.scale.x = 2;
-                        this.player.scale.y = 2;
+                        this.player.scale.x = 4;
+                        this.player.scale.y = 4;
 
                         this.game.camera.follow(this.player);
 
@@ -306,16 +306,16 @@ var GameState = function (_State) {
                                 var cup = cups.getFirstDead();
 
                                 cup.reset(_this2.player.body.x - cup.width / 2, _this2.player.body.y - cup.height / 2);
-                                _this2.game.physics.arcade.moveToPointer(cup, 300);
+                                _this2.game.physics.arcade.moveToPointer(cup, 2000);
 
-                                var targetAngle = _this2.game.math.angleBetween(cup.x + cup.width / 2, cup.y + cup.height / 2, _this2.game.input.activePointer.x, _this2.game.input.activePointer.y);
+                                var targetAngle = _this2.game.math.angleBetween(cup.center.x, cup.center.y, _this2.game.input.activePointer.x, _this2.game.input.activePointer.y);
 
                                 cup.rotation = targetAngle;
                                 cup.pivot.x = cup.width * 0.5;
                                 cup.pivot.y = cup.height * 0.5;
 
-                                cup.x = cup.x + cup.width / 2 + _this2.player.width / 2;
-                                cup.y = cup.y + cup.height / 2 + _this2.player.height / 2;
+                                cup.x = cup.center.x + _this2.player.center.x;
+                                cup.y = cup.center.y + _this2.player.center.y;
                         });
                 }
         }, {

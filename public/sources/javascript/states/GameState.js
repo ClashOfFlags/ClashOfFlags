@@ -101,8 +101,8 @@ export default class GameState extends State {
         // var playerStartPos = this.findObjectsByType('', this.map, 'objectsLayer');
         // this.player = new Hero(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
         this.player = new Hero(this.game, 100, 100, 'player');
-        this.player.scale.x = 2;
-        this.player.scale.y = 2;
+        this.player.scale.x = 4;
+        this.player.scale.y = 4;
 
         this.game.camera.follow(this.player);
 
@@ -124,16 +124,16 @@ export default class GameState extends State {
             var cup = cups.getFirstDead();
 
             cup.reset(this.player.body.x - cup.width / 2, this.player.body.y - cup.height / 2);
-            this.game.physics.arcade.moveToPointer(cup, 300);
+            this.game.physics.arcade.moveToPointer(cup, 2000);
 
-            var targetAngle = this.game.math.angleBetween(cup.x + cup.width/2, cup.y + cup.height/2, this.game.input.activePointer.x, this.game.input.activePointer.y);
+            var targetAngle = this.game.math.angleBetween(cup.center.x, cup.center.y, this.game.input.activePointer.x, this.game.input.activePointer.y);
 
             cup.rotation = targetAngle;
             cup.pivot.x = cup.width * 0.5;
             cup.pivot.y = cup.height * 0.5;
 
-            cup.x = cup.x  + cup.width / 2 + this.player.width / 2;
-            cup.y = cup.y  + cup.height / 2 + this.player.height / 2;
+            cup.x = cup.center.x + this.player.center.x;
+            cup.y = cup.center.y + this.player.center.y;
       });
     }
 
