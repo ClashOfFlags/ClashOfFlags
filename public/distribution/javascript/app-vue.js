@@ -58,17 +58,15 @@
 	
 	var _App2 = _interopRequireDefault(_App);
 	
-	var _routes = __webpack_require__(8);
+	var _router = __webpack_require__(8);
 	
-	var _routes2 = _interopRequireDefault(_routes);
+	var _router2 = _interopRequireDefault(_router);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	_vue2.default.use(_vueRouter2.default);
 	
-	var router = (0, _routes2.default)();
-	
-	router.start(_App2.default, 'app');
+	_router2.default.start(_App2.default, 'app');
 
 /***/ },
 /* 1 */
@@ -102,7 +100,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/ClashOfFlags/app/client/components/App.vue"
+	  var id = "/home/vagrant/GitHub/ClashOfFlags/app/client/components/App.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -145,7 +143,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/ClashOfFlags/app/client/components/Navbar.vue"
+	  var id = "/home/vagrant/GitHub/ClashOfFlags/app/client/components/Navbar.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -187,11 +185,11 @@
 	
 	var _Login2 = _interopRequireDefault(_Login);
 	
-	var _Register = __webpack_require__(17);
+	var _Register = __webpack_require__(22);
 	
 	var _Register2 = _interopRequireDefault(_Register);
 	
-	var _About = __webpack_require__(21);
+	var _About = __webpack_require__(27);
 	
 	var _About2 = _interopRequireDefault(_About);
 	
@@ -200,37 +198,37 @@
 	/* Views */
 	
 	/* Views */
-	exports.default = createRouter;
+	var routerOptions = {
+	    hashbang: false,
+	    history: true,
+	    linkActiveClass: 'active',
+	    saveScrollPosition: true
+	};
+	var router = new _vueRouter2.default(routerOptions);
 	
+	exports.default = router;
 	
-	function createRouter() {
-	    var routerOptions = {
-	        hashbang: false,
-	        history: true,
-	        linkActiveClass: 'active',
-	        saveScrollPosition: true
-	    };
-	    var router = new _vueRouter2.default(routerOptions);
+	/* Routes */
 	
-	    /* Routes */
-	    router.map({
-	        '/': {
-	            component: _Game2.default
-	        },
-	        '/login': {
-	            component: _Login2.default
-	        },
-	        '/register': {
-	            component: _Register2.default
-	        },
-	        '/about': {
-	            component: _About2.default
-	        }
-	    });
-	    /* Routes */
+	router.map({
+	    '/': {
+	        component: _Game2.default
+	    },
+	    '/login': {
+	        component: _Login2.default
+	    },
+	    '/register': {
+	        component: _Register2.default
+	    },
+	    '/about': {
+	        component: _About2.default
+	    }
+	});
 	
-	    return router;
-	}
+	router.redirect({
+	    '*': '/'
+	});
+	/* Routes */
 
 /***/ },
 /* 9 */
@@ -251,7 +249,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/ClashOfFlags/app/client/components/views/Game.vue"
+	  var id = "/home/vagrant/GitHub/ClashOfFlags/app/client/components/views/Game.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -287,7 +285,12 @@
 
 	var __vue_script__, __vue_template__
 	__webpack_require__(12)
-	__vue_template__ = __webpack_require__(16)
+	__vue_script__ = __webpack_require__(16)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] app/client/components/views/Login.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(21)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -297,7 +300,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/ClashOfFlags/app/client/components/views/Login.vue"
+	  var id = "/home/vagrant/GitHub/ClashOfFlags/app/client/components/views/Login.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -340,7 +343,7 @@
 	
 	
 	// module
-	exports.push([module.id, "\n.center-block {\n    float: none;\n}\n", "", {"version":3,"sources":["/./app/client/components/views/Login.vue?3f59164e"],"names":[],"mappings":";AAsBA;IACA,YAAA;CACA","file":"Login.vue","sourcesContent":["<template>\r\n    <div class=\"row\">\r\n        <div class=\"col-xs-4 center-block\">\r\n            <h1>Login</h1>\r\n            <div class=\"form-group\">\r\n                <label for=\"username\">Username</label>\r\n                <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <label for=\"password\">Password</label>\r\n                <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\r\n            </div>\r\n            <button type=\"button\" class=\"btn btn-primary btn-block\">Login</button>\r\n            <hr>\r\n            <a class=\"text-muted\" v-link=\"{ path: '/register' }\">Need an account?</a>\r\n            <br>\r\n            <a class=\"text-muted\" v-link=\"{ path: '/forgot/password' }\">Forgot your password?</a>\r\n        </div>\r\n    </div>\r\n</template>\r\n\r\n<style>\r\n    .center-block {\r\n        float: none;\r\n    }\r\n</style>"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n.center-block {\n    float: none;\n}\n", "", {"version":3,"sources":["/./app/client/components/views/Login.vue?0ea3fd74"],"names":[],"mappings":";AAsBA;IACA,YAAA;CACA","file":"Login.vue","sourcesContent":["<template>\n    <div class=\"row\">\n        <div class=\"col-xs-4 center-block\">\n            <h1>Login</h1>\n            <div class=\"form-group\">\n                <label for=\"username\">Username</label>\n                <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"password\">Password</label>\n                <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n            </div>\n            <button type=\"button\" class=\"btn btn-primary btn-block\">Login</button>\n            <hr>\n            <a class=\"text-muted\" v-link=\"{ path: '/register' }\">Need an account?</a>\n            <br>\n            <a class=\"text-muted\" v-link=\"{ path: '/forgot/password' }\">Forgot your password?</a>\n        </div>\n    </div>\n</template>\n\n<style>\n    .center-block {\n        float: none;\n    }\n</style>\n\n<script type=\"text/babel\">\n    import api from '../../api';\n\n    export default {\n        data() {\n            return {\n                username: '',\n                password: ''\n            };\n        },\n        methods: {\n            register() {\n                api.login(this.username, this.password);\n            }\n        }\n    };\n</script>"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
@@ -625,17 +628,158 @@
 
 /***/ },
 /* 16 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "\n<div class=\"row\">\n    <div class=\"col-xs-4 center-block\">\n        <h1>Login</h1>\n        <div class=\"form-group\">\n            <label for=\"username\">Username</label>\n            <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"password\">Password</label>\n            <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n        </div>\n        <button type=\"button\" class=\"btn btn-primary btn-block\">Login</button>\n        <hr>\n        <a class=\"text-muted\" v-link=\"{ path: '/register' }\">Need an account?</a>\n        <br>\n        <a class=\"text-muted\" v-link=\"{ path: '/forgot/password' }\">Forgot your password?</a>\n    </div>\n</div>\n";
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _api = __webpack_require__(17);
+	
+	var _api2 = _interopRequireDefault(_api);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            username: '',
+	            password: ''
+	        };
+	    },
+	
+	    methods: {
+	        register: function register() {
+	            _api2.default.login(this.username, this.password);
+	        }
+	    }
+	};
 
 /***/ },
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _register2 = __webpack_require__(18);
+	
+	var _register3 = _interopRequireDefault(_register2);
+	
+	var _login2 = __webpack_require__(20);
+	
+	var _login3 = _interopRequireDefault(_login2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    register: function register(email, username, password) {
+	        return (0, _register3.default)(email, username, password);
+	    },
+	    login: function login(username, password) {
+	        return (0, _login3.default)(username, password);
+	    }
+	};
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _socket = __webpack_require__(19);
+	
+	var _socket2 = _interopRequireDefault(_socket);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = register;
+	
+	
+	function register(email, username, password) {
+	    return new Promise(function (resolve, reject) {
+	        var payload = {
+	            email: email,
+	            username: username,
+	            password: password
+	        };
+	
+	        _socket2.default.emit('register', payload, function (result) {
+	            return resolve(result);
+	        });
+	    });
+	}
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = io();
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _socket = __webpack_require__(19);
+	
+	var _socket2 = _interopRequireDefault(_socket);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = login;
+	
+	
+	function login(username, password) {
+	    return new Promise(function (resolve, reject) {
+	        var payload = {
+	            username: username,
+	            password: password
+	        };
+	
+	        _socket2.default.emit('login', payload, function (result) {
+	            return resolve(result);
+	        });
+	    });
+	}
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"row\">\n    <div class=\"col-xs-4 center-block\">\n        <h1>Login</h1>\n        <div class=\"form-group\">\n            <label for=\"username\">Username</label>\n            <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"password\">Password</label>\n            <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n        </div>\n        <button type=\"button\" class=\"btn btn-primary btn-block\">Login</button>\n        <hr>\n        <a class=\"text-muted\" v-link=\"{ path: '/register' }\">Need an account?</a>\n        <br>\n        <a class=\"text-muted\" v-link=\"{ path: '/forgot/password' }\">Forgot your password?</a>\n    </div>\n</div>\n";
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var __vue_script__, __vue_template__
-	__webpack_require__(18)
-	__vue_template__ = __webpack_require__(20)
+	__webpack_require__(23)
+	__vue_script__ = __webpack_require__(25)
+	if (__vue_script__ &&
+	    __vue_script__.__esModule &&
+	    Object.keys(__vue_script__).length > 1) {
+	  console.warn("[vue-loader] app/client/components/views/Register.vue: named exports in *.vue files are ignored.")}
+	__vue_template__ = __webpack_require__(26)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -645,7 +789,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/ClashOfFlags/app/client/components/views/Register.vue"
+	  var id = "/home/vagrant/GitHub/ClashOfFlags/app/client/components/views/Register.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -654,13 +798,13 @@
 	})()}
 
 /***/ },
-/* 18 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(19);
+	var content = __webpack_require__(24);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(15)(content, {});
@@ -680,7 +824,7 @@
 	}
 
 /***/ },
-/* 19 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	exports = module.exports = __webpack_require__(14)();
@@ -688,23 +832,55 @@
 	
 	
 	// module
-	exports.push([module.id, "\n.center-block {\n    float: none;\n}\n", "", {"version":3,"sources":["/./app/client/components/views/Register.vue?1f202834"],"names":[],"mappings":";AAsBA;IACA,YAAA;CACA","file":"Register.vue","sourcesContent":["<template>\r\n    <div class=\"row\">\r\n        <div class=\"col-xs-4 center-block\">\r\n            <h1>Register</h1>\r\n            <div class=\"form-group\">\r\n                <label for=\"email\">Email</label>\r\n                <input id=\"email\" type=\"email\" class=\"form-control\" placeholder=\"name@domain.com\">\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <label for=\"username\">Username</label>\r\n                <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\r\n            </div>\r\n            <div class=\"form-group\">\r\n                <label for=\"password\">Password</label>\r\n                <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\r\n            </div>\r\n            <button type=\"button\" class=\"btn btn-primary btn-block\">Register</button>\r\n        </div>\r\n    </div>\r\n</template>\r\n\r\n<style>\r\n    .center-block {\r\n        float: none;\r\n    }\r\n</style>"],"sourceRoot":"webpack://"}]);
+	exports.push([module.id, "\n.center-block {\n    float: none;\n}\n", "", {"version":3,"sources":["/./app/client/components/views/Register.vue?ce9fe762"],"names":[],"mappings":";AAkCA;IACA,YAAA;CACA","file":"Register.vue","sourcesContent":["<template>\n    <div class=\"row\">\n        <div class=\"col-xs-4 center-block\">\n            <h1>Register</h1>\n            <div class=\"form-group\">\n                <label for=\"email\">Email</label>\n                <input id=\"email\"\n                       type=\"email\"\n                       class=\"form-control\"\n                       placeholder=\"name@domain.com\"\n                       v-model=\"email\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"username\">Username</label>\n                <input id=\"username\"\n                       type=\"text\"\n                       class=\"form-control\"\n                       placeholder=\"Username\"\n                       v-model=\"username\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"password\">Password</label>\n                <input id=\"password\"\n                       type=\"password\"\n                       class=\"form-control\"\n                       placeholder=\"Password\"\n                       v-model=\"password\">\n            </div>\n            <button type=\"button\" class=\"btn btn-primary btn-block\" @click=\"register()\">Register</button>\n        </div>\n    </div>\n</template>\n\n<style>\n    .center-block {\n        float: none;\n    }\n</style>\n\n<script type=\"text/babel\">\n    import api from '../../api';\n\n    export default {\n        data() {\n            return {\n                email: '',\n                username: '',\n                password: ''\n            };\n        },\n        methods: {\n            register() {\n                api.register(this.email, this.username, this.password);\n            }\n        }\n    };\n</script>"],"sourceRoot":"webpack://"}]);
 	
 	// exports
 
 
 /***/ },
-/* 20 */
-/***/ function(module, exports) {
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = "\n<div class=\"row\">\n    <div class=\"col-xs-4 center-block\">\n        <h1>Register</h1>\n        <div class=\"form-group\">\n            <label for=\"email\">Email</label>\n            <input id=\"email\" type=\"email\" class=\"form-control\" placeholder=\"name@domain.com\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"username\">Username</label>\n            <input id=\"username\" type=\"text\" class=\"form-control\" placeholder=\"Username\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"password\">Password</label>\n            <input id=\"password\" type=\"password\" class=\"form-control\" placeholder=\"Password\">\n        </div>\n        <button type=\"button\" class=\"btn btn-primary btn-block\">Register</button>\n    </div>\n</div>\n";
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _api = __webpack_require__(17);
+	
+	var _api2 = _interopRequireDefault(_api);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	    data: function data() {
+	        return {
+	            email: '',
+	            username: '',
+	            password: ''
+	        };
+	    },
+	
+	    methods: {
+	        register: function register() {
+	            _api2.default.register(this.email, this.username, this.password);
+	        }
+	    }
+	};
 
 /***/ },
-/* 21 */
+/* 26 */
+/***/ function(module, exports) {
+
+	module.exports = "\n<div class=\"row\">\n    <div class=\"col-xs-4 center-block\">\n        <h1>Register</h1>\n        <div class=\"form-group\">\n            <label for=\"email\">Email</label>\n            <input id=\"email\"\n                   type=\"email\"\n                   class=\"form-control\"\n                   placeholder=\"name@domain.com\"\n                   v-model=\"email\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"username\">Username</label>\n            <input id=\"username\"\n                   type=\"text\"\n                   class=\"form-control\"\n                   placeholder=\"Username\"\n                   v-model=\"username\">\n        </div>\n        <div class=\"form-group\">\n            <label for=\"password\">Password</label>\n            <input id=\"password\"\n                   type=\"password\"\n                   class=\"form-control\"\n                   placeholder=\"Password\"\n                   v-model=\"password\">\n        </div>\n        <button type=\"button\" class=\"btn btn-primary btn-block\" @click=\"register()\">Register</button>\n    </div>\n</div>\n";
+
+/***/ },
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_script__, __vue_template__
-	__vue_template__ = __webpack_require__(22)
+	__vue_template__ = __webpack_require__(28)
 	module.exports = __vue_script__ || {}
 	if (module.exports.__esModule) module.exports = module.exports.default
 	if (__vue_template__) {
@@ -714,7 +890,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/ClashOfFlags/app/client/components/views/About.vue"
+	  var id = "/home/vagrant/GitHub/ClashOfFlags/app/client/components/views/About.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -723,7 +899,7 @@
 	})()}
 
 /***/ },
-/* 22 */
+/* 28 */
 /***/ function(module, exports) {
 
 	module.exports = "\n<div class=\"jumbotron jumbotron-fluid\">\n    <div class=\"container\">\n        <h1 class=\"display-4\">About Clash of Flags</h1>\n        <p class=\"lead\">\n            This project has been created by <strong><a href=\"http://schneider.click\" target=\"_blank\">Simon Schneider</a></strong>, <strong><a href=\"http://schemel.me\" target=\"_blank\">Philipp Schemel</a></strong>, <strong>Jochen Walther</strong> & <strong><a href=\"http://vornetran.de\" target=\"_blank\">Marc Vornetran</a></strong> for the <i>\"Games and Gaming\"</i> course at the <strong>Cooperative State University</strong> in <strong>Karlsruhe</strong>.</p>\n        </p>\n    </div>\n</div>\n";

@@ -24,3 +24,21 @@
         float: none;
     }
 </style>
+
+<script type="text/babel">
+    import api from '../../api';
+
+    export default {
+        data() {
+            return {
+                username: '',
+                password: ''
+            };
+        },
+        methods: {
+            register() {
+                api.login(this.username, this.password);
+            }
+        }
+    };
+</script>
