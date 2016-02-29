@@ -264,7 +264,7 @@ var GameState = function (_State) {
                         this.decorationslayer = this.map.createLayer('decorations');
 
                         //collision on obstacleLayer
-                        this.map.setCollisionBetween(1, 0, true, 'obstacle');
+                        this.map.setCollisionBetween(1, 2000, true, 'obstacle');
 
                         /***************************
                         ******     items     ******
