@@ -45,14 +45,12 @@
                  "properties":
                     {
                      "player":"1",
-                     "team":"1",
-                     "type":"playerStart"
+                     "team":"1"
                     },
                  "propertytypes":
                     {
                      "player":"string",
-                     "team":"string",
-                     "type":"string"
+                     "team":"string"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -675,6 +673,14 @@
                  "height":64,
                  "id":57,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -687,6 +693,14 @@
                  "height":64,
                  "id":58,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -897,6 +911,26 @@
                  "width":64,
                  "x":1750.79,
                  "y":1973.21
+                }, 
+                {
+                 "gid":3465,
+                 "height":64,
+                 "id":83,
+                 "name":"playerStart",
+                 "properties":
+                    {
+                     "type":"playerStart"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":3190.92915753661,
+                 "y":386.467813953488
                 }],
          "offsetx":-22.7879,
          "offsety":144.788,
@@ -918,7 +952,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":82,
+ "nextobjectid":84,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":64,
@@ -961,6 +995,19 @@
          "tilecount":130,
          "tileheight":64,
          "tilewidth":64
+        }, 
+        {
+         "columns":44,
+         "firstgid":247,
+         "image":"..\/images\/tiles.png",
+         "imageheight":1280,
+         "imagewidth":705,
+         "margin":0,
+         "name":"tiles",
+         "spacing":0,
+         "tilecount":3520,
+         "tileheight":16,
+         "tilewidth":16
         }],
  "tilewidth":64,
  "version":1,

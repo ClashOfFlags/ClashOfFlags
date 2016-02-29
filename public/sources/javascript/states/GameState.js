@@ -25,7 +25,7 @@ export default class GameState extends State {
         this.game.load.image('cup', this.paths.image('bluecup.png'));
         this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
         this.game.load.atlasJSONHash('explosion', 'assets/images/onfireanimation.png', 'assets/images/onfireanimation.json');
-        this.game.load.spritesheet('fire', 'assets/images/fire.png', 32, 32);
+        this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
         this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
         this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
     }
@@ -70,9 +70,8 @@ export default class GameState extends State {
     createMap() {
         this.game.world.setBounds(0, 0, 6400, 6400);
 
-        // this.objects.set('map', this.game.add.tilemap('map'));
-        // this.map = this.objects.get('map');
-        this.map = this.game.add.tilemap('map');
+        this.objects.set('map', this.game.add.tilemap('map'));
+        this.map = this.objects.get('map');
 
         //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
         this.map.addTilesetImage('dungeon_tileset_64');
@@ -90,17 +89,15 @@ export default class GameState extends State {
       /***************************
       ******     items     ******
       ***************************/
-      // this.createItems();
+      this.createObjects();
 
       this.explosions = this.game.add.group();
       this.explosions.createMultiple(50, 'explosion');
     }
 
     createPlayer() {
-        // var playerStartPos = this.objects.byType('playerStart', 'objectsLayer');
-        // var playerStartPos = this.findObjectsByType('', this.map, 'objectsLayer');
-        // this.player = new Hero(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
-        this.player = new Hero(this.game, 3170, 350, 'player');
+        var playerStartPos = this.objects.byType('playerStart', 'objectsLayer');
+        this.player = new Hero(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
         this.player.scale.x = 4;
         this.player.scale.y = 4;
 
@@ -137,35 +134,15 @@ export default class GameState extends State {
       });
     }
 
-    createItems() {
-        this.items = this.game.add.group();
-        this.items.enableBody = true;
-        var result = this.objects.byType('item', 'objectsLayer');
+    createObjects() {
+        this.torchGroup = this.game.add.group();
+        this.torchGroup.enableBody = true;
+        var result = this.objects.byType('torch', 'objectsLayer');
         result.forEach(function (element) {
-            this.createFromTiledObject(element, this.items);
+            var torch = this.torchGroup.create(element.x, element.y, "torch");
+            torch.animations.add('on', [0, 1, 2, 3], 10, true);
+            torch.animations.play('on');
         }, this);
-    }
-
-    //find objects in a Tiled layer that containt a property called "type" equal to a certain value
-    findObjectsByType(type, map, layer) {
-      var result = [];
-      map.objects[layer].forEach(function(element){
-        if(element.properties.type === type) {
-          element.y -= map.tileHeight;
-          result.push(element);
-        }
-      });
-      return result;
-    }
-
-    //create a sprite from an object
-    createFromTiledObject(element, group) {
-        var sprite = group.create(element.x, element.y, element.properties.sprite);
-
-      //copy all properties to the sprite
-      Object.keys(element.properties).forEach(function(key){
-        sprite[key] = element.properties[key];
-      });
     }
 
     createControls() {
