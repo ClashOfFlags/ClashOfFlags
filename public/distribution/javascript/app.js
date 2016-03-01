@@ -92,8 +92,11 @@ var ObjectsService = function () {
         value: function byType(type, layer) {
             var result = [];
             this.map().objects[layer].forEach(function (element) {
-                if (element.properties.type === type) {
-                    result.push(element);
+                if (element.properties) {
+                    if (element.properties.type === type) {
+                        element.y += 64;
+                        result.push(element);
+                    }
                 }
             });
             return result;
@@ -202,7 +205,7 @@ var GameState = function (_State) {
             this.game.load.image('cup', this.paths.image('bluecup.png'));
             this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
             this.game.load.atlasJSONHash('explosion', 'assets/images/onfireanimation.png', 'assets/images/onfireanimation.json');
-            this.game.load.spritesheet('fire', 'assets/images/fire.png', 32, 32);
+            this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
             this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
             this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
         }
@@ -250,9 +253,8 @@ var GameState = function (_State) {
         value: function createMap() {
             this.game.world.setBounds(0, 0, 6400, 6400);
 
-            // this.objects.set('map', this.game.add.tilemap('map'));
-            // this.map = this.objects.get('map');
-            this.map = this.game.add.tilemap('map');
+            this.objects.set('map', this.game.add.tilemap('map'));
+            this.map = this.objects.get('map');
 
             //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
             this.map.addTilesetImage('dungeon_tileset_64');
@@ -269,7 +271,7 @@ var GameState = function (_State) {
             /***************************
             ******     items     ******
             ***************************/
-            // this.createItems();
+            this.createObjects();
 
             this.explosions = this.game.add.group();
             this.explosions.createMultiple(50, 'explosion');
@@ -279,10 +281,8 @@ var GameState = function (_State) {
         value: function createPlayer() {
             var _this2 = this;
 
-            // var playerStartPos = this.objects.byType('playerStart', 'objectsLayer');
-            // var playerStartPos = this.findObjectsByType('', this.map, 'objectsLayer');
-            // this.player = new Hero(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
-            this.player = new _Hero2.default(this.game, 100, 100, 'player');
+            var playerStartPos = this.objects.byType('playerStart', 'objectsLayer');
+            this.player = new _Hero2.default(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
             this.player.scale.x = 4;
             this.player.scale.y = 4;
 
@@ -308,53 +308,27 @@ var GameState = function (_State) {
                 cup.reset(_this2.player.body.x - cup.width / 2, _this2.player.body.y - cup.height / 2);
                 _this2.game.physics.arcade.moveToPointer(cup, 2000);
 
-                var targetAngle = _this2.game.math.angleBetween(cup.center.x, cup.center.y, _this2.game.input.activePointer.x, _this2.game.input.activePointer.y);
+                var targetAngle = _this2.game.math.angleBetween(cup.x + cup.width / 2, cup.y + cup.height / 2, _this2.game.input.activePointer.x, _this2.game.input.activePointer.y);
 
                 cup.rotation = targetAngle;
                 cup.pivot.x = cup.width * 0.5;
                 cup.pivot.y = cup.height * 0.5;
 
-                cup.x = cup.center.x + _this2.player.center.x;
-                cup.y = cup.center.y + _this2.player.center.y;
+                cup.x = cup.x + cup.width / 2 + _this2.player.width / 2;
+                cup.y = cup.y + cup.height / 2 + _this2.player.height / 2;
             });
         }
     }, {
-        key: 'createItems',
-        value: function createItems() {
-            this.items = this.game.add.group();
-            this.items.enableBody = true;
-            var result = this.objects.byType('item', 'objectsLayer');
+        key: 'createObjects',
+        value: function createObjects() {
+            this.torchGroup = this.game.add.group();
+            this.torchGroup.enableBody = true;
+            var result = this.objects.byType('torch', 'objectsLayer');
             result.forEach(function (element) {
-                this.createFromTiledObject(element, this.items);
+                var torch = this.torchGroup.create(element.x, element.y, "torch");
+                torch.animations.add('on', [0, 1, 2, 3], 10, true);
+                torch.animations.play('on');
             }, this);
-        }
-
-        //find objects in a Tiled layer that containt a property called "type" equal to a certain value
-
-    }, {
-        key: 'findObjectsByType',
-        value: function findObjectsByType(type, map, layer) {
-            var result = [];
-            map.objects[layer].forEach(function (element) {
-                if (element.properties.type === type) {
-                    element.y -= map.tileHeight;
-                    result.push(element);
-                }
-            });
-            return result;
-        }
-
-        //create a sprite from an object
-
-    }, {
-        key: 'createFromTiledObject',
-        value: function createFromTiledObject(element, group) {
-            var sprite = group.create(element.x, element.y, element.properties.sprite);
-
-            //copy all properties to the sprite
-            Object.keys(element.properties).forEach(function (key) {
-                sprite[key] = element.properties[key];
-            });
         }
     }, {
         key: 'createControls',

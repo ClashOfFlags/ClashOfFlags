@@ -10,9 +10,13 @@ export default class ObjectsService {
     byType(type, layer) {
         var result = [];
         this.map().objects[layer].forEach(function (element) {
+          if(element.properties) {
             if (element.properties.type === type) {
+                element.y += 64;
                 result.push(element);
             }
+          }
+
         });
         return result;
     }
