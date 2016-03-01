@@ -429,7 +429,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var game = game || {};
 
-game = new Phaser.Game(1920, 1080, Phaser.AUTO, 'game');
+game = new Phaser.Game('100', '100', Phaser.AUTO, 'game');
 
 var player,
     cursors,

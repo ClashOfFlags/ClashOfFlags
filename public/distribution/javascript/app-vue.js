@@ -100,7 +100,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/home/vagrant/GitHub/ClashOfFlags/app/client/components/App.vue"
+	  var id = "/Users/Marc/GitHub/ClashOfFlags/app/client/components/App.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -143,7 +143,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/home/vagrant/GitHub/ClashOfFlags/app/client/components/Navbar.vue"
+	  var id = "/Users/Marc/GitHub/ClashOfFlags/app/client/components/Navbar.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -249,7 +249,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/home/vagrant/GitHub/ClashOfFlags/app/client/components/views/Game.vue"
+	  var id = "/Users/Marc/GitHub/ClashOfFlags/app/client/components/views/Game.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -300,7 +300,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/home/vagrant/GitHub/ClashOfFlags/app/client/components/views/Login.vue"
+	  var id = "/Users/Marc/GitHub/ClashOfFlags/app/client/components/views/Login.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -789,7 +789,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/home/vagrant/GitHub/ClashOfFlags/app/client/components/views/Register.vue"
+	  var id = "/Users/Marc/GitHub/ClashOfFlags/app/client/components/views/Register.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
@@ -890,7 +890,7 @@
 	  var hotAPI = require("vue-hot-reload-api")
 	  hotAPI.install(require("vue"), true)
 	  if (!hotAPI.compatible) return
-	  var id = "/home/vagrant/GitHub/ClashOfFlags/app/client/components/views/About.vue"
+	  var id = "/Users/Marc/GitHub/ClashOfFlags/app/client/components/views/About.vue"
 	  if (!module.hot.data) {
 	    hotAPI.createRecord(id, module.exports)
 	  } else {
