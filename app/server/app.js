@@ -5,13 +5,14 @@ const express = require('express');
 const app = express();
 const server = require('http').Server(app);
 const history = require('connect-history-api-fallback');
-const socketIo = require('./socket.io');
+const socket = require('./socket');
 const mongoose = require('./mongoose');
 
-app.use(history());
-app.use(express.static('public'));
+app.use(history()); // Serve index.html for all 404 routes
+app.use(express.static('public')); // Serve static files
 
-socketIo.init(server);
+socket.init(server); // Start Socket.io
+require('./api'); // Start API
 
 console.log('Waiting for MongoDB connection...');
 mongoose.then(() => {

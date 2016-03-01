@@ -667,23 +667,19 @@
 	    value: true
 	});
 	
-	var _register2 = __webpack_require__(18);
+	var _register = __webpack_require__(18);
 	
-	var _register3 = _interopRequireDefault(_register2);
+	var _register2 = _interopRequireDefault(_register);
 	
-	var _login2 = __webpack_require__(20);
+	var _login = __webpack_require__(20);
 	
-	var _login3 = _interopRequireDefault(_login2);
+	var _login2 = _interopRequireDefault(_login);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = {
-	    register: function register(email, username, password) {
-	        return (0, _register3.default)(email, username, password);
-	    },
-	    login: function login(username, password) {
-	        return (0, _login3.default)(username, password);
-	    }
+	    register: _register2.default,
+	    login: _login2.default
 	};
 
 /***/ },
@@ -706,16 +702,10 @@
 	
 	
 	function register(email, username, password) {
-	    return new Promise(function (resolve, reject) {
-	        var payload = {
-	            email: email,
-	            username: username,
-	            password: password
-	        };
-	
-	        _socket2.default.emit('register', payload, function (result) {
-	            return resolve(result);
-	        });
+	    return _socket2.default.emit('register', {
+	        email: email,
+	        username: username,
+	        password: password
 	    });
 	}
 
@@ -726,9 +716,22 @@
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
-	exports.default = io();
+	var socket = io();
+	
+	exports.default = {
+	    emit: emit
+	};
+	
+	
+	function emit(event, payload) {
+	    return new Promise(function (resolve, reject) {
+	        socket.emit(event, payload, function (response) {
+	            return resolve(response);
+	        });
+	    });
+	}
 
 /***/ },
 /* 20 */
@@ -750,15 +753,9 @@
 	
 	
 	function login(username, password) {
-	    return new Promise(function (resolve, reject) {
-	        var payload = {
-	            username: username,
-	            password: password
-	        };
-	
-	        _socket2.default.emit('login', payload, function (result) {
-	            return resolve(result);
-	        });
+	    return _socket2.default.emit('login', {
+	        username: username,
+	        password: password
 	    });
 	}
 
