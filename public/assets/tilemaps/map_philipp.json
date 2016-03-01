@@ -47,11 +47,6 @@
                      "player":"1",
                      "team":"1"
                     },
-                 "propertytypes":
-                    {
-                     "player":"string",
-                     "team":"string"
-                    },
                  "rotation":0,
                  "type":"spawn",
                  "visible":true,
@@ -67,11 +62,6 @@
                     {
                      "player":"2",
                      "team":"1"
-                    },
-                 "propertytypes":
-                    {
-                     "player":"string",
-                     "team":"string"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -89,11 +79,6 @@
                      "player":"3",
                      "team":"1"
                     },
-                 "propertytypes":
-                    {
-                     "player":"string",
-                     "team":"string"
-                    },
                  "rotation":0,
                  "type":"spawn",
                  "visible":true,
@@ -109,11 +94,6 @@
                     {
                      "player":"4",
                      "team":"1"
-                    },
-                 "propertytypes":
-                    {
-                     "player":"string",
-                     "team":"string"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -131,11 +111,6 @@
                      "player":"5",
                      "team":"1"
                     },
-                 "propertytypes":
-                    {
-                     "player":"string",
-                     "team":"string"
-                    },
                  "rotation":0,
                  "type":"spawn",
                  "visible":true,
@@ -151,11 +126,6 @@
                     {
                      "player":"1",
                      "team":"2"
-                    },
-                 "propertytypes":
-                    {
-                     "player":"string",
-                     "team":"string"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -173,11 +143,6 @@
                      "player":"2",
                      "team":"2"
                     },
-                 "propertytypes":
-                    {
-                     "player":"string",
-                     "team":"string"
-                    },
                  "rotation":0,
                  "type":"spawn",
                  "visible":true,
@@ -193,11 +158,6 @@
                     {
                      "player":"3",
                      "team":"2"
-                    },
-                 "propertytypes":
-                    {
-                     "player":"string",
-                     "team":"string"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -215,11 +175,6 @@
                      "player":"4",
                      "team":"2"
                     },
-                 "propertytypes":
-                    {
-                     "player":"string",
-                     "team":"string"
-                    },
                  "rotation":0,
                  "type":"spawn",
                  "visible":true,
@@ -235,11 +190,6 @@
                     {
                      "player":"5",
                      "team":"2"
-                    },
-                 "propertytypes":
-                    {
-                     "player":"string",
-                     "team":"string"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -257,10 +207,6 @@
                     {
                      "team":"1"
                     },
-                 "propertytypes":
-                    {
-                     "team":"string"
-                    },
                  "rotation":0,
                  "type":"key",
                  "visible":true,
@@ -276,10 +222,6 @@
                  "properties":
                     {
                      "team":"1"
-                    },
-                 "propertytypes":
-                    {
-                     "team":"string"
                     },
                  "rotation":0,
                  "type":"key",
@@ -297,10 +239,6 @@
                     {
                      "team":"1"
                     },
-                 "propertytypes":
-                    {
-                     "team":"string"
-                    },
                  "rotation":0,
                  "type":"key",
                  "visible":true,
@@ -316,10 +254,6 @@
                  "properties":
                     {
                      "team":"2"
-                    },
-                 "propertytypes":
-                    {
-                     "team":"string"
                     },
                  "rotation":0,
                  "type":"key",
@@ -337,10 +271,6 @@
                     {
                      "team":"2"
                     },
-                 "propertytypes":
-                    {
-                     "team":"string"
-                    },
                  "rotation":0,
                  "type":"key",
                  "visible":true,
@@ -357,10 +287,6 @@
                     {
                      "team":"2"
                     },
-                 "propertytypes":
-                    {
-                     "team":"string"
-                    },
                  "rotation":0,
                  "type":"key",
                  "visible":true,
@@ -373,6 +299,10 @@
                  "height":64,
                  "id":30,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -385,6 +315,10 @@
                  "height":64,
                  "id":31,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -397,6 +331,10 @@
                  "height":64,
                  "id":34,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -409,6 +347,10 @@
                  "height":64,
                  "id":35,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -421,6 +363,10 @@
                  "height":64,
                  "id":36,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -433,6 +379,10 @@
                  "height":64,
                  "id":37,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -445,6 +395,10 @@
                  "height":64,
                  "id":38,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -457,6 +411,10 @@
                  "height":64,
                  "id":39,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -469,6 +427,10 @@
                  "height":64,
                  "id":40,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -481,6 +443,10 @@
                  "height":64,
                  "id":41,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -493,6 +459,10 @@
                  "height":64,
                  "id":42,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -505,6 +475,10 @@
                  "height":64,
                  "id":43,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -517,6 +491,10 @@
                  "height":64,
                  "id":44,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -529,6 +507,10 @@
                  "height":64,
                  "id":45,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -541,6 +523,10 @@
                  "height":64,
                  "id":46,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -553,6 +539,10 @@
                  "height":64,
                  "id":47,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -565,6 +555,10 @@
                  "height":64,
                  "id":48,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -577,6 +571,10 @@
                  "height":64,
                  "id":49,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -589,6 +587,10 @@
                  "height":64,
                  "id":50,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -601,6 +603,10 @@
                  "height":64,
                  "id":51,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -613,6 +619,10 @@
                  "height":64,
                  "id":52,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -625,6 +635,10 @@
                  "height":64,
                  "id":53,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -637,6 +651,10 @@
                  "height":64,
                  "id":54,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -649,6 +667,10 @@
                  "height":64,
                  "id":55,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -661,6 +683,10 @@
                  "height":64,
                  "id":56,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -676,10 +702,6 @@
                  "properties":
                     {
                      "type":"torch"
-                    },
-                 "propertytypes":
-                    {
-                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -697,10 +719,6 @@
                     {
                      "type":"torch"
                     },
-                 "propertytypes":
-                    {
-                     "type":"string"
-                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -713,6 +731,10 @@
                  "height":64,
                  "id":59,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -725,6 +747,10 @@
                  "height":64,
                  "id":60,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -737,6 +763,10 @@
                  "height":64,
                  "id":61,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -749,6 +779,10 @@
                  "height":64,
                  "id":62,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -761,6 +795,10 @@
                  "height":64,
                  "id":63,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -773,6 +811,10 @@
                  "height":64,
                  "id":64,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -785,6 +827,10 @@
                  "height":64,
                  "id":65,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -797,6 +843,10 @@
                  "height":64,
                  "id":66,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -809,6 +859,10 @@
                  "height":64,
                  "id":67,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -821,6 +875,10 @@
                  "height":64,
                  "id":68,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -833,6 +891,10 @@
                  "height":64,
                  "id":69,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -845,6 +907,10 @@
                  "height":64,
                  "id":70,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -857,6 +923,10 @@
                  "height":64,
                  "id":71,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -869,6 +939,10 @@
                  "height":64,
                  "id":72,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -881,6 +955,10 @@
                  "height":64,
                  "id":73,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -893,6 +971,10 @@
                  "height":64,
                  "id":74,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -905,6 +987,10 @@
                  "height":64,
                  "id":75,
                  "name":"torch",
+                 "properties":
+                    {
+                     "type":"torch"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -921,16 +1007,12 @@
                     {
                      "type":"playerStart"
                     },
-                 "propertytypes":
-                    {
-                     "type":"string"
-                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":3190.92915753661,
-                 "y":386.467813953488
+                 "x":3190.93,
+                 "y":386.468
                 }],
          "offsetx":-22.7879,
          "offsety":144.788,
@@ -952,8 +1034,12 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":84,
+ "nextobjectid":85,
  "orientation":"orthogonal",
+ "properties":
+    {
+
+    },
  "renderorder":"right-down",
  "tileheight":64,
  "tilesets":[
@@ -965,6 +1051,10 @@
          "imagewidth":512,
          "margin":0,
          "name":"dungeon_tileset_64",
+         "properties":
+            {
+
+            },
          "spacing":0,
          "tilecount":88,
          "tileheight":64,
@@ -978,6 +1068,10 @@
          "imagewidth":256,
          "margin":0,
          "name":"floor_shadow_tileset_64",
+         "properties":
+            {
+
+            },
          "spacing":0,
          "tilecount":28,
          "tileheight":64,
@@ -991,6 +1085,10 @@
          "imagewidth":640,
          "margin":0,
          "name":"objects_tilset_64",
+         "properties":
+            {
+
+            },
          "spacing":0,
          "tilecount":130,
          "tileheight":64,
@@ -1004,6 +1102,10 @@
          "imagewidth":705,
          "margin":0,
          "name":"tiles",
+         "properties":
+            {
+
+            },
          "spacing":0,
          "tilecount":3520,
          "tileheight":16,
