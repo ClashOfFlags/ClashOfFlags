@@ -24,7 +24,8 @@ export default class GameState extends State {
         this.game.load.image('player', this.paths.image('player.png'));
         this.game.load.image('cup', this.paths.image('bluecup.png'));
         this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
-        this.game.load.atlasJSONHash('explosion', 'assets/images/onfireanimation.png', 'assets/images/onfireanimation.json');
+        this.game.load.atlas('explosion', 'assets/images/fireball_hit.png', 'assets/images/fireball_hit.json');
+        this.game.load.atlas('fireball', 'assets/images/fireball.png', 'assets/images/fireball.json');
         this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
         this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
         this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
@@ -52,12 +53,11 @@ export default class GameState extends State {
 
         var singleExplosion = this.explosions.getFirstDead();
         singleExplosion = this.explosions.create(cup.x, cup.y, 'explosion');
-        singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('onfire_000', 1, 9), 100, false);
-        singleExplosion.scale.x = 0.7;
-        singleExplosion.scale.y = 0.7;
+        singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('fireball_hit_000', 1, 9), 100, false);
+        // singleExplosion.scale.x = 0.7;
+        // singleExplosion.scale.y = 0.7;
         singleExplosion.x = singleExplosion.x - singleExplosion.width / 2;
         singleExplosion.y = singleExplosion.y - singleExplosion.height / 2;
-        singleExplosion.animations.play('fire');
         singleExplosion.animations.play('fire');
 
         singleExplosion.events.onAnimationComplete.add(function () {
@@ -113,19 +113,19 @@ export default class GameState extends State {
         cups.enableBody = true;
         cups.physicsBodyType = Phaser.Physics.ARCADE;
 
-        cups.createMultiple(50, 'bullet');
+        cups.createMultiple(50, 'fireball');
         cups.setAll('checkWorldBounds', true);
         cups.setAll('outOfBoundsKill', true);
+
+        cups.callAll('animations.add', 'animations', 'fireball', Phaser.Animation.generateFrameNames('fireball_000', 1, 6), 60, true);
+        cups.callAll('animations.play', 'animations', 'fireball');
 
         this.game.input.onDown.add(() => {
             var cup = cups.getFirstDead();
 
             cup.reset(this.player.body.x - cup.width / 2, this.player.body.y - cup.height / 2);
-            this.game.physics.arcade.moveToPointer(cup, 2000);
+            this.game.physics.arcade.moveToPointer(cup, 500);
 
-            var targetAngle = this.game.math.angleBetween(cup.x + cup.width/2, cup.y + cup.height/2, this.game.input.activePointer.x, this.game.input.activePointer.y);
-
-            cup.rotation = targetAngle;
             cup.pivot.x = cup.width * 0.5;
             cup.pivot.y = cup.height * 0.5;
 
