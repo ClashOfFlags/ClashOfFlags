@@ -121,7 +121,7 @@ export default class GameState extends State {
             var cup = cups.getFirstDead();
 
             cup.reset(this.player.body.x - cup.width / 2, this.player.body.y - cup.height / 2);
-            this.game.physics.arcade.moveToPointer(cup, 2000);
+            this.game.physics.arcade.moveToPointer(cup, 4000);
 
             var targetAngle = this.game.math.angleBetween(cup.x + cup.width/2, cup.y + cup.height/2, this.game.input.activePointer.x, this.game.input.activePointer.y);
 
