@@ -4,9 +4,11 @@
             activate() {
                 setTimeout(() => {
                     $('#game').show();
+                    window.clashOfFlags.unpause();
                 }, 1);
             },
             deactivate() {
+                window.clashOfFlags.pause();
                 $('#game').hide();
             }
         }

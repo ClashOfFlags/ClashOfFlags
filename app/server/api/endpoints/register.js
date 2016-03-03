@@ -9,5 +9,7 @@ module.exports = {
 };
 
 function* handle(request) {
+    console.log(request);
+
     return true;
 }

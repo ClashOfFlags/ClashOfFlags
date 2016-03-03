@@ -12,6 +12,20 @@ export default class GameState extends State {
         this.paths = $container.PathService;
         this.objects = $container.ObjectsService;
 
+        /*
+            pause() and unpause() will be called from Game.vue component
+            If input is enabled on e.g. Login or Register page the form inputs will not work
+        */
+        window.clashOfFlags = {
+            pause() {
+                game.input.enabled = false;
+                game.physics.arcade.isPaused = true;
+            },
+            unpause() {
+                game.input.enabled = true;
+                game.physics.arcade.isPaused = false;
+            }
+        };
     }
 
     preload() {
@@ -31,6 +45,7 @@ export default class GameState extends State {
     }
 
     create() {
+        window.clashOfFlags.pause();
         this.createMap();
         this.createPlayer();
         this.createControls();
@@ -41,8 +56,6 @@ export default class GameState extends State {
         this.game.physics.arcade.collide(this.objects.cups, this.obstacleLayer, this.destroy, null, this);
 
         this.player.body.velocity.x = 0;
-
-        this.game.input.enabled = true;
 
         this.inputs.applyToPlayer(this.player);
 

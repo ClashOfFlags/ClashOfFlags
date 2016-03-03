@@ -4,6 +4,7 @@ const eventBus = require('../events/event-bus');
 const SocketConnectEvent = require('../events/SocketConnectEvent');
 const endpoints = require('./endpoints');
 const rules = require('./rules');
+const validateRequest = require('./validateRequest');
 const SERVER_ERROR = { error: true };
 
 endpoints.forEach(endpoint => {
@@ -31,8 +32,8 @@ function onEndpointEvent(endpoint, request, callback) {
     const rules = endpoint.rules;
     const result = validateRequest(request, rules);
 
-    if(!result.valid) {
-        return callback({ error: result.error });
+    if (!result.valid) {
+        return callback({error: result.error});
     }
 
     handleRequest(endpoint, request, callback);
@@ -48,47 +49,6 @@ function handleRequest(endpoint, request, callback) {
 
             return callback(SERVER_ERROR);
         });
-}
-
-function validateRequest(request, rules) {
-    const propertyNames = Object.keys(rules);
-    const result = {
-        valid: true,
-        error: {}
-    };
-
-    propertyNames.forEach(propertyName => {
-        const propertyValue = request[propertyName];
-        const propertyRules = rules[propertyName];
-        const propertyResult = validateRequestProperty(propertyValue, propertyRules);
-
-        if(!propertyResult.valid) {
-            result.valid = false;
-            result.error[propertyName] = propertyResult.error;
-        }
-    });
-
-    return result;
-}
-
-function validateRequestProperty(value, rules) {
-    const result = {
-        valid: true,
-        error: {}
-    };
-    const ruleNames = Object.keys(rules);
-
-    ruleNames.forEach(ruleName => {
-        const rule = rules[ruleName];
-        const ruleResult = rule(value);
-
-        if(ruleResult !== true) {
-            result.valid = false;
-            result.error[ruleName] = ruleResult;
-        }
-    });
-
-    return result;
 }
 
 function requireEndpoint(name) {
@@ -131,6 +91,6 @@ function findRuleByName(name) {
 
 function createRule(rule, ruleOptions) {
     return value => {
-        return rule(value, ruleOptions);
+        return rule.validate(value, ruleOptions);
     };
 }

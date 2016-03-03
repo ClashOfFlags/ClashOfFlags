@@ -150,7 +150,7 @@ exports.default = PathService;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-        value: true
+    value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -176,171 +176,184 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var GameState = function (_State) {
-        _inherits(GameState, _State);
+    _inherits(GameState, _State);
 
-        function GameState(game, $container) {
-                _classCallCheck(this, GameState);
+    function GameState(game, $container) {
+        _classCallCheck(this, GameState);
 
-                var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameState).call(this));
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameState).call(this));
 
-                _this.player = {};
+        _this.player = {};
 
-                _this.inputs = $container.InputService;
-                _this.paths = $container.PathService;
-                _this.objects = $container.ObjectsService;
+        _this.inputs = $container.InputService;
+        _this.paths = $container.PathService;
+        _this.objects = $container.ObjectsService;
 
-                return _this;
+        /*
+            pause() and unpause() will be called from Game.vue component
+            If input is enabled on e.g. Login or Register page the form inputs will not work
+        */
+        window.clashOfFlags = {
+            pause: function pause() {
+                game.input.enabled = false;
+                game.physics.arcade.isPaused = true;
+            },
+            unpause: function unpause() {
+                game.input.enabled = true;
+                game.physics.arcade.isPaused = false;
+            }
+        };
+        return _this;
+    }
+
+    _createClass(GameState, [{
+        key: 'preload',
+        value: function preload() {
+
+            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+            this.load.tilemap('map', 'assets/tilemaps/map_philipp.json', null, Phaser.Tilemap.TILED_JSON);
+            this.load.image('dungeon_tileset_64', 'assets/images/dungeon_tileset_64.png');
+            this.load.image('objects_tilset_64', 'assets/images/objects_tilset_64.png');
+            this.game.load.image('player', this.paths.image('player.png'));
+            this.game.load.image('cup', this.paths.image('bluecup.png'));
+            this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
+            this.game.load.atlasJSONHash('explosion', 'assets/images/onfireanimation.png', 'assets/images/onfireanimation.json');
+            this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
+            this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
+            this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
         }
+    }, {
+        key: 'create',
+        value: function create() {
+            window.clashOfFlags.pause();
+            this.createMap();
+            this.createPlayer();
+            this.createControls();
+        }
+    }, {
+        key: 'update',
+        value: function update() {
+            this.game.physics.arcade.collide(this.player, this.obstacleLayer);
+            this.game.physics.arcade.collide(this.objects.cups, this.obstacleLayer, this.destroy, null, this);
 
-        _createClass(GameState, [{
-                key: 'preload',
-                value: function preload() {
+            this.player.body.velocity.x = 0;
 
-                        this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+            this.inputs.applyToPlayer(this.player);
+        }
+    }, {
+        key: 'destroy',
+        value: function destroy(cup, obstacle) {
 
-                        this.load.tilemap('map', 'assets/tilemaps/map_philipp.json', null, Phaser.Tilemap.TILED_JSON);
-                        this.load.image('dungeon_tileset_64', 'assets/images/dungeon_tileset_64.png');
-                        this.load.image('objects_tilset_64', 'assets/images/objects_tilset_64.png');
-                        this.game.load.image('player', this.paths.image('player.png'));
-                        this.game.load.image('cup', this.paths.image('bluecup.png'));
-                        this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
-                        this.game.load.atlasJSONHash('explosion', 'assets/images/onfireanimation.png', 'assets/images/onfireanimation.json');
-                        this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
-                        this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
-                        this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
-                }
-        }, {
-                key: 'create',
-                value: function create() {
-                        this.createMap();
-                        this.createPlayer();
-                        this.createControls();
-                }
-        }, {
-                key: 'update',
-                value: function update() {
-                        this.game.physics.arcade.collide(this.player, this.obstacleLayer);
-                        this.game.physics.arcade.collide(this.objects.cups, this.obstacleLayer, this.destroy, null, this);
+            var singleExplosion = this.explosions.getFirstDead();
+            singleExplosion = this.explosions.create(cup.x, cup.y, 'explosion');
+            singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('onfire_000', 1, 9), 100, false);
+            singleExplosion.scale.x = 0.7;
+            singleExplosion.scale.y = 0.7;
+            singleExplosion.x = singleExplosion.x - singleExplosion.width / 2;
+            singleExplosion.y = singleExplosion.y - singleExplosion.height / 2;
+            singleExplosion.animations.play('fire');
+            singleExplosion.animations.play('fire');
 
-                        this.player.body.velocity.x = 0;
+            singleExplosion.events.onAnimationComplete.add(function () {
+                singleExplosion.kill();
+            }, this);
 
-                        this.game.input.enabled = true;
+            cup.kill();
+        }
+    }, {
+        key: 'createMap',
+        value: function createMap() {
+            this.game.world.setBounds(0, 0, 6400, 6400);
 
-                        this.inputs.applyToPlayer(this.player);
-                }
-        }, {
-                key: 'destroy',
-                value: function destroy(cup, obstacle) {
+            this.objects.set('map', this.game.add.tilemap('map'));
+            this.map = this.objects.get('map');
 
-                        var singleExplosion = this.explosions.getFirstDead();
-                        singleExplosion = this.explosions.create(cup.x, cup.y, 'explosion');
-                        singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('onfire_000', 1, 9), 100, false);
-                        singleExplosion.scale.x = 0.7;
-                        singleExplosion.scale.y = 0.7;
-                        singleExplosion.x = singleExplosion.x - singleExplosion.width / 2;
-                        singleExplosion.y = singleExplosion.y - singleExplosion.height / 2;
-                        singleExplosion.animations.play('fire');
-                        singleExplosion.animations.play('fire');
+            //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
+            this.map.addTilesetImage('dungeon_tileset_64');
+            this.map.addTilesetImage('objects_tilset_64');
 
-                        singleExplosion.events.onAnimationComplete.add(function () {
-                                singleExplosion.kill();
-                        }, this);
+            //create layer
+            this.backgroundlayer = this.map.createLayer('background');
+            this.obstacleLayer = this.map.createLayer('obstacle');
+            this.decorationslayer = this.map.createLayer('decorations');
 
-                        cup.kill();
-                }
-        }, {
-                key: 'createMap',
-                value: function createMap() {
-                        this.game.world.setBounds(0, 0, 6400, 6400);
+            //collision on obstacleLayer
+            this.map.setCollisionBetween(1, 2000, true, 'obstacle');
 
-                        this.objects.set('map', this.game.add.tilemap('map'));
-                        this.map = this.objects.get('map');
+            /***************************
+            ******     items     ******
+            ***************************/
+            this.createObjects();
 
-                        //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
-                        this.map.addTilesetImage('dungeon_tileset_64');
-                        this.map.addTilesetImage('objects_tilset_64');
+            this.explosions = this.game.add.group();
+            this.explosions.createMultiple(50, 'explosion');
+        }
+    }, {
+        key: 'createPlayer',
+        value: function createPlayer() {
+            var _this2 = this;
 
-                        //create layer
-                        this.backgroundlayer = this.map.createLayer('background');
-                        this.obstacleLayer = this.map.createLayer('obstacle');
-                        this.decorationslayer = this.map.createLayer('decorations');
+            var playerStartPos = this.objects.byType('playerStart', 'objectsLayer');
+            this.player = new _Hero2.default(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
+            this.player.scale.x = 4;
+            this.player.scale.y = 4;
 
-                        //collision on obstacleLayer
-                        this.map.setCollisionBetween(1, 2000, true, 'obstacle');
+            this.game.camera.follow(this.player);
 
-                        /***************************
-                        ******     items     ******
-                        ***************************/
-                        this.createObjects();
+            /***************************
+             ******     cups     ******
+             ***************************/
 
-                        this.explosions = this.game.add.group();
-                        this.explosions.createMultiple(50, 'explosion');
-                }
-        }, {
-                key: 'createPlayer',
-                value: function createPlayer() {
-                        var _this2 = this;
+            this.objects.cups = this.game.add.group();
 
-                        var playerStartPos = this.objects.byType('playerStart', 'objectsLayer');
-                        this.player = new _Hero2.default(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
-                        this.player.scale.x = 4;
-                        this.player.scale.y = 4;
+            var cups = this.objects.cups;
+            cups.enableBody = true;
+            cups.physicsBodyType = Phaser.Physics.ARCADE;
 
-                        this.game.camera.follow(this.player);
+            cups.createMultiple(50, 'bullet');
+            cups.setAll('checkWorldBounds', true);
+            cups.setAll('outOfBoundsKill', true);
 
-                        /***************************
-                         ******     cups     ******
-                         ***************************/
+            this.game.input.onDown.add(function () {
+                var cup = cups.getFirstDead();
 
-                        this.objects.cups = this.game.add.group();
+                cup.reset(_this2.player.body.x - cup.width / 2, _this2.player.body.y - cup.height / 2);
+                _this2.game.physics.arcade.moveToPointer(cup, 4000);
 
-                        var cups = this.objects.cups;
-                        cups.enableBody = true;
-                        cups.physicsBodyType = Phaser.Physics.ARCADE;
+                var targetAngle = _this2.game.math.angleBetween(cup.x + cup.width / 2, cup.y + cup.height / 2, _this2.game.input.activePointer.x, _this2.game.input.activePointer.y);
 
-                        cups.createMultiple(50, 'bullet');
-                        cups.setAll('checkWorldBounds', true);
-                        cups.setAll('outOfBoundsKill', true);
+                cup.rotation = targetAngle;
+                cup.pivot.x = cup.width * 0.5;
+                cup.pivot.y = cup.height * 0.5;
 
-                        this.game.input.onDown.add(function () {
-                                var cup = cups.getFirstDead();
+                cup.x = cup.x + cup.width / 2 + _this2.player.width / 2;
+                cup.y = cup.y + cup.height / 2 + _this2.player.height / 2;
+            });
+        }
+    }, {
+        key: 'createObjects',
+        value: function createObjects() {
+            this.torchGroup = this.game.add.group();
+            this.torchGroup.enableBody = true;
+            var result = this.objects.byType('torch', 'objectsLayer');
+            result.forEach(function (element) {
+                var torch = this.torchGroup.create(element.x, element.y, "torch");
+                torch.animations.add('on', [0, 1, 2, 3], 10, true);
+                torch.animations.play('on');
+            }, this);
+        }
+    }, {
+        key: 'createControls',
+        value: function createControls() {
+            this.cursors = this.inputs.cursorKeys();
+            this.wasd = this.inputs.wasd();
 
-                                cup.reset(_this2.player.body.x - cup.width / 2, _this2.player.body.y - cup.height / 2);
-                                _this2.game.physics.arcade.moveToPointer(cup, 4000);
+            this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
+        }
+    }]);
 
-                                var targetAngle = _this2.game.math.angleBetween(cup.x + cup.width / 2, cup.y + cup.height / 2, _this2.game.input.activePointer.x, _this2.game.input.activePointer.y);
-
-                                cup.rotation = targetAngle;
-                                cup.pivot.x = cup.width * 0.5;
-                                cup.pivot.y = cup.height * 0.5;
-
-                                cup.x = cup.x + cup.width / 2 + _this2.player.width / 2;
-                                cup.y = cup.y + cup.height / 2 + _this2.player.height / 2;
-                        });
-                }
-        }, {
-                key: 'createObjects',
-                value: function createObjects() {
-                        this.torchGroup = this.game.add.group();
-                        this.torchGroup.enableBody = true;
-                        var result = this.objects.byType('torch', 'objectsLayer');
-                        result.forEach(function (element) {
-                                var torch = this.torchGroup.create(element.x, element.y, "torch");
-                                torch.animations.add('on', [0, 1, 2, 3], 10, true);
-                                torch.animations.play('on');
-                        }, this);
-                }
-        }, {
-                key: 'createControls',
-                value: function createControls() {
-                        this.cursors = this.inputs.cursorKeys();
-                        this.wasd = this.inputs.wasd();
-
-                        this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
-                }
-        }]);
-
-        return GameState;
+    return GameState;
 }(_State3.default);
 
 exports.default = GameState;
