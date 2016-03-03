@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 module.exports = new Promise((resolve, reject) => {
-    mongoose.connect('mongodb://localhost/clash-of-flags');
+    mongoose.connect('mongodb://localhost/clash-of-flags', {
+        user: 'admin',
+        pass: 'admin'
+    });
 
     const db = mongoose.connection;
 
