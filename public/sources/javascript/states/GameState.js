@@ -124,6 +124,7 @@ export default class GameState extends State {
             var cup = cups.getFirstDead();
 
             cup.reset(this.player.body.x - cup.width / 2, this.player.body.y - cup.height / 2);
+
             this.game.physics.arcade.moveToPointer(cup, 500);
 
             cup.pivot.x = cup.width * 0.5;

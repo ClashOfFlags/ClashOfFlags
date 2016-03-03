@@ -309,6 +309,7 @@ var GameState = function (_State) {
                 var cup = cups.getFirstDead();
 
                 cup.reset(_this2.player.body.x - cup.width / 2, _this2.player.body.y - cup.height / 2);
+
                 _this2.game.physics.arcade.moveToPointer(cup, 500);
 
                 cup.pivot.x = cup.width * 0.5;
