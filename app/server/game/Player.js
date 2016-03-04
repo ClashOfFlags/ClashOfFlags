@@ -1,6 +1,6 @@
 'use strict';
 
-let playerId = 0;
+let playerId = 0; // Not optimal, should be changed later
 
 module.exports = class Player {
 

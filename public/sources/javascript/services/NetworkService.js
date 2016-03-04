@@ -4,6 +4,7 @@ export default class NetworkService {
         this.$container = $container;
         this.objects = $container.ObjectsService;
         this.playerFactory = $container.PlayerFactory;
+        this.teamManager = $container.TeamManager;
         this.socket = io();
         this.player = null;
         this.players = {}; // workaround, should not be here I guess
@@ -33,8 +34,9 @@ export default class NetworkService {
         const playerStartPos = this.objects.byType('spawn', 'objectsLayer');
         const playerSprite = this.playerFactory
             .position(playerStartPos[0])
-            .team('red')
+            .team(this.teamManager.teams.red)
             .key('player')
+            .number(11 + player.id)
             .make();
 
         this.players[player.id] = playerSprite;
