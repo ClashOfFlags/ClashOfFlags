@@ -1,25 +1,76 @@
+import Team from './../objects/values/Team';
+import config from './../setup/config';
+
 export default class Creator {
 
     constructor(game, $container) {
         this.game = game;
         this.$container = $container;
-        this.paths = $container.PathService;
+
+        this.objects = this.$container.ObjectsService;
+        this.playerFactory = this.$container.PlayerFactory;
+
+        this.teamManager = $container.TeamManager;
+
     }
 
-    run(gamestate) {
-        this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    run() {
+        this.createObjects();
 
-        gamestate.load.tilemap('map', 'assets/tilemaps/map_philipp.json', null, Phaser.Tilemap.TILED_JSON);
-        gamestate.load.image('dungeon_tileset_64', 'assets/images/dungeon_tileset_64.png');
-        gamestate.load.image('objects_tilset_64', 'assets/images/objects_tilset_64.png');
-        this.game.load.image('player', this.paths.image('player.png'));
-        this.game.load.image('cup', this.paths.image('bluecup.png'));
-        this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
-        this.game.load.atlas('explosion', 'assets/images/fireball_hit.png', 'assets/images/fireball_hit.json');
-        this.game.load.atlas('fireball', 'assets/images/fireball.png', 'assets/images/fireball.json');
-        this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
-        this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
-        this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32); 
+        this.createTeams();
+
+    }
+
+
+    createTeams() {
+        for (var teamName in config.game.teams) {
+            var team = new Team(teamName);
+            this.teamManager.add(team);
+            this.createPlayersForTeam(team);
+        }
+
+        this.objects.set('hero', this.teamManager.hero());
+    }
+
+    createPlayersForTeam(team) {
+        var spawns = this.objects.byProperties({'type': 'spawn', team: team.name}, 'objectsLayer');
+
+        for (var i in config.game.teams[team.name]) {
+            var playerNumber = config.game.teams[team.name][i];
+
+            const spawn = _.find(spawns, function (current_spawn) {
+                return current_spawn.properties.player == playerNumber;
+            });
+
+            const player = this.playerFactory
+                .position(spawn)
+                .team(team)
+                .number(playerNumber)
+                .key('player')
+                .make();
+
+            this.objects.set('player.' + playerNumber, player);
+
+        }
+    }
+
+    createObjects() {
+        var torchGroup = this.game.add.group();
+        torchGroup.enableBody = true;
+
+        var result = this.objects.byType('torch', 'objectsLayer');
+        result.forEach(function (element) {
+            var torch = torchGroup.create(element.x, element.y, "torch");
+            torch.animations.add('on', [0, 1, 2, 3], 10, true);
+            torch.animations.play('on');
+        }, this);
+    }
+
+    createControls() {
+        this.cursors = this.inputs.cursorKeys();
+        this.wasd = this.inputs.wasd();
+
+        this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
     }
 
 }

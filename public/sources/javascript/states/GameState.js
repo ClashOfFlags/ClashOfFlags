@@ -14,18 +14,27 @@ export default class GameState extends State {
         this.paths = $container.PathService;
         this.objects = $container.ObjectsService;
         this.preloader = $container.Preloader;
+        this.creator = $container.Creator;
         this.playerFactory = $container.PlayerFactory;
         this.network = $container.NetworkService;
         window.clashOfFlags = this; // Publish GameState to window, Vue App needs to access pause() and unpause()
+        this.teamManager = $container.TeamManager;
     }
 
     preload() {
         this.preloader.run(this);
+
     }
 
     create() {
         this.initPauseState();
+
         this.createMap();
+
+        this.creator.run();
+
+        this.player = this.teamManager.hero();
+
         this.createPlayer();
         this.createControls();
         this.network.init();
@@ -77,24 +86,11 @@ export default class GameState extends State {
         //collision on obstacleLayer
         this.map.setCollisionBetween(1, 2000, true, 'obstacle');
 
-
-        /***************************
-         ******     items     ******
-         ***************************/
-        this.createObjects();
-
         this.explosions = this.game.add.group();
         this.explosions.createMultiple(50, 'explosion');
     }
 
     createPlayer() {
-        var playerStartPos = this.objects.byType('spawn', 'objectsLayer');
-
-        this.player = this.playerFactory
-            .position(playerStartPos[0])
-            .team('red')
-            .key('player')
-            .make();
 
         this.game.camera.follow(this.player);
 
@@ -126,16 +122,7 @@ export default class GameState extends State {
         });
     }
 
-    createObjects() {
-        this.torchGroup = this.game.add.group();
-        this.torchGroup.enableBody = true;
-        var result = this.objects.byType('torch', 'objectsLayer');
-        result.forEach(function (element) {
-            var torch = this.torchGroup.create(element.x, element.y, "torch");
-            torch.animations.add('on', [0, 1, 2, 3], 10, true);
-            torch.animations.play('on');
-        }, this);
-    }
+
 
     createControls() {
         this.cursors = this.inputs.cursorKeys();
@@ -157,7 +144,7 @@ export default class GameState extends State {
     initPauseState() {
         const isGameDivVisible = $('#game').is(':visible');
 
-        if(isGameDivVisible) {
+        if (isGameDivVisible) {
             this.unpause();
             return;
         }

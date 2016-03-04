@@ -327,62 +327,62 @@
  <objectgroup name="objectsLayer" offsetx="-22.7879" offsety="144.788">
   <object id="1" name="spawn_blue_1" type="spawn" x="2464.79" y="5873.21" width="132" height="128">
    <properties>
-    <property name="player" value="1"/>
-    <property name="team" value="1"/>
+    <property name="player" value="6"/>
+    <property name="team" value="blue"/>
    </properties>
   </object>
   <object id="2" name="spawn_blue_2" type="spawn" x="2778.79" y="5299.21" width="130" height="126">
    <properties>
-    <property name="player" value="2"/>
-    <property name="team" value="1"/>
+    <property name="player" value="7"/>
+    <property name="team" value="blue"/>
    </properties>
   </object>
   <object id="3" name="spawn_blue_3" type="spawn" x="3154.79" y="5431.21" width="144" height="128">
    <properties>
-    <property name="player" value="3"/>
-    <property name="team" value="1"/>
+    <property name="player" value="8"/>
+    <property name="team" value="blue"/>
    </properties>
   </object>
   <object id="4" name="spawn_blue_4" type="spawn" x="3486.79" y="5295.21" width="154" height="142">
    <properties>
-    <property name="player" value="4"/>
-    <property name="team" value="1"/>
+    <property name="player" value="9"/>
+    <property name="team" value="blue"/>
    </properties>
   </object>
   <object id="8" name="spawn_blue_5" type="spawn" x="3672.79" y="5875.21" width="162" height="144">
    <properties>
-    <property name="player" value="5"/>
-    <property name="team" value="1"/>
+    <property name="player" value="10"/>
+    <property name="team" value="blue"/>
    </properties>
   </object>
   <object id="9" name="spawn_red_1" type="spawn" x="2528.79" y="115.212" width="140" height="134">
    <properties>
     <property name="player" value="1"/>
-    <property name="team" value="2"/>
+    <property name="team" value="red"/>
    </properties>
   </object>
   <object id="11" name="spawn_red_2" type="spawn" x="2838.79" y="689.212" width="138" height="126">
    <properties>
     <property name="player" value="2"/>
-    <property name="team" value="2"/>
+    <property name="team" value="red"/>
    </properties>
   </object>
   <object id="12" name="spawn_red_3" type="spawn" x="3152.79" y="561.212" width="146" height="126">
    <properties>
     <property name="player" value="3"/>
-    <property name="team" value="2"/>
+    <property name="team" value="red"/>
    </properties>
   </object>
   <object id="13" name="spawn_red_4" type="spawn" x="3490.79" y="693.212" width="134" height="130">
    <properties>
     <property name="player" value="4"/>
-    <property name="team" value="2"/>
+    <property name="team" value="red"/>
    </properties>
   </object>
   <object id="14" name="spawn_red_5" type="spawn" x="3728.79" y="117.212" width="140" height="134">
    <properties>
     <property name="player" value="5"/>
-    <property name="team" value="2"/>
+    <property name="team" value="red"/>
    </properties>
   </object>
   <object id="20" name="key_blue_1" type="key" gid="235" x="3112.79" y="5919.21" width="64" height="64">

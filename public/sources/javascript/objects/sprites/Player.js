@@ -7,6 +7,7 @@ export default class Player extends Sprite {
         this.enableArcadePhysics();
         this.body.collideWorldBounds = true;
         this.direction = direction.BOTTOM;
+        this.number = 1;
     }
 
     getSpeed() {
