@@ -102,10 +102,7 @@ export default class GameState extends State {
     }
 
     createPlayer() {
-        var playerStartPos = this.objects.byType('playerStart', 'objectsLayer');
-        /**this.player = new Player(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
-        this.player.scale.x = 4;
-        this.player.scale.y = 4;**/
+        var playerStartPos = this.objects.byType('spawn', 'objectsLayer');
 
         this.player = this.playerFactory
             .position(playerStartPos[0])

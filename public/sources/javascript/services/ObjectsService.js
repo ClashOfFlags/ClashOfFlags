@@ -8,20 +8,37 @@ export default class ObjectsService {
     }
 
     byType(type, layer) {
+        return this.byProperties({'type': type}, layer);
+    }
+
+    byProperties(properties, layer) {
         var result = [];
         this.map().objects[layer].forEach(function (element) {
-          if(element.properties) {
-            if (element.properties.type === type) {
-                element.y += 64;
-                result.push(element);
+            if (element.properties) {
+                for (var key in properties) {
+                    if(properties.hasOwnProperty(key)){
+                        continue;
+                    }
+
+                    if (
+                        (element[key] && properties[key] == element[key]) ||
+                        (properties[key] == element.properties[key])
+                    ) {
+                        element.y += 64;
+                        result.push(element);
+                    }
+                }
             }
-          }
 
         });
         return result;
     }
 
-    get(name){
+    objectHasProperties(properties){
+
+    }
+
+    get(name) {
         return this.collection[name];
     }
 

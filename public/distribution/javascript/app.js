@@ -134,17 +134,31 @@ var ObjectsService = function () {
     }, {
         key: 'byType',
         value: function byType(type, layer) {
+            return this.byProperties({ 'type': type }, layer);
+        }
+    }, {
+        key: 'byProperties',
+        value: function byProperties(properties, layer) {
             var result = [];
             this.map().objects[layer].forEach(function (element) {
                 if (element.properties) {
-                    if (element.properties.type === type) {
-                        element.y += 64;
-                        result.push(element);
+                    for (var key in properties) {
+                        if (properties.hasOwnProperty(key)) {
+                            continue;
+                        }
+
+                        if (element[key] && properties[key] == element[key] || properties[key] == element.properties[key]) {
+                            element.y += 64;
+                            result.push(element);
+                        }
                     }
                 }
             });
             return result;
         }
+    }, {
+        key: 'objectHasProperties',
+        value: function objectHasProperties(properties) {}
     }, {
         key: 'get',
         value: function get(name) {
@@ -379,10 +393,7 @@ var GameState = function (_State) {
         value: function createPlayer() {
             var _this2 = this;
 
-            var playerStartPos = this.objects.byType('playerStart', 'objectsLayer');
-            /**this.player = new Player(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
-            this.player.scale.x = 4;
-            this.player.scale.y = 4;**/
+            var playerStartPos = this.objects.byType('spawn', 'objectsLayer');
 
             this.player = this.playerFactory.position(playerStartPos[0]).team('red').key('player').make();
 
