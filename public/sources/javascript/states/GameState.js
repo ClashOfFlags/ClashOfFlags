@@ -13,7 +13,7 @@ export default class GameState extends State {
         this.inputs = $container.InputService;
         this.paths = $container.PathService;
         this.objects = $container.ObjectsService;
-        this.preloader = $container.Preloader;Crea
+        this.preloader = $container.Preloader;
         this.creator = $container.Creator;
         this.playerFactory = $container.PlayerFactory;
         window.clashOfFlags = this; // Publish GameState to window, Vue App needs to access pause() and unpause()
