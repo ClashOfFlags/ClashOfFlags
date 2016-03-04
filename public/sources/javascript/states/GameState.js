@@ -1,6 +1,8 @@
 import State from './State';
 import Hero from './../objects/sprites/Hero';
+import Player from './../objects/sprites/Player';
 import TestCup from './../objects/sprites/TestCup';
+import PlayerFactory from './../factories/PlayerFactory';
 
 export default class GameState extends State {
     constructor(game, $container) {
@@ -11,11 +13,14 @@ export default class GameState extends State {
         this.inputs = $container.InputService;
         this.paths = $container.PathService;
         this.objects = $container.ObjectsService;
+        this.preloader = $container.Preloader;
+        this.playerFactory = $container.PlayerFactory;
+
 
         /*
-            pause() and unpause() will be called from Game.vue component
-            If input is enabled on e.g. Login or Register page the form inputs will not work
-        */
+         pause() and unpause() will be called from Game.vue component
+         If input is enabled on e.g. Login or Register page the form inputs will not work
+         */
         window.clashOfFlags = {
             pause() {
                 game.input.enabled = false;
@@ -29,20 +34,8 @@ export default class GameState extends State {
     }
 
     preload() {
+        this.preloader.run(this);
 
-        this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-
-        this.load.tilemap('map', 'assets/tilemaps/map_philipp.json', null, Phaser.Tilemap.TILED_JSON);
-        this.load.image('dungeon_tileset_64', 'assets/images/dungeon_tileset_64.png');
-        this.load.image('objects_tilset_64', 'assets/images/objects_tilset_64.png');
-        this.game.load.image('player', this.paths.image('player.png'));
-        this.game.load.image('cup', this.paths.image('bluecup.png'));
-        this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
-        this.game.load.atlas('explosion', 'assets/images/fireball_hit.png', 'assets/images/fireball_hit.json');
-        this.game.load.atlas('fireball', 'assets/images/fireball.png', 'assets/images/fireball.json');
-        this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
-        this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
-        this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
     }
 
     create() {
@@ -74,7 +67,7 @@ export default class GameState extends State {
         singleExplosion.animations.play('fire');
 
         singleExplosion.events.onAnimationComplete.add(function () {
-          singleExplosion.kill();
+            singleExplosion.kill();
         }, this);
 
         cup.kill();
@@ -99,26 +92,28 @@ export default class GameState extends State {
         this.map.setCollisionBetween(1, 2000, true, 'obstacle');
 
 
-      /***************************
-      ******     items     ******
-      ***************************/
-      this.createObjects();
+        /***************************
+         ******     items     ******
+         ***************************/
+        this.createObjects();
 
-      this.explosions = this.game.add.group();
-      this.explosions.createMultiple(50, 'explosion');
+        this.explosions = this.game.add.group();
+        this.explosions.createMultiple(50, 'explosion');
     }
 
     createPlayer() {
         var playerStartPos = this.objects.byType('playerStart', 'objectsLayer');
-        this.player = new Hero(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
+        /**this.player = new Player(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
         this.player.scale.x = 4;
-        this.player.scale.y = 4;
+        this.player.scale.y = 4;**/
+
+        this.player = this.playerFactory
+            .position(playerStartPos[0])
+            .team('red')
+            .key('player')
+            .make();
 
         this.game.camera.follow(this.player);
-
-        /***************************
-         ******     cups     ******
-         ***************************/
 
         this.objects.cups = this.game.add.group();
 
@@ -143,9 +138,9 @@ export default class GameState extends State {
             cup.pivot.x = cup.width * 0.5;
             cup.pivot.y = cup.height * 0.5;
 
-            cup.x = cup.x  + cup.width / 2 + this.player.width / 2;
-            cup.y = cup.y  + cup.height / 2 + this.player.height / 2;
-      });
+            cup.x = cup.x + cup.width / 2 + this.player.width / 2;
+            cup.y = cup.y + cup.height / 2 + this.player.height / 2;
+        });
     }
 
     createObjects() {

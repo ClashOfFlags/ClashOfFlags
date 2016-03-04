@@ -14,8 +14,9 @@ app.use(express.static('public')); // Serve static files
 socket.init(server); // Start Socket.io
 require('./api'); // Start API
 
+server.listen(port);
+
 console.log('Waiting for MongoDB connection...');
 mongoose.then(() => {
-    server.listen(port);
     console.log(`Server listening on port ${ port }!`);
 });

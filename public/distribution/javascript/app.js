@@ -1,4 +1,48 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Creator = function () {
+    function Creator(game, $container) {
+        _classCallCheck(this, Creator);
+
+        this.game = game;
+        this.$container = $container;
+        this.paths = $container.PathService;
+    }
+
+    _createClass(Creator, [{
+        key: 'run',
+        value: function run(gamestate) {
+            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+            gamestate.load.tilemap('map', 'assets/tilemaps/map_philipp.json', null, Phaser.Tilemap.TILED_JSON);
+            gamestate.load.image('dungeon_tileset_64', 'assets/images/dungeon_tileset_64.png');
+            gamestate.load.image('objects_tilset_64', 'assets/images/objects_tilset_64.png');
+            this.game.load.image('player', this.paths.image('player.png'));
+            this.game.load.image('cup', this.paths.image('bluecup.png'));
+            this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
+            this.game.load.atlas('explosion', 'assets/images/fireball_hit.png', 'assets/images/fireball_hit.json');
+            this.game.load.atlas('fireball', 'assets/images/fireball.png', 'assets/images/fireball.json');
+            this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
+            this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
+            this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
+        }
+    }]);
+
+    return Creator;
+}();
+
+exports.default = Creator;
+
+},{}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -64,7 +108,7 @@ var InputService = function () {
 
 exports.default = InputService;
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -118,7 +162,7 @@ var ObjectsService = function () {
 
 exports.default = ObjectsService;
 
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -146,7 +190,51 @@ var PathService = function () {
 
 exports.default = PathService;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Preloader = function () {
+    function Preloader(game, $container) {
+        _classCallCheck(this, Preloader);
+
+        this.game = game;
+        this.$container = $container;
+        this.paths = $container.PathService;
+    }
+
+    _createClass(Preloader, [{
+        key: 'run',
+        value: function run(gamestate) {
+            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+            gamestate.load.tilemap('map', 'assets/tilemaps/map_philipp.json', null, Phaser.Tilemap.TILED_JSON);
+            gamestate.load.image('dungeon_tileset_64', 'assets/images/dungeon_tileset_64.png');
+            gamestate.load.image('objects_tilset_64', 'assets/images/objects_tilset_64.png');
+            this.game.load.image('player', this.paths.image('player.png'));
+            this.game.load.image('cup', this.paths.image('bluecup.png'));
+            this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
+            this.game.load.atlas('explosion', 'assets/images/fireball_hit.png', 'assets/images/fireball_hit.json');
+            this.game.load.atlas('fireball', 'assets/images/fireball.png', 'assets/images/fireball.json');
+            this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
+            this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
+            this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
+        }
+    }]);
+
+    return Preloader;
+}();
+
+exports.default = Preloader;
+
+},{}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -163,9 +251,17 @@ var _Hero = require('./../objects/sprites/Hero');
 
 var _Hero2 = _interopRequireDefault(_Hero);
 
+var _Player = require('./../objects/sprites/Player');
+
+var _Player2 = _interopRequireDefault(_Player);
+
 var _TestCup = require('./../objects/sprites/TestCup');
 
 var _TestCup2 = _interopRequireDefault(_TestCup);
+
+var _PlayerFactory = require('./../factories/PlayerFactory');
+
+var _PlayerFactory2 = _interopRequireDefault(_PlayerFactory);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -188,11 +284,13 @@ var GameState = function (_State) {
         _this.inputs = $container.InputService;
         _this.paths = $container.PathService;
         _this.objects = $container.ObjectsService;
+        _this.preloader = $container.Preloader;
+        _this.playerFactory = $container.PlayerFactory;
 
         /*
-            pause() and unpause() will be called from Game.vue component
-            If input is enabled on e.g. Login or Register page the form inputs will not work
-        */
+         pause() and unpause() will be called from Game.vue component
+         If input is enabled on e.g. Login or Register page the form inputs will not work
+         */
         window.clashOfFlags = {
             pause: function pause() {
                 game.input.enabled = false;
@@ -209,19 +307,7 @@ var GameState = function (_State) {
     _createClass(GameState, [{
         key: 'preload',
         value: function preload() {
-
-            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-
-            this.load.tilemap('map', 'assets/tilemaps/map_philipp.json', null, Phaser.Tilemap.TILED_JSON);
-            this.load.image('dungeon_tileset_64', 'assets/images/dungeon_tileset_64.png');
-            this.load.image('objects_tilset_64', 'assets/images/objects_tilset_64.png');
-            this.game.load.image('player', this.paths.image('player.png'));
-            this.game.load.image('cup', this.paths.image('bluecup.png'));
-            this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
-            this.game.load.atlasJSONHash('explosion', 'assets/images/onfireanimation.png', 'assets/images/onfireanimation.json');
-            this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
-            this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
-            this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
+            this.preloader.run(this);
         }
     }, {
         key: 'create',
@@ -247,12 +333,11 @@ var GameState = function (_State) {
 
             var singleExplosion = this.explosions.getFirstDead();
             singleExplosion = this.explosions.create(cup.x, cup.y, 'explosion');
-            singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('onfire_000', 1, 9), 100, false);
-            singleExplosion.scale.x = 0.7;
-            singleExplosion.scale.y = 0.7;
+            singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('fireball_hit_000', 1, 9), 100, false);
+            // singleExplosion.scale.x = 0.7;
+            // singleExplosion.scale.y = 0.7;
             singleExplosion.x = singleExplosion.x - singleExplosion.width / 2;
             singleExplosion.y = singleExplosion.y - singleExplosion.height / 2;
-            singleExplosion.animations.play('fire');
             singleExplosion.animations.play('fire');
 
             singleExplosion.events.onAnimationComplete.add(function () {
@@ -282,8 +367,8 @@ var GameState = function (_State) {
             this.map.setCollisionBetween(1, 2000, true, 'obstacle');
 
             /***************************
-            ******     items     ******
-            ***************************/
+             ******     items     ******
+             ***************************/
             this.createObjects();
 
             this.explosions = this.game.add.group();
@@ -295,15 +380,13 @@ var GameState = function (_State) {
             var _this2 = this;
 
             var playerStartPos = this.objects.byType('playerStart', 'objectsLayer');
-            this.player = new _Hero2.default(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
+            /**this.player = new Player(this.game, playerStartPos[0].x, playerStartPos[0].y, 'player');
             this.player.scale.x = 4;
-            this.player.scale.y = 4;
+            this.player.scale.y = 4;**/
+
+            this.player = this.playerFactory.position(playerStartPos[0]).team('red').key('player').make();
 
             this.game.camera.follow(this.player);
-
-            /***************************
-             ******     cups     ******
-             ***************************/
 
             this.objects.cups = this.game.add.group();
 
@@ -311,19 +394,20 @@ var GameState = function (_State) {
             cups.enableBody = true;
             cups.physicsBodyType = Phaser.Physics.ARCADE;
 
-            cups.createMultiple(50, 'bullet');
+            cups.createMultiple(50, 'fireball');
             cups.setAll('checkWorldBounds', true);
             cups.setAll('outOfBoundsKill', true);
+
+            cups.callAll('animations.add', 'animations', 'fireball', Phaser.Animation.generateFrameNames('fireball_000', 1, 6), 60, true);
+            cups.callAll('animations.play', 'animations', 'fireball');
 
             this.game.input.onDown.add(function () {
                 var cup = cups.getFirstDead();
 
                 cup.reset(_this2.player.body.x - cup.width / 2, _this2.player.body.y - cup.height / 2);
-                _this2.game.physics.arcade.moveToPointer(cup, 4000);
 
-                var targetAngle = _this2.game.math.angleBetween(cup.x + cup.width / 2, cup.y + cup.height / 2, _this2.game.input.activePointer.x, _this2.game.input.activePointer.y);
+                _this2.game.physics.arcade.moveToPointer(cup, 500);
 
-                cup.rotation = targetAngle;
                 cup.pivot.x = cup.width * 0.5;
                 cup.pivot.y = cup.height * 0.5;
 
@@ -358,7 +442,7 @@ var GameState = function (_State) {
 
 exports.default = GameState;
 
-},{"./../objects/sprites/Hero":7,"./../objects/sprites/TestCup":9,"./State":5}],5:[function(require,module,exports){
+},{"./../factories/PlayerFactory":10,"./../objects/sprites/Hero":12,"./../objects/sprites/Player":13,"./../objects/sprites/TestCup":15,"./State":7}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -393,53 +477,244 @@ var State = function () {
 
 exports.default = State;
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 'use strict';
 
-var _GameState = require('./States/GameState');
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-var _GameState2 = _interopRequireDefault(_GameState);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _InputService = require('./Services/InputService');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var _InputService2 = _interopRequireDefault(_InputService);
+var AbstractFactory = function () {
+    function AbstractFactory() {
+        _classCallCheck(this, AbstractFactory);
+    }
 
-var _PathService = require('./Services/PathService');
+    _createClass(AbstractFactory, [{
+        key: 'set',
+        value: function set(key, value) {
+            this.builder.set(key, value);
+            return this;
+        }
+    }, {
+        key: 'get',
+        value: function get(key, defaultValue) {
+            return this.builder.get(key, defaultValue);
+        }
+    }, {
+        key: 'has',
+        value: function has(key) {
+            return this.builder.has(key);
+        }
+    }, {
+        key: 'validate',
+        value: function validate() {
+            this.assertThatRequiredFieldsAreSet();
+        }
+    }, {
+        key: 'assertThatRequiredFieldsAreSet',
+        value: function assertThatRequiredFieldsAreSet() {
+            if (!this.required) {
+                return true;
+            }
 
-var _PathService2 = _interopRequireDefault(_PathService);
+            for (var i in this.required) {
+                var key = this.required[i];
 
-var _ObjectsService = require('./Services/ObjectsService');
+                if (!this.has(key)) {
+                    throw new Error('Cannot build ' + this.constructor.name + ', "' + key + '" is missing.');
+                }
+            }
 
-var _ObjectsService2 = _interopRequireDefault(_ObjectsService);
+            return true;
+        }
+    }]);
+
+    return AbstractFactory;
+}();
+
+exports.default = AbstractFactory;
+
+},{}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Builder = function () {
+    function Builder() {
+        _classCallCheck(this, Builder);
+
+        this.attributes = {};
+    }
+
+    _createClass(Builder, [{
+        key: "get",
+        value: function get(key, defaultValue) {
+            if (!this.has(key)) {
+                return defaultValue;
+            }
+
+            return this.attributes[key];
+        }
+    }, {
+        key: "set",
+        value: function set(key, value) {
+            this.attributes[key] = value;
+        }
+    }, {
+        key: "has",
+        value: function has(key) {
+            return this.attributes.hasOwnProperty(key);
+        }
+    }]);
+
+    return Builder;
+}();
+
+exports.default = Builder;
+
+},{}],10:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _AbstractFactory2 = require('./AbstractFactory');
+
+var _AbstractFactory3 = _interopRequireDefault(_AbstractFactory2);
+
+var _Builder = require('./Builder');
+
+var _Builder2 = _interopRequireDefault(_Builder);
+
+var _Player = require('./../objects/sprites/Player');
+
+var _Player2 = _interopRequireDefault(_Player);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var game = game || {};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-game = new Phaser.Game('100', '100', Phaser.AUTO, 'game');
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-var player,
-    cursors,
-    cups,
-    keys = {};
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var bottle = new Bottle();
+var PlayerFactory = function (_AbstractFactory) {
+    _inherits(PlayerFactory, _AbstractFactory);
 
-bottle.service('$container', function () {
-  return bottle.container;
+    function PlayerFactory(game) {
+        _classCallCheck(this, PlayerFactory);
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PlayerFactory).call(this));
+
+        _this.game = game;
+
+        _this.builder = new _Builder2.default();
+
+        _this.required = ['key', 'position', 'team'];
+        return _this;
+    }
+
+    _createClass(PlayerFactory, [{
+        key: 'team',
+        value: function team(_team) {
+            return this.set('team', _team);
+        }
+    }, {
+        key: 'position',
+        value: function position(_position) {
+            return this.set('position', _position);
+        }
+    }, {
+        key: 'scale',
+        value: function scale(factor) {
+            return this.set('scale', factor);
+        }
+    }, {
+        key: 'key',
+        value: function key(_key) {
+            return this.set('key', _key);
+        }
+    }, {
+        key: 'make',
+        value: function make() {
+            this.validate();
+
+            console.log(this.get('scale', 4));
+
+            var player = new _Player2.default(this.game, this.get('position').x, this.get('position').y, this.get('key'));
+
+            player.scale.x = this.get('scale', 4);
+            player.scale.y = this.get('scale', 4);
+
+            this.builder = new _Builder2.default();
+
+            return player;
+        }
+    }]);
+
+    return PlayerFactory;
+}(_AbstractFactory3.default);
+
+exports.default = PlayerFactory;
+
+},{"./../objects/sprites/Player":13,"./AbstractFactory":8,"./Builder":9}],11:[function(require,module,exports){
+'use strict';
+
+var _Bootstrapper = require('./setup/Bootstrapper');
+
+var _Bootstrapper2 = _interopRequireDefault(_Bootstrapper);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_Bootstrapper2.default.bootstrap();
+
+},{"./setup/Bootstrapper":17}],12:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-bottle.service('game', function () {
-  return game;
-});
-bottle.service('InputService', _InputService2.default, 'game');
-bottle.service('PathService', _PathService2.default);
-bottle.service('ObjectsService', _ObjectsService2.default, 'game');
-bottle.service('GameState', _GameState2.default, 'game', '$container');
 
-game.state.add('Game', bottle.container.GameState);
-game.state.start('Game');
+var _Player2 = require('./Player');
 
-},{"./Services/InputService":1,"./Services/ObjectsService":2,"./Services/PathService":3,"./States/GameState":4}],7:[function(require,module,exports){
+var _Player3 = _interopRequireDefault(_Player2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Hero = function (_Player) {
+  _inherits(Hero, _Player);
+
+  function Hero() {
+    _classCallCheck(this, Hero);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Hero).apply(this, arguments));
+  }
+
+  return Hero;
+}(_Player3.default);
+
+exports.default = Hero;
+
+},{"./Player":13}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -452,6 +727,10 @@ var _Sprite2 = require('./Sprite');
 
 var _Sprite3 = _interopRequireDefault(_Sprite2);
 
+var _direction = require('./../values/direction');
+
+var _direction2 = _interopRequireDefault(_direction);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -460,21 +739,22 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Hero = function (_Sprite) {
-    _inherits(Hero, _Sprite);
+var Player = function (_Sprite) {
+    _inherits(Player, _Sprite);
 
-    function Hero() {
-        _classCallCheck(this, Hero);
+    function Player() {
+        _classCallCheck(this, Player);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Hero).apply(this, arguments));
+        return _possibleConstructorReturn(this, Object.getPrototypeOf(Player).apply(this, arguments));
     }
 
-    _createClass(Hero, [{
+    _createClass(Player, [{
         key: 'boot',
         value: function boot() {
             this.speed = 500;
             this.enableArcadePhysics();
             this.body.collideWorldBounds = true;
+            this.direction = _direction2.default.BOTTOM;
         }
     }, {
         key: 'getSpeed',
@@ -493,12 +773,12 @@ var Hero = function (_Sprite) {
         }
     }]);
 
-    return Hero;
+    return Player;
 }(_Sprite3.default);
 
-exports.default = Hero;
+exports.default = Player;
 
-},{"./Sprite":8}],8:[function(require,module,exports){
+},{"./../values/direction":16,"./Sprite":14}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -550,7 +830,7 @@ var Sprite = function (_Phaser$Sprite) {
 
 exports.default = Sprite;
 
-},{}],9:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -571,7 +851,133 @@ var TestCup = function TestCup() {
 
 exports.default = TestCup;
 
-},{"./Sprite":8}]},{},[6])
+},{"./Sprite":14}],16:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    TOP: Symbol('top'),
+    BOTTOM: Symbol('bottom'),
+    RIGHT: Symbol('right'),
+    LEFT: Symbol('left')
+};
+
+},{}],17:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _GameState = require('./../States/GameState');
+
+var _GameState2 = _interopRequireDefault(_GameState);
+
+var _InputService = require('./../Services/InputService');
+
+var _InputService2 = _interopRequireDefault(_InputService);
+
+var _PathService = require('./../Services/PathService');
+
+var _PathService2 = _interopRequireDefault(_PathService);
+
+var _Preloader = require('./../Services/Preloader');
+
+var _Preloader2 = _interopRequireDefault(_Preloader);
+
+var _Creator = require('./../Services/Creator');
+
+var _Creator2 = _interopRequireDefault(_Creator);
+
+var _ObjectsService = require('./../Services/ObjectsService');
+
+var _ObjectsService2 = _interopRequireDefault(_ObjectsService);
+
+var _PlayerFactory = require('./../factories/PlayerFactory');
+
+var _PlayerFactory2 = _interopRequireDefault(_PlayerFactory);
+
+var _config = require('./config');
+
+var _config2 = _interopRequireDefault(_config);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Bootstrapper = function () {
+    function Bootstrapper() {
+        _classCallCheck(this, Bootstrapper);
+
+        this.bottle = {};
+        this.game = {};
+    }
+
+    _createClass(Bootstrapper, [{
+        key: 'run',
+        value: function run() {
+            this.bottle = new Bottle();
+            this.game = new Phaser.Game(_config2.default.game.size.width, _config2.default.game.size.height, Phaser.AUTO, 'game');
+
+            this.registerBindings();
+
+            this.game.state.add('Game', this.bottle.container.GameState);
+            this.game.state.start('Game');
+        }
+    }, {
+        key: 'registerBindings',
+        value: function registerBindings() {
+            var _this = this;
+
+            this.bottle.service('$container', function () {
+                return _this.bottle.container;
+            });
+            this.bottle.service('game', function () {
+                return _this.game;
+            });
+            this.bottle.service('config', function () {
+                return _config2.default;
+            });
+            this.bottle.service('InputService', _InputService2.default, 'game');
+            this.bottle.service('PathService', _PathService2.default);
+            this.bottle.service('ObjectsService', _ObjectsService2.default, 'game');
+            this.bottle.service('PlayerFactory', _PlayerFactory2.default, 'game', '$container');
+            this.bottle.service('Preloader', _Preloader2.default, 'game', '$container');
+            this.bottle.service('Creator', _Creator2.default, 'game', '$container');
+            this.bottle.service('GameState', _GameState2.default, 'game', '$container');
+        }
+    }], [{
+        key: 'bootstrap',
+        value: function bootstrap() {
+            return new Bootstrapper().run();
+        }
+    }]);
+
+    return Bootstrapper;
+}();
+
+exports.default = Bootstrapper;
+
+},{"./../Services/Creator":1,"./../Services/InputService":2,"./../Services/ObjectsService":3,"./../Services/PathService":4,"./../Services/Preloader":5,"./../States/GameState":6,"./../factories/PlayerFactory":10,"./config":18}],18:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    game: {
+        size: {
+            width: 800,
+            height: 600
+        }
+    }
+};
+
+},{}]},{},[11])
 
 
 //# sourceMappingURL=app.js.map
