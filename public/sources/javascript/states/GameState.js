@@ -15,6 +15,7 @@ export default class GameState extends State {
         this.objects = $container.ObjectsService;
         this.preloader = $container.Preloader;
         this.playerFactory = $container.PlayerFactory;
+        this.network = $container.NetworkService;
         window.clashOfFlags = this; // Publish GameState to window, Vue App needs to access pause() and unpause()
     }
 
@@ -27,6 +28,7 @@ export default class GameState extends State {
         this.createMap();
         this.createPlayer();
         this.createControls();
+        this.network.init();
     }
 
     update() {
@@ -36,7 +38,7 @@ export default class GameState extends State {
         this.player.body.velocity.x = 0;
 
         this.inputs.applyToPlayer(this.player);
-
+        this.network.sendPosition(this.player);
     }
 
     destroy(cup, obstacle) {

@@ -119,6 +119,94 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var NetworkService = function () {
+    function NetworkService($container) {
+        _classCallCheck(this, NetworkService);
+
+        this.$container = $container;
+        this.objects = $container.ObjectsService;
+        this.playerFactory = $container.PlayerFactory;
+        this.socket = io();
+        this.player = null;
+        this.players = {}; // workaround, should not be here I guess
+    }
+
+    _createClass(NetworkService, [{
+        key: 'init',
+        value: function init() {
+            var _this = this;
+
+            this.connect();
+
+            this.socket.on('PlayerConnectEvent', function (player) {
+                _this.onPlayerConnect(player);
+            });
+
+            this.socket.on('PlayerDisconnectEvent', function (player) {
+                _this.onPlayerDisconnect(player);
+            });
+
+            this.socket.on('PlayerPositionEvent', function (player) {
+                _this.onPlayerPosition(player);
+            });
+        }
+    }, {
+        key: 'connect',
+        value: function connect() {
+            this.socket.emit('PlayerConnectEvent');
+        }
+    }, {
+        key: 'onPlayerConnect',
+        value: function onPlayerConnect(player) {
+            var playerStartPos = this.objects.byType('spawn', 'objectsLayer');
+            var playerSprite = this.playerFactory.position(playerStartPos[0]).team('red').key('player').make();
+
+            this.players[player.id] = playerSprite;
+        }
+    }, {
+        key: 'onPlayerDisconnect',
+        value: function onPlayerDisconnect(player) {
+            var playerSprite = this.players[player.id];
+
+            if (playerSprite) {
+                playerSprite.kill();
+            }
+        }
+    }, {
+        key: 'onPlayerPosition',
+        value: function onPlayerPosition(player) {
+            var playerSprite = this.players[player.id];
+            playerSprite.x = player.position.x;
+            playerSprite.y = player.position.y;
+        }
+    }, {
+        key: 'sendPosition',
+        value: function sendPosition(player) {
+            var position = {
+                x: player.x,
+                y: player.y
+            };
+
+            this.socket.emit('PlayerPositionEvent', position);
+        }
+    }]);
+
+    return NetworkService;
+}();
+
+exports.default = NetworkService;
+
+},{}],4:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var ObjectsService = function () {
     function ObjectsService(game) {
         _classCallCheck(this, ObjectsService);
@@ -185,7 +273,7 @@ var ObjectsService = function () {
 
 exports.default = ObjectsService;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -213,7 +301,7 @@ var PathService = function () {
 
 exports.default = PathService;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -257,7 +345,7 @@ var Preloader = function () {
 
 exports.default = Preloader;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -309,6 +397,7 @@ var GameState = function (_State) {
         _this.objects = $container.ObjectsService;
         _this.preloader = $container.Preloader;
         _this.playerFactory = $container.PlayerFactory;
+        _this.network = $container.NetworkService;
         window.clashOfFlags = _this; // Publish GameState to window, Vue App needs to access pause() and unpause()
         return _this;
     }
@@ -325,6 +414,7 @@ var GameState = function (_State) {
             this.createMap();
             this.createPlayer();
             this.createControls();
+            this.network.init();
         }
     }, {
         key: 'update',
@@ -335,6 +425,7 @@ var GameState = function (_State) {
             this.player.body.velocity.x = 0;
 
             this.inputs.applyToPlayer(this.player);
+            this.network.sendPosition(this.player);
         }
     }, {
         key: 'destroy',
@@ -472,7 +563,7 @@ var GameState = function (_State) {
 
 exports.default = GameState;
 
-},{"./../factories/PlayerFactory":10,"./../objects/sprites/Hero":12,"./../objects/sprites/Player":13,"./../objects/sprites/TestCup":15,"./State":7}],7:[function(require,module,exports){
+},{"./../factories/PlayerFactory":11,"./../objects/sprites/Hero":13,"./../objects/sprites/Player":14,"./../objects/sprites/TestCup":16,"./State":8}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -507,7 +598,7 @@ var State = function () {
 
 exports.default = State;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -568,7 +659,7 @@ var AbstractFactory = function () {
 
 exports.default = AbstractFactory;
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -612,7 +703,7 @@ var Builder = function () {
 
 exports.default = Builder;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -700,7 +791,7 @@ var PlayerFactory = function (_AbstractFactory) {
 
 exports.default = PlayerFactory;
 
-},{"./../objects/sprites/Player":13,"./AbstractFactory":8,"./Builder":9}],11:[function(require,module,exports){
+},{"./../objects/sprites/Player":14,"./AbstractFactory":9,"./Builder":10}],12:[function(require,module,exports){
 'use strict';
 
 var _Bootstrapper = require('./setup/Bootstrapper');
@@ -711,11 +802,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _Bootstrapper2.default.bootstrap();
 
-var socket = io();
-
-console.log('socket.io!');
-
-},{"./setup/Bootstrapper":17}],12:[function(require,module,exports){
+},{"./setup/Bootstrapper":18}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -748,7 +835,7 @@ var Hero = function (_Player) {
 
 exports.default = Hero;
 
-},{"./Player":13}],13:[function(require,module,exports){
+},{"./Player":14}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -812,7 +899,7 @@ var Player = function (_Sprite) {
 
 exports.default = Player;
 
-},{"./../values/direction":16,"./Sprite":14}],14:[function(require,module,exports){
+},{"./../values/direction":17,"./Sprite":15}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -864,7 +951,7 @@ var Sprite = function (_Phaser$Sprite) {
 
 exports.default = Sprite;
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -885,7 +972,7 @@ var TestCup = function TestCup() {
 
 exports.default = TestCup;
 
-},{"./Sprite":14}],16:[function(require,module,exports){
+},{"./Sprite":15}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -898,7 +985,7 @@ exports.default = {
     LEFT: Symbol('left')
 };
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -930,6 +1017,10 @@ var _Creator2 = _interopRequireDefault(_Creator);
 var _ObjectsService = require('./../Services/ObjectsService');
 
 var _ObjectsService2 = _interopRequireDefault(_ObjectsService);
+
+var _NetworkService = require('./../Services/NetworkService');
+
+var _NetworkService2 = _interopRequireDefault(_NetworkService);
 
 var _PlayerFactory = require('./../factories/PlayerFactory');
 
@@ -979,6 +1070,7 @@ var Bootstrapper = function () {
             this.bottle.service('InputService', _InputService2.default, 'game');
             this.bottle.service('PathService', _PathService2.default);
             this.bottle.service('ObjectsService', _ObjectsService2.default, 'game');
+            this.bottle.service('NetworkService', _NetworkService2.default, '$container');
             this.bottle.service('PlayerFactory', _PlayerFactory2.default, 'game', '$container');
             this.bottle.service('Preloader', _Preloader2.default, 'game', '$container');
             this.bottle.service('Creator', _Creator2.default, 'game', '$container');
@@ -996,7 +1088,7 @@ var Bootstrapper = function () {
 
 exports.default = Bootstrapper;
 
-},{"./../Services/Creator":1,"./../Services/InputService":2,"./../Services/ObjectsService":3,"./../Services/PathService":4,"./../Services/Preloader":5,"./../States/GameState":6,"./../factories/PlayerFactory":10,"./config":18}],18:[function(require,module,exports){
+},{"./../Services/Creator":1,"./../Services/InputService":2,"./../Services/NetworkService":3,"./../Services/ObjectsService":4,"./../Services/PathService":5,"./../Services/Preloader":6,"./../States/GameState":7,"./../factories/PlayerFactory":11,"./config":19}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1011,7 +1103,7 @@ exports.default = {
     }
 };
 
-},{}]},{},[11])
+},{}]},{},[12])
 
 
 //# sourceMappingURL=app.js.map
