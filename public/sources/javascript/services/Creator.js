@@ -19,7 +19,7 @@ export default class Creator {
         this.game.load.atlas('fireball', 'assets/images/fireball.png', 'assets/images/fireball.json');
         this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
         this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
-        this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
+        this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32); 
     }
 
 }
