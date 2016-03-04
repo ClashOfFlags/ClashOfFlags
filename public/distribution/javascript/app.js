@@ -26,12 +26,17 @@ var Creator = function () {
         this.game = game;
         this.$container = $container;
 
+        this.objects = this.$container.ObjectsService;
+        this.playerFactory = this.$container.PlayerFactory;
+
         this.teamManager = $container.TeamManager;
     }
 
     _createClass(Creator, [{
         key: 'run',
         value: function run() {
+            this.createObjects();
+
             this.createTeams();
         }
     }, {
@@ -42,15 +47,46 @@ var Creator = function () {
                 this.teamManager.add(team);
                 this.createPlayersForTeam(team);
             }
+
+            this.objects.set('hero', this.teamManager.hero());
         }
     }, {
         key: 'createPlayersForTeam',
         value: function createPlayersForTeam(team) {
-            var playerStartPos = this.objects.byProperties({ 'type': 'spawn', team: team.name }, 'objectsLayer');
+            var spawns = this.objects.byProperties({ 'type': 'spawn', team: team.name }, 'objectsLayer');
 
-            for (var playerNumber in _config2.default.game.teams[team.name]) {
-                this.player = this.playerFactory.position(playerStartPos[0]).team(team).name(playerNumber).key('player').make();
+            for (var i in _config2.default.game.teams[team.name]) {
+                var playerNumber = _config2.default.game.teams[team.name][i];
+
+                var spawn = _.find(spawns, function (current_spawn) {
+                    return current_spawn.properties.player == playerNumber;
+                });
+
+                var player = this.playerFactory.position(spawn).team(team).number(playerNumber).key('player').make();
+
+                this.objects.set('player.' + playerNumber, player);
             }
+        }
+    }, {
+        key: 'createObjects',
+        value: function createObjects() {
+            var torchGroup = this.game.add.group();
+            torchGroup.enableBody = true;
+
+            var result = this.objects.byType('torch', 'objectsLayer');
+            result.forEach(function (element) {
+                var torch = torchGroup.create(element.x, element.y, "torch");
+                torch.animations.add('on', [0, 1, 2, 3], 10, true);
+                torch.animations.play('on');
+            }, this);
+        }
+    }, {
+        key: 'createControls',
+        value: function createControls() {
+            this.cursors = this.inputs.cursorKeys();
+            this.wasd = this.inputs.wasd();
+
+            this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
         }
     }]);
 
@@ -329,7 +365,6 @@ var GameState = function (_State) {
         _this.playerFactory = $container.PlayerFactory;
         window.clashOfFlags = _this; // Publish GameState to window, Vue App needs to access pause() and unpause()
         _this.teamManager = $container.TeamManager;
-
         return _this;
     }
 
@@ -343,9 +378,12 @@ var GameState = function (_State) {
         value: function create() {
             this.initPauseState();
 
+            this.createMap();
+
             this.creator.run();
 
-            this.createMap();
+            this.player = this.teamManager.hero();
+
             this.createPlayer();
             this.createControls();
         }
@@ -398,11 +436,6 @@ var GameState = function (_State) {
             //collision on obstacleLayer
             this.map.setCollisionBetween(1, 2000, true, 'obstacle');
 
-            /***************************
-             ******     items     ******
-             ***************************/
-            this.createObjects();
-
             this.explosions = this.game.add.group();
             this.explosions.createMultiple(50, 'explosion');
         }
@@ -439,18 +472,6 @@ var GameState = function (_State) {
                 cup.x = cup.x + cup.width / 2 + _this2.player.width / 2;
                 cup.y = cup.y + cup.height / 2 + _this2.player.height / 2;
             });
-        }
-    }, {
-        key: 'createObjects',
-        value: function createObjects() {
-            this.torchGroup = this.game.add.group();
-            this.torchGroup.enableBody = true;
-            var result = this.objects.byType('torch', 'objectsLayer');
-            result.forEach(function (element) {
-                var torch = this.torchGroup.create(element.x, element.y, "torch");
-                torch.animations.add('on', [0, 1, 2, 3], 10, true);
-                torch.animations.play('on');
-            }, this);
         }
     }, {
         key: 'createControls',
@@ -535,14 +556,28 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _Builder = require('./Builder');
+
+var _Builder2 = _interopRequireDefault(_Builder);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var AbstractFactory = function () {
-    function AbstractFactory() {
+    function AbstractFactory(game) {
         _classCallCheck(this, AbstractFactory);
+
+        this.game = game;
+        this.rebuild();
     }
 
     _createClass(AbstractFactory, [{
+        key: 'rebuild',
+        value: function rebuild() {
+            this.builder = new _Builder2.default();
+        }
+    }, {
         key: 'set',
         value: function set(key, value) {
             this.builder.set(key, value);
@@ -580,6 +615,17 @@ var AbstractFactory = function () {
 
             return true;
         }
+    }, {
+        key: 'make',
+        value: function make() {
+            this.validate();
+
+            var object = this.doMake();
+
+            this.rebuild();
+
+            return object;
+        }
     }]);
 
     return AbstractFactory;
@@ -587,7 +633,7 @@ var AbstractFactory = function () {
 
 exports.default = AbstractFactory;
 
-},{}],9:[function(require,module,exports){
+},{"./Builder":9}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -666,11 +712,7 @@ var PlayerFactory = function (_AbstractFactory) {
     function PlayerFactory(game) {
         _classCallCheck(this, PlayerFactory);
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PlayerFactory).call(this));
-
-        _this.game = game;
-
-        _this.builder = new _Builder2.default();
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PlayerFactory).call(this, game));
 
         _this.required = ['key', 'position', 'team', 'number'];
         return _this;
@@ -697,16 +739,20 @@ var PlayerFactory = function (_AbstractFactory) {
             return this.set('key', _key);
         }
     }, {
-        key: 'make',
-        value: function make() {
-            this.validate();
-
+        key: 'number',
+        value: function number(_number) {
+            return this.set('number', _number);
+        }
+    }, {
+        key: 'doMake',
+        value: function doMake() {
             var player = new _Player2.default(this.game, this.get('position').x, this.get('position').y, this.get('key'));
 
             player.scale.x = this.get('scale', 4);
             player.scale.y = this.get('scale', 4);
 
-            this.builder = new _Builder2.default();
+            this.get('team').addPlayer(player);
+            player.team = this.get('team');
 
             return player;
         }
@@ -962,7 +1008,8 @@ var TeamManager = function () {
     function TeamManager(game, $container) {
         _classCallCheck(this, TeamManager);
 
-        this.name = name;
+        this.game = game;
+        this.$container = $container;
         this.teams = {};
     }
 
@@ -974,7 +1021,7 @@ var TeamManager = function () {
     }, {
         key: 'hero',
         value: function hero() {
-            return this.teams['red'][0];
+            return this.teams['red'].players[0];
         }
     }]);
 

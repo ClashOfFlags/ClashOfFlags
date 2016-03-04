@@ -18,7 +18,6 @@ export default class GameState extends State {
         this.playerFactory = $container.PlayerFactory;
         window.clashOfFlags = this; // Publish GameState to window, Vue App needs to access pause() and unpause()
         this.teamManager = $container.TeamManager;
-
     }
 
     preload() {
@@ -29,9 +28,12 @@ export default class GameState extends State {
     create() {
         this.initPauseState();
 
+        this.createMap();
+
         this.creator.run();
 
-        this.createMap();
+        this.player = this.teamManager.hero();
+
         this.createPlayer();
         this.createControls();
     }
@@ -82,12 +84,6 @@ export default class GameState extends State {
         //collision on obstacleLayer
         this.map.setCollisionBetween(1, 2000, true, 'obstacle');
 
-
-        /***************************
-         ******     items     ******
-         ***************************/
-        this.createObjects();
-
         this.explosions = this.game.add.group();
         this.explosions.createMultiple(50, 'explosion');
     }
@@ -124,16 +120,7 @@ export default class GameState extends State {
         });
     }
 
-    createObjects() {
-        this.torchGroup = this.game.add.group();
-        this.torchGroup.enableBody = true;
-        var result = this.objects.byType('torch', 'objectsLayer');
-        result.forEach(function (element) {
-            var torch = this.torchGroup.create(element.x, element.y, "torch");
-            torch.animations.add('on', [0, 1, 2, 3], 10, true);
-            torch.animations.play('on');
-        }, this);
-    }
+
 
     createControls() {
         this.cursors = this.inputs.cursorKeys();
@@ -155,7 +142,7 @@ export default class GameState extends State {
     initPauseState() {
         const isGameDivVisible = $('#game').is(':visible');
 
-        if(isGameDivVisible) {
+        if (isGameDivVisible) {
             this.unpause();
             return;
         }

@@ -1,6 +1,7 @@
 export default class TeamManager {
     constructor(game, $container) {
-        this.name = name;
+        this.game = game;
+        this.$container = $container;
         this.teams = {};
     }
 
@@ -9,6 +10,6 @@ export default class TeamManager {
     }
 
     hero() {
-        return this.teams['red'][0];
+        return this.teams['red'].players[0];
     }
 }
