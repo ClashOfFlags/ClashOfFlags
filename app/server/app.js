@@ -15,8 +15,9 @@ socket.init(server); // Start Socket.io
 require('./api'); // Start API
 
 server.listen(port);
+console.log(`Server listening on port ${ port }!`);
 
 console.log('Waiting for MongoDB connection...');
 mongoose.then(() => {
-    console.log(`Server listening on port ${ port }!`);
+    console.log('Connected to MongoDB!');
 });
