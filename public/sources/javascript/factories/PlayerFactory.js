@@ -10,7 +10,7 @@ export default class PlayerFactory extends AbstractFactory {
 
         this.builder = new Builder()
 
-        this.required = ['key' , 'position', 'team'];
+        this.required = ['key', 'position', 'team', 'number'];
     }
 
     team(team) {
@@ -31,8 +31,6 @@ export default class PlayerFactory extends AbstractFactory {
 
     make() {
         this.validate();
-
-        console.log(this.get('scale', 4));
 
         const player = new Player(this.game, this.get('position').x, this.get('position').y, this.get('key'));
 

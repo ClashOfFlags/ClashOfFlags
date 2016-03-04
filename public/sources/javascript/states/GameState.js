@@ -13,8 +13,10 @@ export default class GameState extends State {
         this.inputs = $container.InputService;
         this.paths = $container.PathService;
         this.objects = $container.ObjectsService;
-        this.preloader = $container.Preloader;
+        this.preloader = $container.Preloader;Crea
+        this.creator = $container.Creator;
         this.playerFactory = $container.PlayerFactory;
+        this.teamManager = $container.TeamManager;
 
 
         /*
@@ -40,6 +42,9 @@ export default class GameState extends State {
 
     create() {
         window.clashOfFlags.pause();
+
+        this.creator.run();
+
         this.createMap();
         this.createPlayer();
         this.createControls();
@@ -102,13 +107,6 @@ export default class GameState extends State {
     }
 
     createPlayer() {
-        var playerStartPos = this.objects.byType('spawn', 'objectsLayer');
-
-        this.player = this.playerFactory
-            .position(playerStartPos[0])
-            .team('red')
-            .key('player')
-            .make();
 
         this.game.camera.follow(this.player);
 

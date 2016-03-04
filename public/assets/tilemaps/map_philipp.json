@@ -44,8 +44,8 @@
                  "name":"spawn_blue_1",
                  "properties":
                     {
-                     "player":"1",
-                     "team":"1"
+                     "player":"6",
+                     "team":"blue"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -60,8 +60,8 @@
                  "name":"spawn_blue_2",
                  "properties":
                     {
-                     "player":"2",
-                     "team":"1"
+                     "player":"7",
+                     "team":"blue"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -76,8 +76,8 @@
                  "name":"spawn_blue_3",
                  "properties":
                     {
-                     "player":"3",
-                     "team":"1"
+                     "player":"8",
+                     "team":"blue"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -92,8 +92,8 @@
                  "name":"spawn_blue_4",
                  "properties":
                     {
-                     "player":"4",
-                     "team":"1"
+                     "player":"9",
+                     "team":"blue"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -108,8 +108,8 @@
                  "name":"spawn_blue_5",
                  "properties":
                     {
-                     "player":"5",
-                     "team":"1"
+                     "player":"10",
+                     "team":"blue"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -125,7 +125,7 @@
                  "properties":
                     {
                      "player":"1",
-                     "team":"2"
+                     "team":"red"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -141,7 +141,7 @@
                  "properties":
                     {
                      "player":"2",
-                     "team":"2"
+                     "team":"red"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -157,7 +157,7 @@
                  "properties":
                     {
                      "player":"3",
-                     "team":"2"
+                     "team":"red"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -173,7 +173,7 @@
                  "properties":
                     {
                      "player":"4",
-                     "team":"2"
+                     "team":"red"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -189,7 +189,7 @@
                  "properties":
                     {
                      "player":"5",
-                     "team":"2"
+                     "team":"red"
                     },
                  "rotation":0,
                  "type":"spawn",

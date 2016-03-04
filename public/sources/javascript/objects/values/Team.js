@@ -7,4 +7,5 @@ export default class Team {
     addPlayer(player) {
         this.players.push(player);
     }
+
 }
