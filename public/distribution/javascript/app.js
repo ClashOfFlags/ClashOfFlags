@@ -309,21 +309,7 @@ var GameState = function (_State) {
         _this.objects = $container.ObjectsService;
         _this.preloader = $container.Preloader;
         _this.playerFactory = $container.PlayerFactory;
-
-        /*
-         pause() and unpause() will be called from Game.vue component
-         If input is enabled on e.g. Login or Register page the form inputs will not work
-         */
-        window.clashOfFlags = {
-            pause: function pause() {
-                game.input.enabled = false;
-                game.physics.arcade.isPaused = true;
-            },
-            unpause: function unpause() {
-                game.input.enabled = true;
-                game.physics.arcade.isPaused = false;
-            }
-        };
+        window.clashOfFlags = _this; // Publish GameState to window, Vue App needs to access pause() and unpause()
         return _this;
     }
 
@@ -335,7 +321,7 @@ var GameState = function (_State) {
     }, {
         key: 'create',
         value: function create() {
-            window.clashOfFlags.pause();
+            this.initPauseState();
             this.createMap();
             this.createPlayer();
             this.createControls();
@@ -454,6 +440,30 @@ var GameState = function (_State) {
             this.wasd = this.inputs.wasd();
 
             this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
+        }
+    }, {
+        key: 'pause',
+        value: function pause() {
+            this.game.input.enabled = false;
+            this.game.physics.arcade.isPaused = true;
+        }
+    }, {
+        key: 'unpause',
+        value: function unpause() {
+            this.game.input.enabled = true;
+            this.game.physics.arcade.isPaused = false;
+        }
+    }, {
+        key: 'initPauseState',
+        value: function initPauseState() {
+            var isGameDivVisible = $('#game').is(':visible');
+
+            if (isGameDivVisible) {
+                this.unpause();
+                return;
+            }
+
+            this.pause();
         }
     }]);
 
@@ -700,6 +710,10 @@ var _Bootstrapper2 = _interopRequireDefault(_Bootstrapper);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _Bootstrapper2.default.bootstrap();
+
+var socket = io();
+
+console.log('socket.io!');
 
 },{"./setup/Bootstrapper":17}],12:[function(require,module,exports){
 'use strict';
