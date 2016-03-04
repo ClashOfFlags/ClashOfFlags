@@ -13,29 +13,31 @@ export default class ObjectsService {
 
     byProperties(properties, layer) {
         var result = [];
-        this.map().objects[layer].forEach(function (element) {
-            if (element.properties) {
-                for (var key in properties) {
-                    if(properties.hasOwnProperty(key)){
-                        continue;
-                    }
-
-                    if (
-                        (element[key] && properties[key] == element[key]) ||
-                        (properties[key] == element.properties[key])
-                    ) {
-                        element.y += 64;
-                        result.push(element);
-                    }
-                }
+        this.map().objects[layer].forEach((element) => {
+            if (element.properties && this.objectHasProperties(element, properties)) {
+                element.y += 64;
+                result.push(element);
             }
 
         });
         return result;
     }
 
-    objectHasProperties(properties){
+    objectHasProperties(object, properties) {
+        for (var key in properties) {
+            if (!properties.hasOwnProperty(key)) {
+                continue;
+            }
 
+            const hasAttribute = object[key] && properties[key] == object[key];
+            const hasProperty = properties[key] == object.properties[key];
+
+            if (hasAttribute || hasProperty) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     get(name) {

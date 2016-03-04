@@ -139,26 +139,35 @@ var ObjectsService = function () {
     }, {
         key: 'byProperties',
         value: function byProperties(properties, layer) {
+            var _this = this;
+
             var result = [];
             this.map().objects[layer].forEach(function (element) {
-                if (element.properties) {
-                    for (var key in properties) {
-                        if (properties.hasOwnProperty(key)) {
-                            continue;
-                        }
-
-                        if (element[key] && properties[key] == element[key] || properties[key] == element.properties[key]) {
-                            element.y += 64;
-                            result.push(element);
-                        }
-                    }
+                if (element.properties && _this.objectHasProperties(element, properties)) {
+                    element.y += 64;
+                    result.push(element);
                 }
             });
             return result;
         }
     }, {
         key: 'objectHasProperties',
-        value: function objectHasProperties(properties) {}
+        value: function objectHasProperties(object, properties) {
+            for (var key in properties) {
+                if (!properties.hasOwnProperty(key)) {
+                    continue;
+                }
+
+                var hasAttribute = object[key] && properties[key] == object[key];
+                var hasProperty = properties[key] == object.properties[key];
+
+                if (hasAttribute || hasProperty) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }, {
         key: 'get',
         value: function get(name) {
