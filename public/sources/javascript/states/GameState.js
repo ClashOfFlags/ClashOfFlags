@@ -16,23 +16,9 @@ export default class GameState extends State {
         this.preloader = $container.Preloader;Crea
         this.creator = $container.Creator;
         this.playerFactory = $container.PlayerFactory;
+        window.clashOfFlags = this; // Publish GameState to window, Vue App needs to access pause() and unpause()
         this.teamManager = $container.TeamManager;
 
-
-        /*
-         pause() and unpause() will be called from Game.vue component
-         If input is enabled on e.g. Login or Register page the form inputs will not work
-         */
-        window.clashOfFlags = {
-            pause() {
-                game.input.enabled = false;
-                game.physics.arcade.isPaused = true;
-            },
-            unpause() {
-                game.input.enabled = true;
-                game.physics.arcade.isPaused = false;
-            }
-        };
     }
 
     preload() {
@@ -41,7 +27,7 @@ export default class GameState extends State {
     }
 
     create() {
-        window.clashOfFlags.pause();
+        this.initPauseState();
 
         this.creator.run();
 
@@ -155,4 +141,26 @@ export default class GameState extends State {
 
         this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
     }
+
+    pause() {
+        this.game.input.enabled = false;
+        this.game.physics.arcade.isPaused = true;
+    }
+
+    unpause() {
+        this.game.input.enabled = true;
+        this.game.physics.arcade.isPaused = false;
+    }
+
+    initPauseState() {
+        const isGameDivVisible = $('#game').is(':visible');
+
+        if(isGameDivVisible) {
+            this.unpause();
+            return;
+        }
+
+        this.pause();
+    }
+
 }
