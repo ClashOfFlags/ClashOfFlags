@@ -7,7 +7,7 @@ export default class Player extends Sprite {
         this.speed = 400;
         this.enableArcadePhysics();
         this.body.collideWorldBounds = true;
-        this.direction = direction.BOTTOM;
+        this.direction = direction.RIGHT;
         this.weapon = new Weapon(this, this.game);
         this.number = 1;
     }

@@ -161,17 +161,28 @@ var InputService = function () {
 
             if (this.cursorKeys().up.isDown || this.wasd().up.isDown) {
                 player.direction = _direction2.default.UP;
+                player.angle = -90;
                 player.body.velocity.y -= player.speed;
+                player.animations.play('walk');
             } else if (this.cursorKeys().down.isDown || this.wasd().down.isDown) {
                 player.direction = _direction2.default.BOTTOM;
+                player.angle = 90;
                 player.body.velocity.y += player.speed;
+                player.animations.play('walk');
             } else if (this.cursorKeys().left.isDown || this.wasd().left.isDown) {
                 player.direction = _direction2.default.LEFT;
+                player.angle = 180;
                 player.body.velocity.x -= player.speed;
+                player.animations.play('walk');
             } else if (this.cursorKeys().right.isDown || this.wasd().right.isDown) {
                 player.direction = _direction2.default.RIGHT;
+                player.angle = 0;
                 player.body.velocity.x += player.speed;
-            } else {}
+                player.animations.play('walk');
+            } else {
+                player.animations.stop();
+                player.frame = 0;
+            }
         }
     }]);
 
@@ -402,14 +413,14 @@ var Preloader = function () {
             gamestate.load.tilemap('map', 'assets/tilemaps/map_philipp.json', null, Phaser.Tilemap.TILED_JSON);
             gamestate.load.image('dungeon_tileset_64', 'assets/images/dungeon_tileset_64.png');
             gamestate.load.image('objects_tilset_64', 'assets/images/objects_tilset_64.png');
-            this.game.load.image('player', this.paths.image('player.png'));
-            this.game.load.image('cup', this.paths.image('bluecup.png'));
             this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
             this.game.load.atlas('explosion', 'assets/images/fireball_hit.png', 'assets/images/fireball_hit.json');
             this.game.load.atlas('fireball', 'assets/images/fireball.png', 'assets/images/fireball.json');
             this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
             this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
             this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
+            this.game.load.spritesheet('player', this.paths.image('green_male_marine_flamer.png'), 46, 26);
+            this.game.load.spritesheet('player_shoot', this.paths.image('green_male_marine_flamer_shoot.png'), 52, 26);
         }
     }]);
 
@@ -835,8 +846,12 @@ var PlayerFactory = function (_AbstractFactory) {
         value: function doMake() {
             var player = new _Player2.default(this.game, this.get('position').x, this.get('position').y, this.get('key'));
 
-            player.scale.x = this.get('scale', 4);
-            player.scale.y = this.get('scale', 4);
+            player.scale.x = this.get('scale', 1.5);
+            player.scale.y = this.get('scale', 1.5);
+
+            player.anchor.setTo(0.5, 0.5);
+
+            player.animations.add('walk', [0, 1, 2, 3], 12, true);
 
             this.get('team').addPlayer(player);
             player.team = this.get('team');
@@ -982,7 +997,7 @@ var Player = function (_Sprite) {
             this.speed = 400;
             this.enableArcadePhysics();
             this.body.collideWorldBounds = true;
-            this.direction = _direction2.default.BOTTOM;
+            this.direction = _direction2.default.RIGHT;
             this.weapon = new _Weapon2.default(this, this.game);
             this.number = 1;
         }
@@ -1150,6 +1165,10 @@ var Weapon = function () {
       // }
       //
       // this.nextShotAt = this.time.now + this.shotDelay;
+
+      this.player.loadTexture('player_shoot', 0, true);
+      this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.changeSprite, this);
+
       this.bulletSpeed = 600;
 
       // this.bullet = new Bullet(this.game, this.player.body.x, this.player.body.y, 'fireball');
@@ -1171,6 +1190,11 @@ var Weapon = function () {
         this.bullet.angle = -90;
         this.bullet.body.velocity.x = -this.bulletSpeed;
       }
+    }
+  }, {
+    key: 'changeSprite',
+    value: function changeSprite() {
+      this.player.loadTexture('player', 0, true);
     }
   }]);
 

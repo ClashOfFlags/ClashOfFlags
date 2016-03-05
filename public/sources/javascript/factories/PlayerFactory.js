@@ -32,8 +32,12 @@ export default class PlayerFactory extends AbstractFactory {
     doMake() {
         const player = new Player(this.game, this.get('position').x, this.get('position').y, this.get('key'));
 
-        player.scale.x = this.get('scale', 4);
-        player.scale.y = this.get('scale', 4);
+        player.scale.x = this.get('scale', 1.5);
+        player.scale.y = this.get('scale', 1.5);
+
+        player.anchor.setTo(0.5, 0.5);
+
+        player.animations.add('walk', [0, 1, 2, 3], 12, true);
 
         this.get('team').addPlayer(player);
         player.team = this.get('team');

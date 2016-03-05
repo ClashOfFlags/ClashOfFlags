@@ -20,6 +20,10 @@ export default class Weapon {
       // }
       //
       // this.nextShotAt = this.time.now + this.shotDelay;
+
+      this.player.loadTexture('player_shoot', 0, true);
+      this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.changeSprite, this);
+
       this.bulletSpeed = 600;
 
       // this.bullet = new Bullet(this.game, this.player.body.x, this.player.body.y, 'fireball');
@@ -41,5 +45,9 @@ export default class Weapon {
         this.bullet.angle = -90;
         this.bullet.body.velocity.x = -this.bulletSpeed;
       }
+    }
+
+    changeSprite() {
+      this.player.loadTexture('player', 0, true);
     }
 }
