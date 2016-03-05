@@ -4,7 +4,9 @@ import PathService from './../Services/PathService';
 import Preloader from './../Services/Preloader';
 import Creator from './../Services/Creator';
 import ObjectsService from './../Services/ObjectsService';
+import NetworkService from './../Services/NetworkService';
 import PlayerFactory from './../factories/PlayerFactory';
+import TeamManager from './../services/TeamManager';
 import config from './config';
 
 
@@ -22,7 +24,6 @@ export default class Bootstrapper {
 
         this.game.state.add('Game', this.bottle.container.GameState);
         this.game.state.start('Game');
-
     }
 
     registerBindings() {
@@ -32,8 +33,10 @@ export default class Bootstrapper {
         this.bottle.service('InputService', InputService, 'game');
         this.bottle.service('PathService', PathService);
         this.bottle.service('ObjectsService', ObjectsService, 'game');
+        this.bottle.service('NetworkService', NetworkService, '$container');
         this.bottle.service('PlayerFactory', PlayerFactory, 'game', '$container');
         this.bottle.service('Preloader', Preloader, 'game', '$container');
+        this.bottle.service('TeamManager', TeamManager, 'game', '$container');
         this.bottle.service('Creator', Creator, 'game', '$container');
         this.bottle.service('GameState', GameState, 'game', '$container');
     }

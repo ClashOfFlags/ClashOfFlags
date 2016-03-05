@@ -5,12 +5,8 @@ import Player from './../objects/sprites/Player';
 export default class PlayerFactory extends AbstractFactory {
 
     constructor(game) {
-        super();
-        this.game = game;
-
-        this.builder = new Builder()
-
-        this.required = ['key' , 'position', 'team'];
+        super(game);
+        this.required = ['key', 'position', 'team', 'number'];
     }
 
     team(team) {
@@ -29,20 +25,20 @@ export default class PlayerFactory extends AbstractFactory {
         return this.set('key', key);
     }
 
-    make() {
-        this.validate();
+    number(number) {
+        return this.set('number', number);
+    }
 
-        console.log(this.get('scale', 4));
-
+    doMake() {
         const player = new Player(this.game, this.get('position').x, this.get('position').y, this.get('key'));
 
         player.scale.x = this.get('scale', 4);
         player.scale.y = this.get('scale', 4);
 
-        this.builder = new Builder();
+        this.get('team').addPlayer(player);
+        player.team = this.get('team');
 
         return player;
-
     }
 
 }

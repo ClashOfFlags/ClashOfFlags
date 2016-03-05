@@ -14,23 +14,11 @@ export default class GameState extends State {
         this.paths = $container.PathService;
         this.objects = $container.ObjectsService;
         this.preloader = $container.Preloader;
+        this.creator = $container.Creator;
         this.playerFactory = $container.PlayerFactory;
-
-
-        /*
-         pause() and unpause() will be called from Game.vue component
-         If input is enabled on e.g. Login or Register page the form inputs will not work
-         */
-        window.clashOfFlags = {
-            pause() {
-                game.input.enabled = false;
-                game.physics.arcade.isPaused = true;
-            },
-            unpause() {
-                game.input.enabled = true;
-                game.physics.arcade.isPaused = false;
-            }
-        };
+        this.network = $container.NetworkService;
+        window.clashOfFlags = this; // Publish GameState to window, Vue App needs to access pause() and unpause()
+        this.teamManager = $container.TeamManager;
     }
 
     preload() {
@@ -39,10 +27,17 @@ export default class GameState extends State {
     }
 
     create() {
-        window.clashOfFlags.pause();
+        this.initPauseState();
+
         this.createMap();
+
+        this.creator.run();
+
+        this.player = this.teamManager.hero();
+
         this.createPlayer();
         this.createControls();
+        this.network.init();
     }
 
     update() {
@@ -50,7 +45,7 @@ export default class GameState extends State {
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
         this.inputs.applyToPlayer(this.player);
-
+        this.network.sendPosition(this.player);
     }
 
     bulletHitObstacle(bullet, obstacle) {
@@ -88,38 +83,16 @@ export default class GameState extends State {
         //collision on obstacleLayer
         this.map.setCollisionBetween(1, 2000, true, 'obstacle');
 
-
-        /***************************
-         ******     items     ******
-         ***************************/
-        this.createObjects();
-
         this.explosions = this.game.add.group();
         this.explosions.createMultiple(50, 'explosion');
     }
 
     createPlayer() {
-        var playerStartPos = this.objects.byType('spawn', 'objectsLayer');
-
-        this.player = this.playerFactory
-            .position(playerStartPos[0])
-            .team('red')
-            .key('player')
-            .make();
 
         this.game.camera.follow(this.player);
     }
 
-    createObjects() {
-        this.torchGroup = this.game.add.group();
-        this.torchGroup.enableBody = true;
-        var result = this.objects.byType('torch', 'objectsLayer');
-        result.forEach(function (element) {
-            var torch = this.torchGroup.create(element.x, element.y, "torch");
-            torch.animations.add('on', [0, 1, 2, 3], 10, true);
-            torch.animations.play('on');
-        }, this);
-    }
+
 
     createControls() {
         this.cursors = this.inputs.cursorKeys();
@@ -132,4 +105,26 @@ export default class GameState extends State {
           this.player.shoot();
         });
     }
+
+    pause() {
+        this.game.input.enabled = false;
+        this.game.physics.arcade.isPaused = true;
+    }
+
+    unpause() {
+        this.game.input.enabled = true;
+        this.game.physics.arcade.isPaused = false;
+    }
+
+    initPauseState() {
+        const isGameDivVisible = $('#game').is(':visible');
+
+        if (isGameDivVisible) {
+            this.unpause();
+            return;
+        }
+
+        this.pause();
+    }
+
 }
