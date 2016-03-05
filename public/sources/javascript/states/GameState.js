@@ -47,30 +47,23 @@ export default class GameState extends State {
 
     update() {
         this.game.physics.arcade.collide(this.player, this.obstacleLayer);
-        this.game.physics.arcade.collide(this.objects.cups, this.obstacleLayer, this.destroy, null, this);
-
-        this.player.body.velocity.x = 0;
+        this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
         this.inputs.applyToPlayer(this.player);
 
     }
 
-    destroy(cup, obstacle) {
-
+    bulletHitObstacle(bullet, obstacle) {
         var singleExplosion = this.explosions.getFirstDead();
-        singleExplosion = this.explosions.create(cup.x, cup.y, 'explosion');
+        singleExplosion = this.explosions.create(bullet.body.x, bullet.body.y, 'explosion');
         singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('fireball_hit_000', 1, 9), 100, false);
-        // singleExplosion.scale.x = 0.7;
-        // singleExplosion.scale.y = 0.7;
-        singleExplosion.x = singleExplosion.x - singleExplosion.width / 2;
-        singleExplosion.y = singleExplosion.y - singleExplosion.height / 2;
         singleExplosion.animations.play('fire');
 
         singleExplosion.events.onAnimationComplete.add(function () {
             singleExplosion.kill();
         }, this);
 
-        cup.kill();
+        bullet.kill();
     }
 
     createMap() {
@@ -87,6 +80,10 @@ export default class GameState extends State {
         this.backgroundlayer = this.map.createLayer('background');
         this.obstacleLayer = this.map.createLayer('obstacle');
         this.decorationslayer = this.map.createLayer('decorations');
+
+        this.backgroundlayer.resizeWorld();
+        this.obstacleLayer.resizeWorld();
+        this.decorationslayer.resizeWorld();
 
         //collision on obstacleLayer
         this.map.setCollisionBetween(1, 2000, true, 'obstacle');
@@ -111,33 +108,6 @@ export default class GameState extends State {
             .make();
 
         this.game.camera.follow(this.player);
-
-        this.objects.cups = this.game.add.group();
-
-        var cups = this.objects.cups;
-        cups.enableBody = true;
-        cups.physicsBodyType = Phaser.Physics.ARCADE;
-
-        cups.createMultiple(50, 'fireball');
-        cups.setAll('checkWorldBounds', true);
-        cups.setAll('outOfBoundsKill', true);
-
-        cups.callAll('animations.add', 'animations', 'fireball', Phaser.Animation.generateFrameNames('fireball_000', 1, 6), 60, true);
-        cups.callAll('animations.play', 'animations', 'fireball');
-
-        this.game.input.onDown.add(() => {
-            var cup = cups.getFirstDead();
-
-            cup.reset(this.player.body.x - cup.width / 2, this.player.body.y - cup.height / 2);
-
-            this.game.physics.arcade.moveToPointer(cup, 500);
-
-            cup.pivot.x = cup.width * 0.5;
-            cup.pivot.y = cup.height * 0.5;
-
-            cup.x = cup.x + cup.width / 2 + this.player.width / 2;
-            cup.y = cup.y + cup.height / 2 + this.player.height / 2;
-        });
     }
 
     createObjects() {
@@ -154,7 +124,12 @@ export default class GameState extends State {
     createControls() {
         this.cursors = this.inputs.cursorKeys();
         this.wasd = this.inputs.wasd();
+        this.space = this.inputs.space();
 
         this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
+
+        this.space.onDown.add(() => {
+          this.player.shoot();
+        });
     }
 }

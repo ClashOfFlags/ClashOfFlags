@@ -1,3 +1,5 @@
+import direction from './../objects/values/direction';
+
 export default class InputService {
     constructor(game) {
         this.game = game;
@@ -10,7 +12,6 @@ export default class InputService {
         if (!this.inputs.cursorKeys) {
             this.inputs.cursorKeys = this.game.input.keyboard.createCursorKeys();
         }
-
 
         return this.inputs.cursorKeys;
     }
@@ -27,25 +28,36 @@ export default class InputService {
 
         return this.inputs.wasd;
     }
-    
-    applyToPlayer(player){
-        if (this.cursorKeys().up.isDown || this.wasd().up.isDown) {
-            if (player.body.velocity.y == 0)
-                player.body.velocity.y -= player.getSpeed();
-        }
-        else if (this.cursorKeys().down.isDown || this.wasd().down.isDown) {
-            if (player.body.velocity.y == 0)
-                player.body.velocity.y += player.getSpeed();
-        }
-        else {
-            player.body.velocity.y = 0;
-        }
-        if (this.cursorKeys().left.isDown || this.wasd().left.isDown) {
-            player.body.velocity.x -= player.getSpeed();
-        }
-        else if (this.cursorKeys().right.isDown || this.wasd().right.isDown) {
-            player.body.velocity.x += player.getSpeed();
-        }
 
+    space() {
+      if (!this.inputs.space) {
+          this.inputs.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+      }
+
+      return this.inputs.space;
     }
+
+    applyToPlayer(player){
+      player.body.velocity.x = 0;
+      player.body.velocity.y = 0;
+
+      if (this.cursorKeys().up.isDown || this.wasd().up.isDown) {
+        player.direction = direction.UP;
+        player.body.velocity.y -= player.speed;
+      }
+      else if (this.cursorKeys().down.isDown || this.wasd().down.isDown) {
+        player.direction = direction.BOTTOM
+        player.body.velocity.y += player.speed;
+      }
+      else if (this.cursorKeys().left.isDown || this.wasd().left.isDown) {
+        player.direction = direction.LEFT;
+        player.body.velocity.x -= player.speed;
+      }
+      else if (this.cursorKeys().right.isDown || this.wasd().right.isDown) {
+        player.direction = direction.RIGHT;
+        player.body.velocity.x += player.speed;
+      }else {
+
+      }
+  }
 }

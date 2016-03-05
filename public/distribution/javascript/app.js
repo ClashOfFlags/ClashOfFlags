@@ -43,13 +43,19 @@ var Creator = function () {
 exports.default = Creator;
 
 },{}],2:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _direction = require('./../objects/values/direction');
+
+var _direction2 = _interopRequireDefault(_direction);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -63,7 +69,7 @@ var InputService = function () {
     }
 
     _createClass(InputService, [{
-        key: "cursorKeys",
+        key: 'cursorKeys',
         value: function cursorKeys() {
             if (!this.inputs.cursorKeys) {
                 this.inputs.cursorKeys = this.game.input.keyboard.createCursorKeys();
@@ -72,7 +78,7 @@ var InputService = function () {
             return this.inputs.cursorKeys;
         }
     }, {
-        key: "wasd",
+        key: 'wasd',
         value: function wasd() {
             if (!this.inputs.wasd) {
                 this.inputs.wasd = {
@@ -86,20 +92,33 @@ var InputService = function () {
             return this.inputs.wasd;
         }
     }, {
-        key: "applyToPlayer",
+        key: 'space',
+        value: function space() {
+            if (!this.inputs.space) {
+                this.inputs.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+            }
+
+            return this.inputs.space;
+        }
+    }, {
+        key: 'applyToPlayer',
         value: function applyToPlayer(player) {
+            player.body.velocity.x = 0;
+            player.body.velocity.y = 0;
+
             if (this.cursorKeys().up.isDown || this.wasd().up.isDown) {
-                if (player.body.velocity.y == 0) player.body.velocity.y -= player.getSpeed();
+                player.direction = _direction2.default.UP;
+                player.body.velocity.y -= player.speed;
             } else if (this.cursorKeys().down.isDown || this.wasd().down.isDown) {
-                if (player.body.velocity.y == 0) player.body.velocity.y += player.getSpeed();
-            } else {
-                player.body.velocity.y = 0;
-            }
-            if (this.cursorKeys().left.isDown || this.wasd().left.isDown) {
-                player.body.velocity.x -= player.getSpeed();
+                player.direction = _direction2.default.BOTTOM;
+                player.body.velocity.y += player.speed;
+            } else if (this.cursorKeys().left.isDown || this.wasd().left.isDown) {
+                player.direction = _direction2.default.LEFT;
+                player.body.velocity.x -= player.speed;
             } else if (this.cursorKeys().right.isDown || this.wasd().right.isDown) {
-                player.body.velocity.x += player.getSpeed();
-            }
+                player.direction = _direction2.default.RIGHT;
+                player.body.velocity.x += player.speed;
+            } else {}
         }
     }]);
 
@@ -108,7 +127,7 @@ var InputService = function () {
 
 exports.default = InputService;
 
-},{}],3:[function(require,module,exports){
+},{"./../objects/values/direction":18}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -344,30 +363,23 @@ var GameState = function (_State) {
         key: 'update',
         value: function update() {
             this.game.physics.arcade.collide(this.player, this.obstacleLayer);
-            this.game.physics.arcade.collide(this.objects.cups, this.obstacleLayer, this.destroy, null, this);
-
-            this.player.body.velocity.x = 0;
+            this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
             this.inputs.applyToPlayer(this.player);
         }
     }, {
-        key: 'destroy',
-        value: function destroy(cup, obstacle) {
-
+        key: 'bulletHitObstacle',
+        value: function bulletHitObstacle(bullet, obstacle) {
             var singleExplosion = this.explosions.getFirstDead();
-            singleExplosion = this.explosions.create(cup.x, cup.y, 'explosion');
+            singleExplosion = this.explosions.create(bullet.body.x, bullet.body.y, 'explosion');
             singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('fireball_hit_000', 1, 9), 100, false);
-            // singleExplosion.scale.x = 0.7;
-            // singleExplosion.scale.y = 0.7;
-            singleExplosion.x = singleExplosion.x - singleExplosion.width / 2;
-            singleExplosion.y = singleExplosion.y - singleExplosion.height / 2;
             singleExplosion.animations.play('fire');
 
             singleExplosion.events.onAnimationComplete.add(function () {
                 singleExplosion.kill();
             }, this);
 
-            cup.kill();
+            bullet.kill();
         }
     }, {
         key: 'createMap',
@@ -386,6 +398,10 @@ var GameState = function (_State) {
             this.obstacleLayer = this.map.createLayer('obstacle');
             this.decorationslayer = this.map.createLayer('decorations');
 
+            this.backgroundlayer.resizeWorld();
+            this.obstacleLayer.resizeWorld();
+            this.decorationslayer.resizeWorld();
+
             //collision on obstacleLayer
             this.map.setCollisionBetween(1, 2000, true, 'obstacle');
 
@@ -400,40 +416,11 @@ var GameState = function (_State) {
     }, {
         key: 'createPlayer',
         value: function createPlayer() {
-            var _this2 = this;
-
             var playerStartPos = this.objects.byType('spawn', 'objectsLayer');
 
             this.player = this.playerFactory.position(playerStartPos[0]).team('red').key('player').make();
 
             this.game.camera.follow(this.player);
-
-            this.objects.cups = this.game.add.group();
-
-            var cups = this.objects.cups;
-            cups.enableBody = true;
-            cups.physicsBodyType = Phaser.Physics.ARCADE;
-
-            cups.createMultiple(50, 'fireball');
-            cups.setAll('checkWorldBounds', true);
-            cups.setAll('outOfBoundsKill', true);
-
-            cups.callAll('animations.add', 'animations', 'fireball', Phaser.Animation.generateFrameNames('fireball_000', 1, 6), 60, true);
-            cups.callAll('animations.play', 'animations', 'fireball');
-
-            this.game.input.onDown.add(function () {
-                var cup = cups.getFirstDead();
-
-                cup.reset(_this2.player.body.x - cup.width / 2, _this2.player.body.y - cup.height / 2);
-
-                _this2.game.physics.arcade.moveToPointer(cup, 500);
-
-                cup.pivot.x = cup.width * 0.5;
-                cup.pivot.y = cup.height * 0.5;
-
-                cup.x = cup.x + cup.width / 2 + _this2.player.width / 2;
-                cup.y = cup.y + cup.height / 2 + _this2.player.height / 2;
-            });
         }
     }, {
         key: 'createObjects',
@@ -450,10 +437,17 @@ var GameState = function (_State) {
     }, {
         key: 'createControls',
         value: function createControls() {
+            var _this2 = this;
+
             this.cursors = this.inputs.cursorKeys();
             this.wasd = this.inputs.wasd();
+            this.space = this.inputs.space();
 
             this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
+
+            this.space.onDown.add(function () {
+                _this2.player.shoot();
+            });
         }
     }]);
 
@@ -462,7 +456,7 @@ var GameState = function (_State) {
 
 exports.default = GameState;
 
-},{"./../factories/PlayerFactory":10,"./../objects/sprites/Hero":12,"./../objects/sprites/Player":13,"./../objects/sprites/TestCup":15,"./State":7}],7:[function(require,module,exports){
+},{"./../factories/PlayerFactory":10,"./../objects/sprites/Hero":13,"./../objects/sprites/Player":14,"./../objects/sprites/TestCup":16,"./State":7}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -690,7 +684,7 @@ var PlayerFactory = function (_AbstractFactory) {
 
 exports.default = PlayerFactory;
 
-},{"./../objects/sprites/Player":13,"./AbstractFactory":8,"./Builder":9}],11:[function(require,module,exports){
+},{"./../objects/sprites/Player":14,"./AbstractFactory":8,"./Builder":9}],11:[function(require,module,exports){
 'use strict';
 
 var _Bootstrapper = require('./setup/Bootstrapper');
@@ -701,7 +695,51 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _Bootstrapper2.default.bootstrap();
 
-},{"./setup/Bootstrapper":17}],12:[function(require,module,exports){
+},{"./setup/Bootstrapper":19}],12:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Sprite2 = require('./Sprite');
+
+var _Sprite3 = _interopRequireDefault(_Sprite2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Bullet = function (_Sprite) {
+  _inherits(Bullet, _Sprite);
+
+  function Bullet() {
+    _classCallCheck(this, Bullet);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(Bullet).apply(this, arguments));
+  }
+
+  _createClass(Bullet, [{
+    key: 'boot',
+    value: function boot() {
+      this.enableArcadePhysics();
+      this.checkWorldBounds = true;
+      this.outOfBoundsKill = true;
+    }
+  }]);
+
+  return Bullet;
+}(_Sprite3.default);
+
+exports.default = Bullet;
+
+},{"./Sprite":15}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -734,7 +772,7 @@ var Hero = function (_Player) {
 
 exports.default = Hero;
 
-},{"./Player":13}],13:[function(require,module,exports){
+},{"./Player":14}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -750,6 +788,10 @@ var _Sprite3 = _interopRequireDefault(_Sprite2);
 var _direction = require('./../values/direction');
 
 var _direction2 = _interopRequireDefault(_direction);
+
+var _Weapon = require('./../values/Weapon');
+
+var _Weapon2 = _interopRequireDefault(_Weapon);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -771,25 +813,21 @@ var Player = function (_Sprite) {
     _createClass(Player, [{
         key: 'boot',
         value: function boot() {
-            this.speed = 500;
+            this.speed = 400;
             this.enableArcadePhysics();
             this.body.collideWorldBounds = true;
             this.direction = _direction2.default.BOTTOM;
-        }
-    }, {
-        key: 'getSpeed',
-        value: function getSpeed() {
-            return this.speed;
-        }
-    }, {
-        key: 'setSpeed',
-        value: function setSpeed(newSpeed) {
-            this.speed = newSpeed;
+            this.weapon = new _Weapon2.default(this, this.game);
         }
     }, {
         key: 'collect',
         value: function collect(item) {
             item.kill();
+        }
+    }, {
+        key: 'shoot',
+        value: function shoot() {
+            this.weapon.shoot();
         }
     }]);
 
@@ -798,7 +836,7 @@ var Player = function (_Sprite) {
 
 exports.default = Player;
 
-},{"./../values/direction":16,"./Sprite":14}],14:[function(require,module,exports){
+},{"./../values/Weapon":17,"./../values/direction":18,"./Sprite":15}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -850,7 +888,7 @@ var Sprite = function (_Phaser$Sprite) {
 
 exports.default = Sprite;
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -871,7 +909,79 @@ var TestCup = function TestCup() {
 
 exports.default = TestCup;
 
-},{"./Sprite":14}],16:[function(require,module,exports){
+},{"./Sprite":15}],17:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Bullet = require('../sprites/Bullet');
+
+var _Bullet2 = _interopRequireDefault(_Bullet);
+
+var _direction = require('./direction');
+
+var _direction2 = _interopRequireDefault(_direction);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Weapon = function () {
+  function Weapon(player, game) {
+    _classCallCheck(this, Weapon);
+
+    this.game = game;
+    this.player = player;
+    this.shotDelay = 500;
+    // this.nextShotAt = this.time.now + this.shotDelay;
+
+    this.bullets = game.add.group();
+    this.bullets.enableBody = true;
+    this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+  }
+
+  _createClass(Weapon, [{
+    key: 'shoot',
+    value: function shoot() {
+      // if (this.nextShotAt > this.time.now) {
+      //   return;
+      // }
+      //
+      // this.nextShotAt = this.time.now + this.shotDelay;
+      this.bulletSpeed = 600;
+
+      // this.bullet = new Bullet(this.game, this.player.body.x, this.player.body.y, 'fireball');
+      this.bullet = this.bullets.create(this.player.body.center.x, this.player.body.center.y, 'fireball');
+      this.bullet.animations.add('fireball', Phaser.Animation.generateFrameNames('fireball_000', 1, 6), 60, true);
+      this.bullet.animations.play('fireball');
+      this.bullet.anchor.setTo(0.5, 0.5);
+
+      if (this.player.direction === _direction2.default.BOTTOM) {
+        this.bullet.body.velocity.y = this.bulletSpeed;
+        this.bullet.angle = 180;
+      } else if (this.player.direction === _direction2.default.UP) {
+        this.bullet.angle = 0;
+        this.bullet.body.velocity.y = -this.bulletSpeed;
+      } else if (this.player.direction === _direction2.default.RIGHT) {
+        this.bullet.angle = 90;
+        this.bullet.body.velocity.x = this.bulletSpeed;
+      } else if (this.player.direction === _direction2.default.LEFT) {
+        this.bullet.angle = -90;
+        this.bullet.body.velocity.x = -this.bulletSpeed;
+      }
+    }
+  }]);
+
+  return Weapon;
+}();
+
+exports.default = Weapon;
+
+},{"../sprites/Bullet":12,"./direction":18}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -884,7 +994,7 @@ exports.default = {
     LEFT: Symbol('left')
 };
 
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -982,7 +1092,7 @@ var Bootstrapper = function () {
 
 exports.default = Bootstrapper;
 
-},{"./../Services/Creator":1,"./../Services/InputService":2,"./../Services/ObjectsService":3,"./../Services/PathService":4,"./../Services/Preloader":5,"./../States/GameState":6,"./../factories/PlayerFactory":10,"./config":18}],18:[function(require,module,exports){
+},{"./../Services/Creator":1,"./../Services/InputService":2,"./../Services/ObjectsService":3,"./../Services/PathService":4,"./../Services/Preloader":5,"./../States/GameState":6,"./../factories/PlayerFactory":10,"./config":20}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
