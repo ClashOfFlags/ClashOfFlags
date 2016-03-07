@@ -1149,8 +1149,8 @@ var Weapon = function () {
 
     this.game = game;
     this.player = player;
-    this.shotDelay = 500;
-    // this.nextShotAt = this.time.now + this.shotDelay;
+    this.shotDelay = 300;
+    this.nextShotAt = Date.now() + this.shotDelay;
 
     this.bullets = game.add.group();
     this.bullets.enableBody = true;
@@ -1160,11 +1160,11 @@ var Weapon = function () {
   _createClass(Weapon, [{
     key: 'shoot',
     value: function shoot() {
-      // if (this.nextShotAt > this.time.now) {
-      //   return;
-      // }
-      //
-      // this.nextShotAt = this.time.now + this.shotDelay;
+      if (this.nextShotAt > Date.now()) {
+        return;
+      }
+
+      this.nextShotAt = Date.now() + this.shotDelay;
 
       this.player.loadTexture('player_shoot', 0, true);
       this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.changeSprite, this);
