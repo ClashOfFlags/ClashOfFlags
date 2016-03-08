@@ -42,6 +42,12 @@ export default class PlayerFactory extends AbstractFactory {
         this.get('team').addPlayer(player);
         player.team = this.get('team');
 
+        var style = { font: "16px Arial", fill: "#fff", align: "center", width: player.width};
+
+        player.name = this.game.add.text(0, 0, "Player " + this.get('number'), style);
+        player.name.anchor.setTo(0.5, 0.5);
+        player.updateName();
+
         return player;
     }
 

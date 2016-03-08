@@ -54,6 +54,7 @@ export default class NetworkService {
         const playerSprite = this.players[player.id];
         playerSprite.x = player.position.x;
         playerSprite.y = player.position.y;
+        playerSprite.updateName();
     }
 
     sendPosition(player) {

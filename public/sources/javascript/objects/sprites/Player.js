@@ -23,4 +23,9 @@ export default class Player extends Sprite {
     changeSpriteToNormal() {
       this.player.loadTexture('player', 0, true);
     }
+
+    updateName() {
+      this.name.x = this.x;
+      this.name.y = this.y - this.height * 1.2; 
+    }
 }

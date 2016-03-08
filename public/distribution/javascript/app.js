@@ -164,21 +164,25 @@ var InputService = function () {
                 player.angle = -90;
                 player.body.velocity.y -= player.speed;
                 player.animations.play('walk');
+                player.updateName();
             } else if (this.cursorKeys().down.isDown || this.wasd().down.isDown) {
                 player.direction = _direction2.default.BOTTOM;
                 player.angle = 90;
                 player.body.velocity.y += player.speed;
                 player.animations.play('walk');
+                player.updateName();
             } else if (this.cursorKeys().left.isDown || this.wasd().left.isDown) {
                 player.direction = _direction2.default.LEFT;
                 player.angle = 180;
                 player.body.velocity.x -= player.speed;
                 player.animations.play('walk');
+                player.updateName();
             } else if (this.cursorKeys().right.isDown || this.wasd().right.isDown) {
                 player.direction = _direction2.default.RIGHT;
                 player.angle = 0;
                 player.body.velocity.x += player.speed;
                 player.animations.play('walk');
+                player.updateName();
             } else {
                 player.animations.stop();
                 player.frame = 0;
@@ -262,6 +266,7 @@ var NetworkService = function () {
             var playerSprite = this.players[player.id];
             playerSprite.x = player.position.x;
             playerSprite.y = player.position.y;
+            playerSprite.updateName();
         }
     }, {
         key: 'sendPosition',
@@ -856,6 +861,12 @@ var PlayerFactory = function (_AbstractFactory) {
             this.get('team').addPlayer(player);
             player.team = this.get('team');
 
+            var style = { font: "16px Arial", fill: "#fff", align: "center", width: player.width };
+
+            player.name = this.game.add.text(0, 0, "Player " + this.get('number'), style);
+            player.name.anchor.setTo(0.5, 0.5);
+            player.updateName();
+
             return player;
         }
     }]);
@@ -1026,6 +1037,12 @@ var Player = function (_Sprite) {
         key: 'changeSpriteToNormal',
         value: function changeSpriteToNormal() {
             this.player.loadTexture('player', 0, true);
+        }
+    }, {
+        key: 'updateName',
+        value: function updateName() {
+            this.name.x = this.x;
+            this.name.y = this.y - this.height * 1.2;
         }
     }]);
 
@@ -1396,7 +1413,7 @@ exports.default = {
         weapons: {
             'fireball': {
                 bulletSpeed: 600,
-                lifetime: 0.5,
+                lifetime: 2.5,
                 shotDelay: 300
             }
         }
