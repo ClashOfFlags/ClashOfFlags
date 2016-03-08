@@ -38,15 +38,34 @@ export default class GameState extends State {
         this.createPlayer();
         this.createControls();
         this.network.init();
+
+        this.miniMapOverlay = this.objects.get('miniMapOverlay');
+        this.miniMapSize = this.objects.get('miniMapSize');
+
     }
 
 
     update() {
         this.game.physics.arcade.collide(this.player, this.obstacleLayer);
+        this.game.physics.arcade.collide(this.player, this.waterlayer);
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
         this.inputs.applyToPlayer(this.player);
         this.network.sendPosition(this.player);
+
+        this.updateMiniMap();
+    }
+
+    updateMiniMap() {
+
+      this.miniMapOverlay.context.clearRect(0, 0, this.miniMapOverlay.width, this.miniMapOverlay.height);
+
+      this.miniMapOverlay.rect(
+        Math.floor(this.player.x / 64) * this.miniMapSize,
+        Math.floor(this.player.y / 64) * this.miniMapSize,
+        this.miniMapSize * 2, this.miniMapSize * 2, '#FFFF00');
+      this.miniMapOverlay.dirty = true;
+
     }
 
     bulletHitObstacle(bullet, obstacle) {
@@ -74,15 +93,18 @@ export default class GameState extends State {
 
         //create layer
         this.backgroundlayer = this.map.createLayer('background');
+        this.waterlayer = this.map.createLayer('water');
         this.obstacleLayer = this.map.createLayer('obstacle');
         this.decorationslayer = this.map.createLayer('decorations');
 
         this.backgroundlayer.resizeWorld();
+        this.waterlayer.resizeWorld();
         this.obstacleLayer.resizeWorld();
         this.decorationslayer.resizeWorld();
 
         //collision on obstacleLayer
         this.map.setCollisionBetween(1, 2000, true, 'obstacle');
+        this.map.setCollisionBetween(1, 2000, true, 'water');
 
         this.explosions = this.game.add.group();
         this.explosions.createMultiple(50, 'explosion');

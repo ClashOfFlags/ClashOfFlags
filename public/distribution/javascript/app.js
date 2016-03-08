@@ -38,6 +38,43 @@ var Creator = function () {
             this.createObjects();
 
             this.createTeams();
+
+            this.createMiniMap();
+        }
+    }, {
+        key: 'createMiniMap',
+        value: function createMiniMap() {
+            this.map = this.objects.get('map');
+            this.miniMapSize = 2;
+
+            var miniMapBmd = this.game.add.bitmapData();
+
+            for (var l = 0; l < this.map.layers.length; l++) {
+                for (var y = 0; y < this.map.height; y++) {
+                    for (var x = 0; x < this.map.width; x++) {
+                        var tile = this.map.getTile(x, y, l);
+                        if (tile && this.map.layers[l].name == 'background') {
+                            miniMapBmd.ctx.fillStyle = '#1D2A34';
+                            miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
+                        } else if (tile && this.map.layers[l].name == 'water') {
+                            miniMapBmd.ctx.fillStyle = '#0000ff';
+                            miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
+                        } else if (tile && this.map.layers[l].name == 'obstacle') {
+                            miniMapBmd.ctx.fillStyle = '#cccccc';
+                            miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
+                        }
+                    }
+                }
+            }
+            this.miniMap = this.game.add.sprite(10, 390, miniMapBmd);
+            this.miniMap.fixedToCamera = true;
+
+            var miniMapOverlayBmd = this.game.add.bitmapData();
+            this.miniMapOverlay = this.game.add.sprite(10, 390, miniMapOverlayBmd);
+            this.miniMapOverlay.fixedToCamera = true;
+
+            this.objects.set('miniMapOverlay', miniMapOverlayBmd);
+            this.objects.set('miniMapSize', this.miniMapSize);
         }
     }, {
         key: 'createTeams',
@@ -535,15 +572,30 @@ var GameState = function (_State) {
             this.createPlayer();
             this.createControls();
             this.network.init();
+
+            this.miniMapOverlay = this.objects.get('miniMapOverlay');
+            this.miniMapSize = this.objects.get('miniMapSize');
         }
     }, {
         key: 'update',
         value: function update() {
             this.game.physics.arcade.collide(this.player, this.obstacleLayer);
+            this.game.physics.arcade.collide(this.player, this.waterlayer);
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
             this.inputs.applyToPlayer(this.player);
             this.network.sendPosition(this.player);
+
+            this.updateMiniMap();
+        }
+    }, {
+        key: 'updateMiniMap',
+        value: function updateMiniMap() {
+
+            this.miniMapOverlay.context.clearRect(0, 0, this.miniMapOverlay.width, this.miniMapOverlay.height);
+
+            this.miniMapOverlay.rect(Math.floor(this.player.x / 64) * this.miniMapSize, Math.floor(this.player.y / 64) * this.miniMapSize, this.miniMapSize * 2, this.miniMapSize * 2, '#FFFF00');
+            this.miniMapOverlay.dirty = true;
         }
     }, {
         key: 'bulletHitObstacle',
@@ -573,15 +625,18 @@ var GameState = function (_State) {
 
             //create layer
             this.backgroundlayer = this.map.createLayer('background');
+            this.waterlayer = this.map.createLayer('water');
             this.obstacleLayer = this.map.createLayer('obstacle');
             this.decorationslayer = this.map.createLayer('decorations');
 
             this.backgroundlayer.resizeWorld();
+            this.waterlayer.resizeWorld();
             this.obstacleLayer.resizeWorld();
             this.decorationslayer.resizeWorld();
 
             //collision on obstacleLayer
             this.map.setCollisionBetween(1, 2000, true, 'obstacle');
+            this.map.setCollisionBetween(1, 2000, true, 'water');
 
             this.explosions = this.game.add.group();
             this.explosions.createMultiple(50, 'explosion');
