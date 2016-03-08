@@ -42,6 +42,8 @@ export default class PlayerFactory extends AbstractFactory {
         this.get('team').addPlayer(player);
         player.team = this.get('team');
 
+        player.health = 100;
+
         return player;
     }
 

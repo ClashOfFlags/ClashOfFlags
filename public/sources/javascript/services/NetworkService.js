@@ -24,6 +24,10 @@ export default class NetworkService {
         this.socket.on('PlayerPositionEvent', player => {
             this.onPlayerPosition(player);
         });
+
+        this.socket.on('PlayerShootEvent', data => {
+            this.onPlayerShoot(data);
+        });
     }
 
     connect() {
@@ -45,7 +49,7 @@ export default class NetworkService {
     onPlayerDisconnect(player) {
         const playerSprite = this.players[player.id];
 
-        if(playerSprite) {
+        if (playerSprite) {
             playerSprite.kill();
         }
     }
@@ -56,6 +60,12 @@ export default class NetworkService {
         playerSprite.y = player.position.y;
     }
 
+    onPlayerShoot(data) {
+        //player = this.teamManager.allPlayers()[data.player];
+
+        console.log('shoot over network', data);
+    }
+
     sendPosition(player) {
         const position = {
             x: player.x,
@@ -63,6 +73,16 @@ export default class NetworkService {
         };
 
         this.socket.emit('PlayerPositionEvent', position);
+    }
+
+    sendShoot(player) {
+        const data = {
+            direction: player.direction,
+            x: player.x,
+            y: player.y
+        };
+
+        this.socket.emit('PlayerShootEvent', data);
     }
 
 }

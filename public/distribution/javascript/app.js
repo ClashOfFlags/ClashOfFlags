@@ -233,6 +233,10 @@ var NetworkService = function () {
             this.socket.on('PlayerPositionEvent', function (player) {
                 _this.onPlayerPosition(player);
             });
+
+            this.socket.on('PlayerShootEvent', function (data) {
+                _this.onPlayerShoot(data);
+            });
         }
     }, {
         key: 'connect',
@@ -264,6 +268,13 @@ var NetworkService = function () {
             playerSprite.y = player.position.y;
         }
     }, {
+        key: 'onPlayerShoot',
+        value: function onPlayerShoot(data) {
+            //player = this.teamManager.allPlayers()[data.player];
+
+            console.log('shoot over network', data);
+        }
+    }, {
         key: 'sendPosition',
         value: function sendPosition(player) {
             var position = {
@@ -272,6 +283,17 @@ var NetworkService = function () {
             };
 
             this.socket.emit('PlayerPositionEvent', position);
+        }
+    }, {
+        key: 'sendShoot',
+        value: function sendShoot(player) {
+            var data = {
+                direction: player.direction,
+                x: player.x,
+                y: player.y
+            };
+
+            this.socket.emit('PlayerShootEvent', data);
         }
     }]);
 
@@ -301,7 +323,8 @@ var ObjectsService = function () {
     _createClass(ObjectsService, [{
         key: 'set',
         value: function set(name, value) {
-            this.collection[name] = value;
+
+            return _.set(this.collection, name, value);
         }
     }, {
         key: 'byType',
@@ -343,7 +366,7 @@ var ObjectsService = function () {
     }, {
         key: 'get',
         value: function get(name) {
-            return this.collection[name];
+            return _.get(this.collection, name);
         }
     }, {
         key: 'map',
@@ -577,6 +600,8 @@ var GameState = function (_State) {
 
             this.space.onDown.add(function () {
                 _this2.player.shoot();
+                console.log('send shoot');
+                _this2.network.sendShoot(_this2.player);
             });
         }
     }, {
@@ -855,6 +880,8 @@ var PlayerFactory = function (_AbstractFactory) {
 
             this.get('team').addPlayer(player);
             player.team = this.get('team');
+
+            player.health = 100;
 
             return player;
         }
@@ -1244,7 +1271,28 @@ var TeamManager = function () {
     }, {
         key: 'hero',
         value: function hero() {
-            return this.teams['red'].players[0];
+            return this.teams['red'].players[1];
+        }
+    }, {
+        key: 'findPlayer',
+        value: function findPlayer(number) {
+            //TODO: iterate through teams and search for player with the number number
+        }
+    }, {
+        key: 'allPlayers',
+        value: function allPlayers() {
+
+            var players = {};
+
+            for (var teamName in this.teams) {
+                for (var i in this.teams[teamName].players) {
+                    var player = this.teams[teamName].players[i];
+
+                    players[player.number] = player;
+                }
+            }
+
+            return players;
         }
     }]);
 

@@ -40,6 +40,7 @@ export default class GameState extends State {
         this.network.init();
     }
 
+
     update() {
         this.game.physics.arcade.collide(this.player, this.obstacleLayer);
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
@@ -93,7 +94,6 @@ export default class GameState extends State {
     }
 
 
-
     createControls() {
         this.cursors = this.inputs.cursorKeys();
         this.wasd = this.inputs.wasd();
@@ -102,7 +102,9 @@ export default class GameState extends State {
         this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
 
         this.space.onDown.add(() => {
-          this.player.shoot();
+            this.player.shoot();
+            console.log('send shoot');
+            this.network.sendShoot(this.player);
         });
     }
 
