@@ -4,7 +4,8 @@ export default class ObjectsService {
     }
 
     set(name, value) {
-        this.collection[name] = value;
+
+        return _.set(this.collection, name, value);
     }
 
     byType(type, layer) {
@@ -41,7 +42,7 @@ export default class ObjectsService {
     }
 
     get(name) {
-        return this.collection[name];
+        return _.get(this.collection, name);
     }
 
     map() {

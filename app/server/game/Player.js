@@ -20,11 +20,21 @@ module.exports = class Player {
 
         this.socket.on('PlayerPositionEvent', position => {
             this.lobby.players.forEach(otherPlayer => {
-                if(otherPlayer.id === this.id) {
+                if (otherPlayer.id === this.id) {
                     return;
                 }
 
                 otherPlayer.sendPosition(this, position);
+            });
+        });
+
+        this.socket.on('PlayerShootEvent', data => {
+            this.lobby.players.forEach(otherPlayer => {
+                if (otherPlayer.id === this.id) {
+                    return;
+                }
+
+                otherPlayer.sendShoot(this, data);
             });
         });
     }
@@ -34,18 +44,24 @@ module.exports = class Player {
     }
 
     addPlayer(player) {
-        this.emit('PlayerConnectEvent', { id: player.id });
+        this.emit('PlayerConnectEvent', {id: player.id});
     }
 
     removePlayer(player) {
-        this.emit('PlayerDisconnectEvent', { id: player.id });
+        this.emit('PlayerDisconnectEvent', {id: player.id});
     }
 
     sendPosition(player, position) {
-        this.emit('PlayerPositionEvent', {
+        this.emit('PlayerShootEvent', {
             id: player.id,
             position: position
         });
+    }
+
+    sendShoot(player, data) {
+        data.id = player.id;
+
+        this.emit('PlayerPositionEvent', data);
     }
 
     disconnect() {

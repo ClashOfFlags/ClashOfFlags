@@ -47,6 +47,7 @@ export default class PlayerFactory extends AbstractFactory {
         player.name = this.game.add.text(0, 0, "Player " + this.get('number'), style);
         player.name.anchor.setTo(0.5, 0.5);
         player.updateName();
+        player.health = 100;
 
         return player;
     }
