@@ -19,4 +19,8 @@ export default class Player extends Sprite {
     shoot() {
       this.weapon.shoot();
     }
+
+    changeSpriteToNormal() {
+      this.player.loadTexture('player', 0, true);
+    }
 }

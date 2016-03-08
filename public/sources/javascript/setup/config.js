@@ -7,6 +7,13 @@ export default{
         teams: {
             'red': [1, 2, 3, 4, 5],
             'blue': [6, 7, 8, 9, 10]
+        },
+        weapons: {
+          'fireball': {
+            bulletSpeed: 600,
+            lifetime: 0.5,
+            shotDelay: 300
+          }
         }
     }
 }

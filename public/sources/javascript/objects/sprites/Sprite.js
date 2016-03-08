@@ -2,6 +2,7 @@ export default class Sprite extends Phaser.Sprite {
     constructor(game, x, y, key, frame) {
         super(game, x, y, key, frame);
 
+        this.key = key;
         this.game.stage.addChild(this);
         this.game.add.existing(this);
 

@@ -889,6 +889,10 @@ var _Sprite2 = require('./Sprite');
 
 var _Sprite3 = _interopRequireDefault(_Sprite2);
 
+var _config = require('../../setup/config');
+
+var _config2 = _interopRequireDefault(_config);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -912,6 +916,13 @@ var Bullet = function (_Sprite) {
       this.enableArcadePhysics();
       this.checkWorldBounds = true;
       this.outOfBoundsKill = true;
+
+      this.game.time.events.add(Phaser.Timer.SECOND * _config2.default.game.weapons[this.key].lifetime, this.killBullet, this);
+    }
+  }, {
+    key: 'killBullet',
+    value: function killBullet() {
+      this.kill();
     }
   }]);
 
@@ -920,7 +931,7 @@ var Bullet = function (_Sprite) {
 
 exports.default = Bullet;
 
-},{"./Sprite":16}],14:[function(require,module,exports){
+},{"../../setup/config":23,"./Sprite":16}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1011,6 +1022,11 @@ var Player = function (_Sprite) {
         value: function shoot() {
             this.weapon.shoot();
         }
+    }, {
+        key: 'changeSpriteToNormal',
+        value: function changeSpriteToNormal() {
+            this.player.loadTexture('player', 0, true);
+        }
     }]);
 
     return Player;
@@ -1041,6 +1057,7 @@ var Sprite = function (_Phaser$Sprite) {
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Sprite).call(this, game, x, y, key, frame));
 
+        _this.key = key;
         _this.game.stage.addChild(_this);
         _this.game.add.existing(_this);
 
@@ -1139,6 +1156,10 @@ var _direction = require('./direction');
 
 var _direction2 = _interopRequireDefault(_direction);
 
+var _config = require('../../setup/config');
+
+var _config2 = _interopRequireDefault(_config);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1149,12 +1170,13 @@ var Weapon = function () {
 
     this.game = game;
     this.player = player;
-    this.shotDelay = 300;
-    this.nextShotAt = Date.now() + this.shotDelay;
+    this.nextShotAt = Date.now() + _config2.default.game.weapons.fireball.shotDelay;
 
     this.bullets = game.add.group();
     this.bullets.enableBody = true;
     this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+
+    this.weapon = 'fireball';
   }
 
   _createClass(Weapon, [{
@@ -1164,37 +1186,31 @@ var Weapon = function () {
         return;
       }
 
-      this.nextShotAt = Date.now() + this.shotDelay;
+      this.nextShotAt = Date.now() + _config2.default.game.weapons.fireball.shotDelay;
 
       this.player.loadTexture('player_shoot', 0, true);
-      this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.changeSprite, this);
+      this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.player.changeSpriteToNormal, this);
 
-      this.bulletSpeed = 600;
-
-      // this.bullet = new Bullet(this.game, this.player.body.x, this.player.body.y, 'fireball');
-      this.bullet = this.bullets.create(this.player.body.center.x, this.player.body.center.y, 'fireball');
-      this.bullet.animations.add('fireball', Phaser.Animation.generateFrameNames('fireball_000', 1, 6), 60, true);
-      this.bullet.animations.play('fireball');
-      this.bullet.anchor.setTo(0.5, 0.5);
+      var bullet = new _Bullet2.default(this.game, this.player.body.center.x, this.player.body.center.y, this.weapon);
+      bullet.animations.add(this.weapon, Phaser.Animation.generateFrameNames(this.weapon + '_000', 1, 6), 60, true);
+      bullet.animations.play(this.weapon);
+      bullet.anchor.setTo(0.5, 0.5);
 
       if (this.player.direction === _direction2.default.BOTTOM) {
-        this.bullet.body.velocity.y = this.bulletSpeed;
-        this.bullet.angle = 180;
+        bullet.body.velocity.y = _config2.default.game.weapons[this.weapon].bulletSpeed;
+        bullet.angle = 180;
       } else if (this.player.direction === _direction2.default.UP) {
-        this.bullet.angle = 0;
-        this.bullet.body.velocity.y = -this.bulletSpeed;
+        bullet.angle = 0;
+        bullet.body.velocity.y = -_config2.default.game.weapons[this.weapon].bulletSpeed;
       } else if (this.player.direction === _direction2.default.RIGHT) {
-        this.bullet.angle = 90;
-        this.bullet.body.velocity.x = this.bulletSpeed;
+        bullet.angle = 90;
+        bullet.body.velocity.x = _config2.default.game.weapons[this.weapon].bulletSpeed;
       } else if (this.player.direction === _direction2.default.LEFT) {
-        this.bullet.angle = -90;
-        this.bullet.body.velocity.x = -this.bulletSpeed;
+        bullet.angle = -90;
+        bullet.body.velocity.x = -_config2.default.game.weapons[this.weapon].bulletSpeed;
       }
-    }
-  }, {
-    key: 'changeSprite',
-    value: function changeSprite() {
-      this.player.loadTexture('player', 0, true);
+
+      this.bullets.add(bullet);
     }
   }]);
 
@@ -1203,7 +1219,7 @@ var Weapon = function () {
 
 exports.default = Weapon;
 
-},{"../sprites/Bullet":13,"./direction":20}],20:[function(require,module,exports){
+},{"../../setup/config":23,"../sprites/Bullet":13,"./direction":20}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1376,6 +1392,13 @@ exports.default = {
         teams: {
             'red': [1, 2, 3, 4, 5],
             'blue': [6, 7, 8, 9, 10]
+        },
+        weapons: {
+            'fireball': {
+                bulletSpeed: 600,
+                lifetime: 0.5,
+                shotDelay: 300
+            }
         }
     }
 };
