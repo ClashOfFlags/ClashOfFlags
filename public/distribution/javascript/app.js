@@ -357,6 +357,7 @@ var NetworkService = function () {
 
             if (playerSprite) {
                 playerSprite.kill();
+                playerSprite.name.kill();
             }
         }
     }, {
@@ -368,7 +369,7 @@ var NetworkService = function () {
             playerSprite.x = networkPlayer.position.x;
             playerSprite.y = networkPlayer.position.y;
 
-            //playerSprite.updateName();
+            playerSprite.updateName();
         }
     }, {
         key: 'onPlayerShoot',
