@@ -52,6 +52,7 @@ export default class NetworkService {
         this.waitForHandshake(player);
     }
 
+
     onPlayerConnect(networkPlayer) {
         this.players[networkPlayer.id] = this.teamManager.allPlayers()[networkPlayer.slot];
     }
@@ -78,7 +79,8 @@ export default class NetworkService {
     onPlayerShoot(data) {
         var player = this.teamManager.allPlayers()[data.slot];
 
-        console.log('player shot', player.number);
+        player.shoot();
+
     }
 
     sendPosition(player) {
