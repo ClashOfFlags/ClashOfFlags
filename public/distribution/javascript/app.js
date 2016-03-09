@@ -36,14 +36,11 @@ var Creator = function () {
         key: 'run',
         value: function run() {
             this.createTorchs();
-
             this.createKeysRed();
-
             this.createKeysBlue();
-
+            this.createPlayerGroup();
             this.createTeams();
             this.createItem('barrel');
-
             this.createMiniMap();
         }
     }, {
@@ -161,6 +158,14 @@ var Creator = function () {
             }, this);
 
             this.objects.set('keyBlueGroup', keyBlueGroup);
+        }
+    }, {
+        key: 'createPlayerGroup',
+        value: function createPlayerGroup() {
+            var playerGroup = this.game.add.group();
+            playerGroup.enableBody = true;
+
+            this.objects.set('playerGroup', playerGroup);
         }
     }, {
         key: 'createControls',
@@ -668,7 +673,7 @@ var GameState = function (_State) {
             this.game.physics.arcade.collide(this.objects.get('barrels'), this.obstacleLayer);
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
-            this.players = this.teamManager.allPlayers();
+            this.game.physics.arcade.collide(this.player, this.objects.get('playerGroup'));
 
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.players, this.bulletHitPlayer, null, this);
             this.game.physics.arcade.collide(this.player, this.players);
@@ -765,8 +770,7 @@ var GameState = function (_State) {
     }, {
         key: 'playerCollectsKey',
         value: function playerCollectsKey(player, key) {
-            console.log('Key collected');
-            //TODO: collect and carry the key by the player
+            key.kill();
         }
     }, {
         key: 'createMap',
@@ -1039,12 +1043,13 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var PlayerFactory = function (_AbstractFactory) {
     _inherits(PlayerFactory, _AbstractFactory);
 
-    function PlayerFactory(game) {
+    function PlayerFactory(game, $container) {
         _classCallCheck(this, PlayerFactory);
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PlayerFactory).call(this, game));
 
         _this.required = ['key', 'position', 'team', 'number'];
+        _this.objects = $container.ObjectsService;
         return _this;
     }
 
@@ -1095,6 +1100,9 @@ var PlayerFactory = function (_AbstractFactory) {
             player.name.anchor.setTo(0.5, 0.5);
             player.updateName();
             player.health = 100;
+
+            var playerGroup = this.objects.get('playerGroup');
+            playerGroup.add(player);
 
             return player;
         }

@@ -59,7 +59,7 @@ export default class GameState extends State {
         this.game.physics.arcade.collide(this.objects.get('barrels'), this.obstacleLayer);
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
-        this.players = this.teamManager.allPlayers();
+        this.game.physics.arcade.collide(this.player, this.objects.get('playerGroup'));
 
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.players, this.bulletHitPlayer, null, this);
         this.game.physics.arcade.collide(this.player, this.players);
@@ -153,8 +153,7 @@ export default class GameState extends State {
     }
 
     playerCollectsKey(player, key) {
-        console.log('Key collected');
-        //TODO: collect and carry the key by the player
+        key.kill();
     }
 
     createMap() {

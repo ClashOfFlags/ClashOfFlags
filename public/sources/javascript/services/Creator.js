@@ -16,14 +16,11 @@ export default class Creator {
 
     run() {
         this.createTorchs();
-
         this.createKeysRed();
-
         this.createKeysBlue();
-
+        this.createPlayerGroup();
         this.createTeams();
         this.createItem('barrel');
-
         this.createMiniMap();
     }
 
@@ -142,6 +139,13 @@ export default class Creator {
         }, this);
 
         this.objects.set('keyBlueGroup', keyBlueGroup);
+    }
+
+    createPlayerGroup() {
+        var playerGroup = this.game.add.group();
+        playerGroup.enableBody = true;
+
+        this.objects.set('playerGroup', playerGroup);
     }
 
     createControls() {

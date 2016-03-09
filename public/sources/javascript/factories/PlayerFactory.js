@@ -4,9 +4,10 @@ import Player from './../objects/sprites/Player';
 
 export default class PlayerFactory extends AbstractFactory {
 
-    constructor(game) {
+    constructor(game, $container) {
         super(game);
         this.required = ['key', 'position', 'team', 'number'];
+        this.objects = $container.ObjectsService;
     }
 
     team(team) {
@@ -49,6 +50,9 @@ export default class PlayerFactory extends AbstractFactory {
         player.name.anchor.setTo(0.5, 0.5);
         player.updateName();
         player.health = 100;
+
+        var playerGroup = this.objects.get('playerGroup');
+        playerGroup.add(player);
 
         return player;
     }
