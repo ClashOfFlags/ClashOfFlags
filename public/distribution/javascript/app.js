@@ -37,7 +37,9 @@ var Creator = function () {
         value: function run() {
             this.createTorchs();
 
-            this.createKeys();
+            this.createKeysRed();
+
+            this.createKeysBlue();
 
             this.createTeams();
 
@@ -120,17 +122,32 @@ var Creator = function () {
             }, this);
         }
     }, {
-        key: 'createKeys',
-        value: function createKeys() {
-            var keyGroup = this.game.add.group();
-            keyGroup.enableBody = true;
-            var result = this.objects.byType('key', 'objectsLayer');
+        key: 'createKeysRed',
+        value: function createKeysRed() {
+            var keyRedGroup = this.game.add.group();
+            keyRedGroup.enableBody = true;
+            var keysRed = this.objects.byProperties({ 'type': 'key_red' }, 'objectsLayer');
 
-            result.forEach(function (element) {
-                var key = keyGroup.create(element.x, element.y, "key");
+            keysRed.forEach(function (element) {
+                console.log('RedKey Create');
+                var keyRed = keyRedGroup.create(element.x, element.y, 'key');
             }, this);
 
-            this.objects.set('keyGroup', keyGroup);
+            this.objects.set('keyRedGroup', keyRedGroup);
+        }
+    }, {
+        key: 'createKeysBlue',
+        value: function createKeysBlue() {
+            var keyBlueGroup = this.game.add.group();
+            keyBlueGroup.enableBody = true;
+            var keysBlue = this.objects.byProperties({ 'type': 'key_blue' }, 'objectsLayer');
+
+            keysBlue.forEach(function (element) {
+                console.log('BlueKey Create');
+                var keyBlue = keyBlueGroup.create(element.x, element.y, 'key');
+            }, this);
+
+            this.objects.set('keyBlueGroup', keyBlueGroup);
         }
     }, {
         key: 'createControls',
@@ -599,8 +616,11 @@ var GameState = function (_State) {
             this.game.physics.arcade.collide(this.player, this.waterlayer);
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
-            this.keyGroup = this.objects.get('keyGroup');
-            this.game.physics.arcade.overlap(this.player, this.keyGroup, this.playerCollectsKey, null, this);
+            this.keyRedGroup = this.objects.get('keyRedGroup');
+            this.game.physics.arcade.overlap(this.player, this.keyRedGroup, this.playerCollectsKey, null, this);
+
+            this.keyBlueGroup = this.objects.get('keyBlueGroup');
+            this.game.physics.arcade.overlap(this.player, this.keyBlueGroup, this.playerCollectsKey, null, this);
 
             this.inputs.applyToPlayer(this.player);
             this.network.sendPosition(this.player);
@@ -633,6 +653,7 @@ var GameState = function (_State) {
     }, {
         key: 'playerCollectsKey',
         value: function playerCollectsKey(player, key) {
+            console.log('Key collected');
             //TODO: collect and carry the key by the player
         }
     }, {

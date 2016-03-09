@@ -17,7 +17,9 @@ export default class Creator {
     run() {
         this.createTorchs();
 
-        this.createKeys();
+        this.createKeysRed();
+
+        this.createKeysBlue();
 
         this.createTeams();
 
@@ -103,16 +105,30 @@ export default class Creator {
         }, this);
     }
 
-    createKeys() {
-        var keyGroup = this.game.add.group();
-        keyGroup.enableBody = true;
-        var result = this.objects.byType('key', 'objectsLayer');
+    createKeysRed() {
+        var keyRedGroup = this.game.add.group();
+        keyRedGroup.enableBody = true;
+        var keysRed = this.objects.byProperties({'type': 'key_red'}, 'objectsLayer');
 
-        result.forEach(function (element) {
-            var key = keyGroup.create(element.x, element.y, "key");
+        keysRed.forEach(function (element) {
+            console.log('RedKey Create');
+            var keyRed = keyRedGroup.create(element.x, element.y, 'key');
         }, this);
 
-        this.objects.set('keyGroup', keyGroup);
+        this.objects.set('keyRedGroup', keyRedGroup);
+    }
+
+    createKeysBlue() {
+        var keyBlueGroup = this.game.add.group();
+        keyBlueGroup.enableBody = true;
+        var keysBlue = this.objects.byProperties({'type': 'key_blue'}, 'objectsLayer');
+
+        keysBlue.forEach(function (element) {
+            console.log('BlueKey Create');
+            var keyBlue = keyBlueGroup.create(element.x, element.y, 'key');
+        }, this);
+
+        this.objects.set('keyBlueGroup', keyBlueGroup);
     }
 
     createControls() {

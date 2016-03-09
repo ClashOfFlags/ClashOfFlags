@@ -491,32 +491,32 @@
   </object>
   <object id="20" name="key_blue_1" type="key" gid="235" x="3112.79" y="5919.21" width="64" height="64">
    <properties>
-    <property name="team" value="1"/>
+    <property name="type" value="key_blue"/>
    </properties>
   </object>
   <object id="21" name="key_blue_2" type="key" gid="235" x="3189.45" y="5917.21" width="64" height="64">
    <properties>
-    <property name="team" value="1"/>
+    <property name="type" value="key_blue"/>
    </properties>
   </object>
   <object id="22" name="key_blue_3" type="key" gid="235" x="3258.79" y="5923.21" width="64" height="64">
    <properties>
-    <property name="team" value="1"/>
+    <property name="type" value="key_blue"/>
    </properties>
   </object>
   <object id="27" name="key_red_1" type="key" gid="235" x="3123.79" y="305.212" width="64" height="64">
    <properties>
-    <property name="team" value="2"/>
+    <property name="type" value="key_red"/>
    </properties>
   </object>
   <object id="28" name="key_red_2" type="key" gid="235" x="3189.79" y="306.212" width="64" height="64">
    <properties>
-    <property name="team" value="2"/>
+    <property name="type" value="key_red"/>
    </properties>
   </object>
   <object id="29" name="key_red_3" type="key" gid="235" x="3254.79" y="308.212" width="64" height="64">
    <properties>
-    <property name="team" value="2"/>
+    <property name="type" value="key_red"/>
    </properties>
   </object>
   <object id="30" name="torch" type="torch" gid="237" x="3016.12" y="5810.55" width="64" height="64">
@@ -737,11 +737,6 @@
   <object id="75" name="torch" type="torch" gid="237" x="1750.79" y="1973.21" width="64" height="64">
    <properties>
     <property name="type" value="torch"/>
-   </properties>
-  </object>
-  <object id="83" name="playerStart" gid="3465" x="3190.93" y="386.468" width="64" height="64">
-   <properties>
-    <property name="type" value="playerStart"/>
    </properties>
   </object>
  </objectgroup>
