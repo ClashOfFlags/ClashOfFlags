@@ -15,7 +15,9 @@ export default class Creator {
     }
 
     run() {
-        this.createObjects();
+        this.createTorchs();
+
+        this.createKeys();
 
         this.createTeams();
 
@@ -89,7 +91,7 @@ export default class Creator {
         }
     }
 
-    createObjects() {
+    createTorchs() {
         var torchGroup = this.game.add.group();
         torchGroup.enableBody = true;
 
@@ -99,6 +101,18 @@ export default class Creator {
             torch.animations.add('on', [0, 1, 2, 3], 10, true);
             torch.animations.play('on');
         }, this);
+    }
+
+    createKeys() {
+        var keyGroup = this.game.add.group();
+        keyGroup.enableBody = true;
+        var result = this.objects.byType('key', 'objectsLayer');
+
+        result.forEach(function (element) {
+            var key = keyGroup.create(element.x, element.y, "key");
+        }, this);
+
+        this.objects.set('keyGroup', keyGroup);
     }
 
     createControls() {

@@ -20,6 +20,7 @@ export default class Preloader {
         this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
         this.game.load.spritesheet('player', this.paths.image('green_male_marine_flamer.png'), 46, 26);
         this.game.load.spritesheet('player_shoot', this.paths.image('green_male_marine_flamer_shoot.png'), 52, 26);
+        this.game.load.spritesheet('key', 'assets/images/key.png', 64, 64);
     }
 
 }
