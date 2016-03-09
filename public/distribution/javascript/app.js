@@ -638,7 +638,10 @@ var GameState = function (_State) {
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
             this.players = this.teamManager.allPlayers();
+            console.log('Players: ', this.teamManager.allPlayers());
+
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.players, this.bulletHitPlayer, null, this);
+            this.game.physics.arcade.collide(this.player, this.players);
 
             this.keyRedGroup = this.objects.get('keyRedGroup');
             this.game.physics.arcade.overlap(this.player, this.keyRedGroup, this.playerCollectsKey, null, this);
