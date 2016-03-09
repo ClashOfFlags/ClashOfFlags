@@ -64,20 +64,17 @@ export default class NetworkService {
     }
 
     onPlayerPosition(networkPlayer) {
-        console.log('move player', networkPlayer.id);
-
         const playerSprite = this.players[networkPlayer.id];
         playerSprite.x = networkPlayer.position.x;
         playerSprite.y = networkPlayer.position.y;
-        //playerSprite.direction = networkPlayer.position.direction;
+
+        playerSprite.moveToDirection(networkPlayer.position.direction);
 
         playerSprite.updateName();
     }
 
     onPlayerShoot(data) {
         var player = this.teamManager.allPlayers()[data.slot];
-
-        console.log('shoot over network', data);
         player.shoot(data.direction);
 
     }
