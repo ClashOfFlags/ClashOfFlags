@@ -38,6 +38,43 @@ var Creator = function () {
             this.createObjects();
 
             this.createTeams();
+
+            this.createMiniMap();
+        }
+    }, {
+        key: 'createMiniMap',
+        value: function createMiniMap() {
+            this.map = this.objects.get('map');
+            this.miniMapSize = 2;
+
+            var miniMapBmd = this.game.add.bitmapData();
+
+            for (var l = 0; l < this.map.layers.length; l++) {
+                for (var y = 0; y < this.map.height; y++) {
+                    for (var x = 0; x < this.map.width; x++) {
+                        var tile = this.map.getTile(x, y, l);
+                        if (tile && this.map.layers[l].name == 'background') {
+                            miniMapBmd.ctx.fillStyle = '#1D2A34';
+                            miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
+                        } else if (tile && this.map.layers[l].name == 'water') {
+                            miniMapBmd.ctx.fillStyle = '#0000ff';
+                            miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
+                        } else if (tile && this.map.layers[l].name == 'obstacle') {
+                            miniMapBmd.ctx.fillStyle = '#cccccc';
+                            miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
+                        }
+                    }
+                }
+            }
+            this.miniMap = this.game.add.sprite(10, 390, miniMapBmd);
+            this.miniMap.fixedToCamera = true;
+
+            var miniMapOverlayBmd = this.game.add.bitmapData();
+            this.miniMapOverlay = this.game.add.sprite(10, 390, miniMapOverlayBmd);
+            this.miniMapOverlay.fixedToCamera = true;
+
+            this.objects.set('miniMapOverlay', miniMapOverlayBmd);
+            this.objects.set('miniMapSize', this.miniMapSize);
         }
     }, {
         key: 'createTeams',
@@ -47,6 +84,8 @@ var Creator = function () {
                 this.teamManager.add(team);
                 this.createPlayersForTeam(team);
             }
+
+            this.objects.set('hero', this.teamManager.hero());
         }
     }, {
         key: 'createPlayersForTeam',
@@ -215,14 +254,14 @@ var NetworkService = function () {
         this.socket = io();
         this.player = null;
         this.players = {}; // workaround, should not be here I guess
-
-        this.waitForHandshake = function () {};
     }
 
     _createClass(NetworkService, [{
         key: 'init',
         value: function init() {
             var _this = this;
+
+            this.connect();
 
             this.socket.on('PlayerConnectEvent', function (player) {
                 _this.onPlayerConnect(player);
@@ -239,37 +278,24 @@ var NetworkService = function () {
             this.socket.on('PlayerShootEvent', function (data) {
                 _this.onPlayerShoot(data);
             });
-
-            this.socket.on('PlayerHandshakeEvent', function (player) {
-                _this.onPlayerHandshake(player);
-            });
-
-            this.connect();
         }
     }, {
         key: 'connect',
         value: function connect() {
-            console.log('connect network');
             this.socket.emit('PlayerConnectEvent');
         }
     }, {
-        key: 'onPlayerHandshake',
-        value: function onPlayerHandshake(networkPlayer) {
-            var player = this.teamManager.allPlayers()[networkPlayer.slot];
-
-            this.teamManager.hero = player;
-
-            this.waitForHandshake(player);
-        }
-    }, {
         key: 'onPlayerConnect',
-        value: function onPlayerConnect(networkPlayer) {
-            this.players[networkPlayer.id] = this.teamManager.allPlayers()[networkPlayer.slot];
+        value: function onPlayerConnect(player) {
+            var playerStartPos = this.objects.byType('spawn', 'objectsLayer');
+            var playerSprite = this.playerFactory.position(playerStartPos[0]).team(this.teamManager.teams.red).key('player').number(11 + player.id).make();
+
+            this.players[player.id] = playerSprite;
         }
     }, {
         key: 'onPlayerDisconnect',
-        value: function onPlayerDisconnect(networkPlayer) {
-            var playerSprite = this.players[networkPlayer.id];
+        value: function onPlayerDisconnect(player) {
+            var playerSprite = this.players[player.id];
 
             if (playerSprite) {
                 playerSprite.kill();
@@ -277,21 +303,18 @@ var NetworkService = function () {
         }
     }, {
         key: 'onPlayerPosition',
-        value: function onPlayerPosition(networkPlayer) {
-            console.log('move player', networkPlayer.id);
-
-            var playerSprite = this.players[networkPlayer.id];
-            playerSprite.x = networkPlayer.position.x;
-            playerSprite.y = networkPlayer.position.y;
-
-            //playerSprite.updateName();
+        value: function onPlayerPosition(player) {
+            var playerSprite = this.players[player.id];
+            playerSprite.x = player.position.x;
+            playerSprite.y = player.position.y;
+            playerSprite.updateName();
         }
     }, {
         key: 'onPlayerShoot',
         value: function onPlayerShoot(data) {
-            var player = this.teamManager.allPlayers()[data.slot];
+            //player = this.teamManager.allPlayers()[data.player];
 
-            console.log('player shot', player.number);
+            console.log('shoot over network', data);
         }
     }, {
         key: 'sendPosition',
@@ -516,7 +539,7 @@ var GameState = function (_State) {
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameState).call(this));
 
-        _this.player = null;
+        _this.player = {};
 
         _this.inputs = $container.InputService;
         _this.paths = $container.PathService;
@@ -538,33 +561,41 @@ var GameState = function (_State) {
     }, {
         key: 'create',
         value: function create() {
-            var _this2 = this;
-
             this.initPauseState();
+
             this.createMap();
 
             this.creator.run();
-            this.createControls();
 
+            this.player = this.teamManager.hero();
+
+            this.createPlayer();
+            this.createControls();
             this.network.init();
 
-            this.network.waitForHandshake = function (hero) {
-                console.log('waited for handshake', hero);
-                _this2.player = hero;
-                _this2.game.camera.follow(_this2.player);
-                _this2.objects.set('hero', hero);
-            };
+            this.miniMapOverlay = this.objects.get('miniMapOverlay');
+            this.miniMapSize = this.objects.get('miniMapSize');
         }
     }, {
         key: 'update',
         value: function update() {
-            if (!this.player) return;
-
             this.game.physics.arcade.collide(this.player, this.obstacleLayer);
+            this.game.physics.arcade.collide(this.player, this.waterlayer);
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
             this.inputs.applyToPlayer(this.player);
             this.network.sendPosition(this.player);
+
+            this.updateMiniMap();
+        }
+    }, {
+        key: 'updateMiniMap',
+        value: function updateMiniMap() {
+
+            this.miniMapOverlay.context.clearRect(0, 0, this.miniMapOverlay.width, this.miniMapOverlay.height);
+
+            this.miniMapOverlay.rect(Math.floor(this.player.x / 64) * this.miniMapSize, Math.floor(this.player.y / 64) * this.miniMapSize, this.miniMapSize * 2, this.miniMapSize * 2, '#FFFF00');
+            this.miniMapOverlay.dirty = true;
         }
     }, {
         key: 'bulletHitObstacle',
@@ -594,23 +625,32 @@ var GameState = function (_State) {
 
             //create layer
             this.backgroundlayer = this.map.createLayer('background');
+            this.waterlayer = this.map.createLayer('water');
             this.obstacleLayer = this.map.createLayer('obstacle');
             this.decorationslayer = this.map.createLayer('decorations');
 
             this.backgroundlayer.resizeWorld();
+            this.waterlayer.resizeWorld();
             this.obstacleLayer.resizeWorld();
             this.decorationslayer.resizeWorld();
 
             //collision on obstacleLayer
             this.map.setCollisionBetween(1, 2000, true, 'obstacle');
+            this.map.setCollisionBetween(1, 2000, true, 'water');
 
             this.explosions = this.game.add.group();
             this.explosions.createMultiple(50, 'explosion');
         }
     }, {
+        key: 'createPlayer',
+        value: function createPlayer() {
+
+            this.game.camera.follow(this.player);
+        }
+    }, {
         key: 'createControls',
         value: function createControls() {
-            var _this3 = this;
+            var _this2 = this;
 
             this.cursors = this.inputs.cursorKeys();
             this.wasd = this.inputs.wasd();
@@ -619,8 +659,9 @@ var GameState = function (_State) {
             this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
 
             this.space.onDown.add(function () {
-                _this3.player.shoot();
-                _this3.network.sendShoot(_this3.player);
+                _this2.player.shoot();
+                console.log('send shoot');
+                _this2.network.sendShoot(_this2.player);
             });
         }
     }, {
@@ -899,7 +940,6 @@ var PlayerFactory = function (_AbstractFactory) {
 
             this.get('team').addPlayer(player);
             player.team = this.get('team');
-            player.number = this.get('number');
 
             var style = { font: "16px Arial", fill: "#fff", align: "center", width: player.width };
 
@@ -1063,7 +1103,6 @@ var Player = function (_Sprite) {
             this.direction = _direction2.default.RIGHT;
             this.weapon = new _Weapon2.default(this, this.game);
             this.number = 1;
-            this.networkId = null;
         }
     }, {
         key: 'collect',
@@ -1292,7 +1331,7 @@ exports.default = {
 };
 
 },{}],21:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -1309,22 +1348,27 @@ var TeamManager = function () {
         this.game = game;
         this.$container = $container;
         this.teams = {};
-        this.hero = null;
     }
 
     _createClass(TeamManager, [{
-        key: "add",
+        key: 'add',
         value: function add(team) {
             this.teams[team.name] = team;
         }
     }, {
-        key: "findPlayer",
+        key: 'hero',
+        value: function hero() {
+            return this.teams['red'].players[1];
+        }
+    }, {
+        key: 'findPlayer',
         value: function findPlayer(number) {
             //TODO: iterate through teams and search for player with the number number
         }
     }, {
-        key: "allPlayers",
+        key: 'allPlayers',
         value: function allPlayers() {
+
             var players = {};
 
             for (var teamName in this.teams) {
@@ -1336,20 +1380,6 @@ var TeamManager = function () {
             }
 
             return players;
-        }
-    }, {
-        key: "findFreePlayer",
-        value: function findFreePlayer() {
-            var allPlayers = this.allPlayers();
-            for (var i in allPlayers) {
-                var player = allPlayers[i];
-
-                if (!player.networkId) {
-                    return player;
-                }
-            }
-
-            return null;
         }
     }]);
 

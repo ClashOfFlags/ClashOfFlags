@@ -19,6 +19,42 @@ export default class Creator {
 
         this.createTeams();
 
+        this.createMiniMap();
+
+    }
+
+    createMiniMap() {
+      this.map = this.objects.get('map');
+      this.miniMapSize = 2;      
+
+      var miniMapBmd = this.game.add.bitmapData();
+
+      for (var l = 0; l<this.map.layers.length; l++) {
+        for (var y = 0; y < this.map.height; y++) {
+          for (var x = 0; x < this.map.width; x++) {
+            var tile = this.map.getTile(x, y, l);
+            if (tile && this.map.layers[l].name == 'background') {
+              miniMapBmd.ctx.fillStyle = '#1D2A34';
+              miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
+             }else if (tile && this.map.layers[l].name == 'water') {
+              miniMapBmd.ctx.fillStyle = '#0000ff';
+              miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
+            }else if (tile && this.map.layers[l].name == 'obstacle') {
+               miniMapBmd.ctx.fillStyle = '#cccccc';
+               miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
+             }
+           }
+         }
+       }
+       this.miniMap = this.game.add.sprite(10,390, miniMapBmd);
+       this.miniMap.fixedToCamera = true;
+
+       var miniMapOverlayBmd = this.game.add.bitmapData();
+       this.miniMapOverlay = this.game.add.sprite(10,390, miniMapOverlayBmd);
+       this.miniMapOverlay.fixedToCamera = true;
+
+       this.objects.set('miniMapOverlay', miniMapOverlayBmd);
+       this.objects.set('miniMapSize', this.miniMapSize);
     }
 
 
