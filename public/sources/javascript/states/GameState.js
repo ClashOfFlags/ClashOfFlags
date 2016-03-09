@@ -8,7 +8,7 @@ export default class GameState extends State {
     constructor(game, $container) {
         super();
 
-        this.player = {};
+        this.player = null;
 
         this.inputs = $container.InputService;
         this.paths = $container.PathService;
@@ -28,30 +28,49 @@ export default class GameState extends State {
 
     create() {
         this.initPauseState();
-
         this.createMap();
 
         this.creator.run();
-
-        this.player = this.teamManager.hero();
-
-        this.createPlayer();
         this.createControls();
+
         this.network.init();
+
+        this.network.waitForHandshake = (hero)=> {
+            console.log('waited for handshake', hero);
+            this.player = hero;
+            this.game.camera.follow(this.player);
+            this.objects.set('hero', hero);
+        }
 
         this.miniMapOverlay = this.objects.get('miniMapOverlay');
         this.miniMapSize = this.objects.get('miniMapSize');
+
 
     }
 
 
     update() {
+        if (!this.player)
+            return;
+
         this.game.physics.arcade.collide(this.player, this.obstacleLayer);
         this.game.physics.arcade.collide(this.player, this.waterlayer);
         this.game.physics.arcade.collide(this.player, this.objects.get('barrels'));
         this.game.physics.arcade.overlap(this.player.weapon.bullets, this.objects.get('barrels'), this.bulletHitBarrel, null, this);
         this.game.physics.arcade.collide(this.objects.get('barrels'), this.obstacleLayer);
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
+
+        this.players = this.teamManager.allPlayers();
+        console.log('Players: ' , this.teamManager.allPlayers());
+
+        this.game.physics.arcade.collide(this.player.weapon.bullets, this.players, this.bulletHitPlayer, null, this);
+        this.game.physics.arcade.collide(this.player, this.players);
+
+        this.keyRedGroup = this.objects.get('keyRedGroup');
+        this.game.physics.arcade.overlap(this.player, this.keyRedGroup, this.playerCollectsKey, null, this);
+
+        this.keyBlueGroup = this.objects.get('keyBlueGroup');
+        this.game.physics.arcade.overlap(this.player, this.keyBlueGroup, this.playerCollectsKey, null, this);
 
         this.inputs.applyToPlayer(this.player);
         this.network.sendPosition(this.player);
@@ -114,6 +133,24 @@ export default class GameState extends State {
       bullet.kill();
     }
 
+    bulletHitPlayer(bullet, player) {
+        var singleExplosion = this.explosions.getFirstDead();
+        singleExplosion = this.explosions.create(bullet.body.x, bullet.body.y, 'explosion');
+        singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('fireball_hit_000', 1, 9), 100, false);
+        singleExplosion.animations.play('fire');
+
+        singleExplosion.events.onAnimationComplete.add(function () {
+            singleExplosion.kill();
+        }, this);
+
+        bullet.kill();
+    }
+
+    playerCollectsKey(player, key) {
+        console.log('Key collected');
+        //TODO: collect and carry the key by the player
+    }
+
     createMap() {
         this.game.world.setBounds(0, 0, 6400, 6400);
 
@@ -140,11 +177,6 @@ export default class GameState extends State {
         this.map.setCollisionBetween(1, 2000, true, 'water');
     }
 
-    createPlayer() {
-
-        this.game.camera.follow(this.player);
-    }
-
 
     createControls() {
         this.cursors = this.inputs.cursorKeys();
@@ -155,7 +187,6 @@ export default class GameState extends State {
 
         this.space.onDown.add(() => {
             this.player.shoot();
-            console.log('send shoot');
             this.network.sendShoot(this.player);
         });
     }

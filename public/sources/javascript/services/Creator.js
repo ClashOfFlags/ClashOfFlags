@@ -15,7 +15,11 @@ export default class Creator {
     }
 
     run() {
-        this.createObjects();
+        this.createTorchs();
+
+        this.createKeysRed();
+
+        this.createKeysBlue();
 
         this.createTeams();
         this.createItem('barrel');
@@ -26,7 +30,7 @@ export default class Creator {
     createItem(item) {
       var group = this.game.add.group();
       group.enableBody = true;
-
+ 
       var result = this.objects.byType(item, 'objectsLayer');
       result.forEach(function (element) {
           var sprite = group.create(element.x, element.y, item);
@@ -78,7 +82,6 @@ export default class Creator {
             this.createPlayersForTeam(team);
         }
 
-        this.objects.set('hero', this.teamManager.hero());
     }
 
     createPlayersForTeam(team) {
@@ -103,7 +106,7 @@ export default class Creator {
         }
     }
 
-    createObjects() {
+    createTorchs() {
         var torchGroup = this.game.add.group();
         torchGroup.enableBody = true;
 
@@ -113,6 +116,32 @@ export default class Creator {
             torch.animations.add('on', [0, 1, 2, 3], 10, true);
             torch.animations.play('on');
         }, this);
+    }
+
+    createKeysRed() {
+        var keyRedGroup = this.game.add.group();
+        keyRedGroup.enableBody = true;
+        var keysRed = this.objects.byProperties({'type': 'key_red'}, 'objectsLayer');
+
+        keysRed.forEach(function (element) {
+            console.log('RedKey Create');
+            var keyRed = keyRedGroup.create(element.x, element.y, 'key');
+        }, this);
+
+        this.objects.set('keyRedGroup', keyRedGroup);
+    }
+
+    createKeysBlue() {
+        var keyBlueGroup = this.game.add.group();
+        keyBlueGroup.enableBody = true;
+        var keysBlue = this.objects.byProperties({'type': 'key_blue'}, 'objectsLayer');
+
+        keysBlue.forEach(function (element) {
+            console.log('BlueKey Create');
+            var keyBlue = keyBlueGroup.create(element.x, element.y, 'key');
+        }, this);
+
+        this.objects.set('keyBlueGroup', keyBlueGroup);
     }
 
     createControls() {
