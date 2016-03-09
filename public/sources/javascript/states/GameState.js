@@ -60,9 +60,6 @@ export default class GameState extends State {
         this.game.physics.arcade.collide(this.objects.get('barrels'), this.obstacleLayer);
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
-        this.players = this.teamManager.allPlayers();
-        console.log('Players: ' , this.teamManager.allPlayers());
-
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.players, this.bulletHitPlayer, null, this);
         this.game.physics.arcade.collide(this.player, this.players);
 
@@ -82,12 +79,20 @@ export default class GameState extends State {
 
       this.miniMapOverlay.context.clearRect(0, 0, this.miniMapOverlay.width, this.miniMapOverlay.height);
 
-      this.miniMapOverlay.rect(
-        Math.floor(this.player.x / 64) * this.miniMapSize,
-        Math.floor(this.player.y / 64) * this.miniMapSize,
-        this.miniMapSize * 2, this.miniMapSize * 2, '#FFFF00');
-      this.miniMapOverlay.dirty = true;
+      for (var i = 0; i < this.teamManager.teams[this.player.team.name].players.length; i++) {
+        var teamPlayer = this.teamManager.teams[this.player.team.name].players[i];
+        var color = '#0AFF12';
 
+        if(teamPlayer === this.player){
+          color = '#FFFF00';
+        }
+
+        this.miniMapOverlay.rect(
+          Math.floor(teamPlayer.x / 64) * this.miniMapSize,
+          Math.floor(teamPlayer.y / 64) * this.miniMapSize,
+          this.miniMapSize * 2, this.miniMapSize * 2, color);
+        this.miniMapOverlay.dirty = true;
+      }
     }
 
     bulletHitBarrel(bullet, barrel) {

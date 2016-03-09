@@ -30,7 +30,7 @@ export default class Creator {
     createItem(item) {
       var group = this.game.add.group();
       group.enableBody = true;
- 
+
       var result = this.objects.byType(item, 'objectsLayer');
       result.forEach(function (element) {
           var sprite = group.create(element.x, element.y, item);
