@@ -50,6 +50,9 @@ export default class GameState extends State {
         this.game.physics.arcade.collide(this.player, this.waterlayer);
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
+        this.keyGroup = this.objects.get('keyGroup');
+        this.game.physics.arcade.overlap(this.player, this.keyGroup, this.playerCollectsKey, null, this);
+
         this.inputs.applyToPlayer(this.player);
         this.network.sendPosition(this.player);
 
@@ -79,6 +82,10 @@ export default class GameState extends State {
         }, this);
 
         bullet.kill();
+    }
+
+    playerCollectsKey(player, key) {
+        //TODO: collect and carry the key by the player
     }
 
     createMap() {

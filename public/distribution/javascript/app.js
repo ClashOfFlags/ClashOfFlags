@@ -35,7 +35,9 @@ var Creator = function () {
     _createClass(Creator, [{
         key: 'run',
         value: function run() {
-            this.createObjects();
+            this.createTorchs();
+
+            this.createKeys();
 
             this.createTeams();
 
@@ -105,8 +107,8 @@ var Creator = function () {
             }
         }
     }, {
-        key: 'createObjects',
-        value: function createObjects() {
+        key: 'createTorchs',
+        value: function createTorchs() {
             var torchGroup = this.game.add.group();
             torchGroup.enableBody = true;
 
@@ -116,6 +118,19 @@ var Creator = function () {
                 torch.animations.add('on', [0, 1, 2, 3], 10, true);
                 torch.animations.play('on');
             }, this);
+        }
+    }, {
+        key: 'createKeys',
+        value: function createKeys() {
+            var keyGroup = this.game.add.group();
+            keyGroup.enableBody = true;
+            var result = this.objects.byType('key', 'objectsLayer');
+
+            result.forEach(function (element) {
+                var key = keyGroup.create(element.x, element.y, "key");
+            }, this);
+
+            this.objects.set('keyGroup', keyGroup);
         }
     }, {
         key: 'createControls',
@@ -486,6 +501,7 @@ var Preloader = function () {
             this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
             this.game.load.spritesheet('player', this.paths.image('green_male_marine_flamer.png'), 46, 26);
             this.game.load.spritesheet('player_shoot', this.paths.image('green_male_marine_flamer_shoot.png'), 52, 26);
+            this.game.load.spritesheet('key', 'assets/images/key.png', 64, 64);
         }
     }]);
 
@@ -583,6 +599,9 @@ var GameState = function (_State) {
             this.game.physics.arcade.collide(this.player, this.waterlayer);
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
+            this.keyGroup = this.objects.get('keyGroup');
+            this.game.physics.arcade.overlap(this.player, this.keyGroup, this.playerCollectsKey, null, this);
+
             this.inputs.applyToPlayer(this.player);
             this.network.sendPosition(this.player);
 
@@ -610,6 +629,11 @@ var GameState = function (_State) {
             }, this);
 
             bullet.kill();
+        }
+    }, {
+        key: 'playerCollectsKey',
+        value: function playerCollectsKey(player, key) {
+            //TODO: collect and carry the key by the player
         }
     }, {
         key: 'createMap',
@@ -1241,7 +1265,7 @@ exports.default = Team;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+      value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1263,56 +1287,56 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Weapon = function () {
-  function Weapon(player, game) {
-    _classCallCheck(this, Weapon);
+      function Weapon(player, game) {
+            _classCallCheck(this, Weapon);
 
-    this.game = game;
-    this.player = player;
-    this.nextShotAt = Date.now() + _config2.default.game.weapons.fireball.shotDelay;
+            this.game = game;
+            this.player = player;
+            this.nextShotAt = Date.now() + _config2.default.game.weapons.fireball.shotDelay;
 
-    this.bullets = game.add.group();
-    this.bullets.enableBody = true;
-    this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+            this.bullets = game.add.group();
+            this.bullets.enableBody = true;
+            this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
 
-    this.weapon = 'fireball';
-  }
-
-  _createClass(Weapon, [{
-    key: 'shoot',
-    value: function shoot() {
-      if (this.nextShotAt > Date.now()) {
-        return;
+            this.weapon = 'fireball';
       }
 
-      this.nextShotAt = Date.now() + _config2.default.game.weapons.fireball.shotDelay;
+      _createClass(Weapon, [{
+            key: 'shoot',
+            value: function shoot() {
+                  if (this.nextShotAt > Date.now()) {
+                        return;
+                  }
 
-      this.player.loadTexture('player_shoot', 0, true);
-      this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.player.changeSpriteToNormal, this);
+                  this.nextShotAt = Date.now() + _config2.default.game.weapons.fireball.shotDelay;
 
-      var bullet = new _Bullet2.default(this.game, this.player.body.center.x, this.player.body.center.y, this.weapon);
-      bullet.animations.add(this.weapon, Phaser.Animation.generateFrameNames(this.weapon + '_000', 1, 6), 60, true);
-      bullet.animations.play(this.weapon);
-      bullet.anchor.setTo(0.5, 0.5);
+                  this.player.loadTexture('player_shoot', 0, true);
+                  this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.player.changeSpriteToNormal, this);
 
-      if (this.player.direction === _direction2.default.BOTTOM) {
-        bullet.body.velocity.y = _config2.default.game.weapons[this.weapon].bulletSpeed;
-        bullet.angle = 180;
-      } else if (this.player.direction === _direction2.default.UP) {
-        bullet.angle = 0;
-        bullet.body.velocity.y = -_config2.default.game.weapons[this.weapon].bulletSpeed;
-      } else if (this.player.direction === _direction2.default.RIGHT) {
-        bullet.angle = 90;
-        bullet.body.velocity.x = _config2.default.game.weapons[this.weapon].bulletSpeed;
-      } else if (this.player.direction === _direction2.default.LEFT) {
-        bullet.angle = -90;
-        bullet.body.velocity.x = -_config2.default.game.weapons[this.weapon].bulletSpeed;
-      }
+                  var bullet = new _Bullet2.default(this.game, this.player.body.center.x, this.player.body.center.y, this.weapon);
+                  bullet.animations.add(this.weapon, Phaser.Animation.generateFrameNames(this.weapon + '_000', 1, 6), 60, true);
+                  bullet.animations.play(this.weapon);
+                  bullet.anchor.setTo(0.5, 0.5);
 
-      this.bullets.add(bullet);
-    }
-  }]);
+                  if (this.player.direction === _direction2.default.BOTTOM) {
+                        bullet.body.velocity.y = _config2.default.game.weapons[this.weapon].bulletSpeed;
+                        bullet.angle = 180;
+                  } else if (this.player.direction === _direction2.default.UP) {
+                        bullet.angle = 0;
+                        bullet.body.velocity.y = -_config2.default.game.weapons[this.weapon].bulletSpeed;
+                  } else if (this.player.direction === _direction2.default.RIGHT) {
+                        bullet.angle = 90;
+                        bullet.body.velocity.x = _config2.default.game.weapons[this.weapon].bulletSpeed;
+                  } else if (this.player.direction === _direction2.default.LEFT) {
+                        bullet.angle = -90;
+                        bullet.body.velocity.x = -_config2.default.game.weapons[this.weapon].bulletSpeed;
+                  }
 
-  return Weapon;
+                  this.bullets.add(bullet);
+            }
+      }]);
+
+      return Weapon;
 }();
 
 exports.default = Weapon;
