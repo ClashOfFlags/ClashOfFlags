@@ -8,7 +8,7 @@ export default class GameState extends State {
     constructor(game, $container) {
         super();
 
-        this.player = {};
+        this.player = null;
 
         this.inputs = $container.InputService;
         this.paths = $container.PathService;
@@ -28,20 +28,27 @@ export default class GameState extends State {
 
     create() {
         this.initPauseState();
-
         this.createMap();
 
         this.creator.run();
-
-        this.player = this.teamManager.hero();
-
-        this.createPlayer();
         this.createControls();
+
         this.network.init();
+
+        this.network.waitForHandshake = (hero)=> {
+            console.log('waited for handshake', hero);
+            this.player = hero;
+            this.game.camera.follow(this.player);
+            this.objects.set('hero', hero);
+        }
+
     }
 
 
     update() {
+        if (!this.player)
+            return;
+
         this.game.physics.arcade.collide(this.player, this.obstacleLayer);
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
@@ -88,11 +95,6 @@ export default class GameState extends State {
         this.explosions.createMultiple(50, 'explosion');
     }
 
-    createPlayer() {
-
-        this.game.camera.follow(this.player);
-    }
-
 
     createControls() {
         this.cursors = this.inputs.cursorKeys();
@@ -103,7 +105,6 @@ export default class GameState extends State {
 
         this.space.onDown.add(() => {
             this.player.shoot();
-            console.log('send shoot');
             this.network.sendShoot(this.player);
         });
     }

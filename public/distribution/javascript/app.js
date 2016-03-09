@@ -47,8 +47,6 @@ var Creator = function () {
                 this.teamManager.add(team);
                 this.createPlayersForTeam(team);
             }
-
-            this.objects.set('hero', this.teamManager.hero());
         }
     }, {
         key: 'createPlayersForTeam',
@@ -217,14 +215,14 @@ var NetworkService = function () {
         this.socket = io();
         this.player = null;
         this.players = {}; // workaround, should not be here I guess
+
+        this.waitForHandshake = function () {};
     }
 
     _createClass(NetworkService, [{
         key: 'init',
         value: function init() {
             var _this = this;
-
-            this.connect();
 
             this.socket.on('PlayerConnectEvent', function (player) {
                 _this.onPlayerConnect(player);
@@ -241,24 +239,37 @@ var NetworkService = function () {
             this.socket.on('PlayerShootEvent', function (data) {
                 _this.onPlayerShoot(data);
             });
+
+            this.socket.on('PlayerHandshakeEvent', function (player) {
+                _this.onPlayerHandshake(player);
+            });
+
+            this.connect();
         }
     }, {
         key: 'connect',
         value: function connect() {
+            console.log('connect network');
             this.socket.emit('PlayerConnectEvent');
         }
     }, {
-        key: 'onPlayerConnect',
-        value: function onPlayerConnect(player) {
-            var playerStartPos = this.objects.byType('spawn', 'objectsLayer');
-            var playerSprite = this.playerFactory.position(playerStartPos[0]).team(this.teamManager.teams.red).key('player').number(11 + player.id).make();
+        key: 'onPlayerHandshake',
+        value: function onPlayerHandshake(networkPlayer) {
+            var player = this.teamManager.allPlayers()[networkPlayer.slot];
 
-            this.players[player.id] = playerSprite;
+            this.teamManager.hero = player;
+
+            this.waitForHandshake(player);
+        }
+    }, {
+        key: 'onPlayerConnect',
+        value: function onPlayerConnect(networkPlayer) {
+            this.players[networkPlayer.id] = this.teamManager.allPlayers()[networkPlayer.slot];
         }
     }, {
         key: 'onPlayerDisconnect',
-        value: function onPlayerDisconnect(player) {
-            var playerSprite = this.players[player.id];
+        value: function onPlayerDisconnect(networkPlayer) {
+            var playerSprite = this.players[networkPlayer.id];
 
             if (playerSprite) {
                 playerSprite.kill();
@@ -266,18 +277,21 @@ var NetworkService = function () {
         }
     }, {
         key: 'onPlayerPosition',
-        value: function onPlayerPosition(player) {
-            var playerSprite = this.players[player.id];
-            playerSprite.x = player.position.x;
-            playerSprite.y = player.position.y;
-            playerSprite.updateName();
+        value: function onPlayerPosition(networkPlayer) {
+            console.log('move player', networkPlayer.id);
+
+            var playerSprite = this.players[networkPlayer.id];
+            playerSprite.x = networkPlayer.position.x;
+            playerSprite.y = networkPlayer.position.y;
+
+            //playerSprite.updateName();
         }
     }, {
         key: 'onPlayerShoot',
         value: function onPlayerShoot(data) {
-            //player = this.teamManager.allPlayers()[data.player];
+            var player = this.teamManager.allPlayers()[data.slot];
 
-            console.log('shoot over network', data);
+            console.log('player shot', player.number);
         }
     }, {
         key: 'sendPosition',
@@ -502,7 +516,7 @@ var GameState = function (_State) {
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameState).call(this));
 
-        _this.player = {};
+        _this.player = null;
 
         _this.inputs = $container.InputService;
         _this.paths = $container.PathService;
@@ -524,21 +538,28 @@ var GameState = function (_State) {
     }, {
         key: 'create',
         value: function create() {
-            this.initPauseState();
+            var _this2 = this;
 
+            this.initPauseState();
             this.createMap();
 
             this.creator.run();
-
-            this.player = this.teamManager.hero();
-
-            this.createPlayer();
             this.createControls();
+
             this.network.init();
+
+            this.network.waitForHandshake = function (hero) {
+                console.log('waited for handshake', hero);
+                _this2.player = hero;
+                _this2.game.camera.follow(_this2.player);
+                _this2.objects.set('hero', hero);
+            };
         }
     }, {
         key: 'update',
         value: function update() {
+            if (!this.player) return;
+
             this.game.physics.arcade.collide(this.player, this.obstacleLayer);
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
@@ -587,15 +608,9 @@ var GameState = function (_State) {
             this.explosions.createMultiple(50, 'explosion');
         }
     }, {
-        key: 'createPlayer',
-        value: function createPlayer() {
-
-            this.game.camera.follow(this.player);
-        }
-    }, {
         key: 'createControls',
         value: function createControls() {
-            var _this2 = this;
+            var _this3 = this;
 
             this.cursors = this.inputs.cursorKeys();
             this.wasd = this.inputs.wasd();
@@ -604,9 +619,8 @@ var GameState = function (_State) {
             this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
 
             this.space.onDown.add(function () {
-                _this2.player.shoot();
-                console.log('send shoot');
-                _this2.network.sendShoot(_this2.player);
+                _this3.player.shoot();
+                _this3.network.sendShoot(_this3.player);
             });
         }
     }, {
@@ -885,6 +899,7 @@ var PlayerFactory = function (_AbstractFactory) {
 
             this.get('team').addPlayer(player);
             player.team = this.get('team');
+            player.number = this.get('number');
 
             var style = { font: "16px Arial", fill: "#fff", align: "center", width: player.width };
 
@@ -1048,6 +1063,7 @@ var Player = function (_Sprite) {
             this.direction = _direction2.default.RIGHT;
             this.weapon = new _Weapon2.default(this, this.game);
             this.number = 1;
+            this.networkId = null;
         }
     }, {
         key: 'collect',
@@ -1276,7 +1292,7 @@ exports.default = {
 };
 
 },{}],21:[function(require,module,exports){
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -1293,27 +1309,22 @@ var TeamManager = function () {
         this.game = game;
         this.$container = $container;
         this.teams = {};
+        this.hero = null;
     }
 
     _createClass(TeamManager, [{
-        key: 'add',
+        key: "add",
         value: function add(team) {
             this.teams[team.name] = team;
         }
     }, {
-        key: 'hero',
-        value: function hero() {
-            return this.teams['red'].players[1];
-        }
-    }, {
-        key: 'findPlayer',
+        key: "findPlayer",
         value: function findPlayer(number) {
             //TODO: iterate through teams and search for player with the number number
         }
     }, {
-        key: 'allPlayers',
+        key: "allPlayers",
         value: function allPlayers() {
-
             var players = {};
 
             for (var teamName in this.teams) {
@@ -1325,6 +1336,20 @@ var TeamManager = function () {
             }
 
             return players;
+        }
+    }, {
+        key: "findFreePlayer",
+        value: function findFreePlayer() {
+            var allPlayers = this.allPlayers();
+            for (var i in allPlayers) {
+                var player = allPlayers[i];
+
+                if (!player.networkId) {
+                    return player;
+                }
+            }
+
+            return null;
         }
     }]);
 

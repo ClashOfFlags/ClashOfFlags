@@ -10,6 +10,7 @@ export default class Player extends Sprite {
         this.direction = direction.RIGHT;
         this.weapon = new Weapon(this, this.game);
         this.number = 1;
+        this.networkId = null;
     }
 
     collect(item) {
@@ -17,7 +18,7 @@ export default class Player extends Sprite {
     }
 
     shoot() {
-      this.weapon.shoot();
+        this.weapon.shoot();
     }
 
     changeSpriteToNormal() {

@@ -3,33 +3,45 @@ export default class TeamManager {
         this.game = game;
         this.$container = $container;
         this.teams = {};
+        this.hero = null;
     }
 
     add(team) {
         this.teams[team.name] = team;
     }
 
-    hero() {
-        return this.teams['red'].players[1];
-    }
 
     findPlayer(number) {
         //TODO: iterate through teams and search for player with the number number
     }
 
     allPlayers() {
-
         var players = {};
 
         for (var teamName in this.teams) {
             for (var i in this.teams[teamName].players) {
-                const player = this.teams[teamName].players[i];
+                var player = this.teams[teamName].players[i];
 
                 players[player.number] = player;
             }
         }
 
+
+
         return players;
 
+    }
+
+    findFreePlayer() {
+        const allPlayers = this.allPlayers()
+        for (var i in allPlayers) {
+            const player = allPlayers[i];
+
+            if (!player.networkId) {
+                return player;
+            }
+        }
+
+        return null;
     }
 }

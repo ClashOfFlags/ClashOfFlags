@@ -29,7 +29,6 @@ export default class Creator {
             this.createPlayersForTeam(team);
         }
 
-        this.objects.set('hero', this.teamManager.hero());
     }
 
     createPlayersForTeam(team) {
