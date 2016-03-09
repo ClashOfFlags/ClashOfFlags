@@ -376,7 +376,7 @@ var NetworkService = function () {
         value: function onPlayerShoot(data) {
             var player = this.teamManager.allPlayers()[data.slot];
 
-            console.log('player shot', player.number);
+            player.shoot();
         }
     }, {
         key: 'sendPosition',
@@ -1078,9 +1078,9 @@ var PlayerFactory = function (_AbstractFactory) {
             player.team = this.get('team');
             player.number = this.get('number');
 
-            var style = { font: "16px Arial", fill: "#fff", align: "center", width: player.width };
+            var style = { font: "16px Arial", fill: player.team.name == "red" ? "#f00" : "#00f", align: "center", width: player.width };
 
-            player.name = this.game.add.text(0, 0, "Player " + this.get('number'), style);
+            player.name = this.game.add.text(0, 0, "Player " + this.get('number') + ' ' + +this.get('networkId'), style);
             player.name.anchor.setTo(0.5, 0.5);
             player.updateName();
             player.health = 100;

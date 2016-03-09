@@ -52,6 +52,7 @@ export default class NetworkService {
         this.waitForHandshake(player);
     }
 
+
     onPlayerConnect(networkPlayer) {
         this.players[networkPlayer.id] = this.teamManager.allPlayers()[networkPlayer.slot];
     }
