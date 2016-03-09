@@ -340,7 +340,9 @@ var NetworkService = function () {
         key: 'onPlayerHandshake',
         value: function onPlayerHandshake(networkPlayer) {
             var player = this.teamManager.allPlayers()[networkPlayer.slot];
+
             this.teamManager.hero = player;
+
             this.waitForHandshake(player);
         }
     }, {
@@ -366,7 +368,6 @@ var NetworkService = function () {
             var playerSprite = this.players[networkPlayer.id];
             playerSprite.x = networkPlayer.position.x;
             playerSprite.y = networkPlayer.position.y;
-            //playerSprite.direction = networkPlayer.position.direction;
 
             playerSprite.updateName();
         }
@@ -375,14 +376,12 @@ var NetworkService = function () {
         value: function onPlayerShoot(data) {
             var player = this.teamManager.allPlayers()[data.slot];
 
-            console.log('shoot over network', data);
-            player.shoot(data.direction);
+            player.shoot();
         }
     }, {
         key: 'sendPosition',
         value: function sendPosition(player) {
             var position = {
-                direction: player.direction,
                 x: player.x,
                 y: player.y
             };
@@ -397,8 +396,6 @@ var NetworkService = function () {
                 x: player.x,
                 y: player.y
             };
-
-            console.log('send shoot', data);
 
             this.socket.emit('PlayerShootEvent', data);
         }
@@ -668,8 +665,6 @@ var GameState = function (_State) {
             this.game.physics.arcade.collide(this.objects.get('barrels'), this.obstacleLayer);
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
-            this.players = this.teamManager.allPlayers();
-
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.players, this.bulletHitPlayer, null, this);
             this.game.physics.arcade.collide(this.player, this.players);
 
@@ -690,8 +685,17 @@ var GameState = function (_State) {
 
             this.miniMapOverlay.context.clearRect(0, 0, this.miniMapOverlay.width, this.miniMapOverlay.height);
 
-            this.miniMapOverlay.rect(Math.floor(this.player.x / 64) * this.miniMapSize, Math.floor(this.player.y / 64) * this.miniMapSize, this.miniMapSize * 2, this.miniMapSize * 2, '#FFFF00');
-            this.miniMapOverlay.dirty = true;
+            for (var i = 0; i < this.teamManager.teams[this.player.team.name].players.length; i++) {
+                var teamPlayer = this.teamManager.teams[this.player.team.name].players[i];
+                var color = '#0AFF12';
+
+                if (teamPlayer === this.player) {
+                    color = '#FFFF00';
+                }
+
+                this.miniMapOverlay.rect(Math.floor(teamPlayer.x / 64) * this.miniMapSize, Math.floor(teamPlayer.y / 64) * this.miniMapSize, this.miniMapSize * 2, this.miniMapSize * 2, color);
+                this.miniMapOverlay.dirty = true;
+            }
         }
     }, {
         key: 'bulletHitBarrel',
@@ -1251,8 +1255,8 @@ var Player = function (_Sprite) {
         }
     }, {
         key: 'shoot',
-        value: function shoot(overwriteDirection) {
-            this.weapon.shoot(overwriteDirection);
+        value: function shoot() {
+            this.weapon.shoot();
         }
     }, {
         key: 'changeSpriteToNormal',
@@ -1381,7 +1385,7 @@ exports.default = Team;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1403,60 +1407,56 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Weapon = function () {
-    function Weapon(player, game) {
-        _classCallCheck(this, Weapon);
+  function Weapon(player, game) {
+    _classCallCheck(this, Weapon);
 
-        this.game = game;
-        this.player = player;
-        this.nextShotAt = Date.now() + _config2.default.game.weapons.fireball.shotDelay;
+    this.game = game;
+    this.player = player;
+    this.nextShotAt = Date.now() + _config2.default.game.weapons.fireball.shotDelay;
 
-        this.bullets = game.add.group();
-        this.bullets.enableBody = true;
-        this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+    this.bullets = game.add.group();
+    this.bullets.enableBody = true;
+    this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
 
-        this.weapon = 'fireball';
+    this.weapon = 'fireball';
+  }
+
+  _createClass(Weapon, [{
+    key: 'shoot',
+    value: function shoot() {
+      if (this.nextShotAt > Date.now()) {
+        return;
+      }
+
+      this.nextShotAt = Date.now() + _config2.default.game.weapons.fireball.shotDelay;
+
+      this.player.loadTexture('player_shoot', 0, true);
+      this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.player.changeSpriteToNormal, this);
+
+      var bullet = new _Bullet2.default(this.game, this.player.body.center.x, this.player.body.center.y, this.weapon);
+      bullet.animations.add(this.weapon, Phaser.Animation.generateFrameNames(this.weapon + '_000', 1, 6), 60, true);
+      bullet.animations.play(this.weapon);
+      bullet.anchor.setTo(0.5, 0.5);
+
+      if (this.player.direction === _direction2.default.BOTTOM) {
+        bullet.body.velocity.y = _config2.default.game.weapons[this.weapon].bulletSpeed;
+        bullet.angle = 180;
+      } else if (this.player.direction === _direction2.default.UP) {
+        bullet.angle = 0;
+        bullet.body.velocity.y = -_config2.default.game.weapons[this.weapon].bulletSpeed;
+      } else if (this.player.direction === _direction2.default.RIGHT) {
+        bullet.angle = 90;
+        bullet.body.velocity.x = _config2.default.game.weapons[this.weapon].bulletSpeed;
+      } else if (this.player.direction === _direction2.default.LEFT) {
+        bullet.angle = -90;
+        bullet.body.velocity.x = -_config2.default.game.weapons[this.weapon].bulletSpeed;
+      }
+
+      this.bullets.add(bullet);
     }
+  }]);
 
-    _createClass(Weapon, [{
-        key: 'shoot',
-        value: function shoot() {
-            var overwriteDirection = arguments.length <= 0 || arguments[0] === undefined ? null : arguments[0];
-
-            if (this.nextShotAt > Date.now()) {
-                return;
-            }
-
-            var shootDirection = overwriteDirection ? overwriteDirection : this.player.direction;
-
-            this.nextShotAt = Date.now() + _config2.default.game.weapons.fireball.shotDelay;
-
-            this.player.loadTexture('player_shoot', 0, true);
-            this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.player.changeSpriteToNormal, this);
-
-            var bullet = new _Bullet2.default(this.game, this.player.body.center.x, this.player.body.center.y, this.weapon);
-            bullet.animations.add(this.weapon, Phaser.Animation.generateFrameNames(this.weapon + '_000', 1, 6), 60, true);
-            bullet.animations.play(this.weapon);
-            bullet.anchor.setTo(0.5, 0.5);
-
-            if (shootDirection === _direction2.default.BOTTOM) {
-                bullet.body.velocity.y = _config2.default.game.weapons[this.weapon].bulletSpeed;
-                bullet.angle = 180;
-            } else if (shootDirection === _direction2.default.UP) {
-                bullet.angle = 0;
-                bullet.body.velocity.y = -_config2.default.game.weapons[this.weapon].bulletSpeed;
-            } else if (shootDirection === _direction2.default.RIGHT) {
-                bullet.angle = 90;
-                bullet.body.velocity.x = _config2.default.game.weapons[this.weapon].bulletSpeed;
-            } else if (shootDirection === _direction2.default.LEFT) {
-                bullet.angle = -90;
-                bullet.body.velocity.x = -_config2.default.game.weapons[this.weapon].bulletSpeed;
-            }
-
-            this.bullets.add(bullet);
-        }
-    }]);
-
-    return Weapon;
+  return Weapon;
 }();
 
 exports.default = Weapon;
@@ -1468,10 +1468,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = {
-    TOP: 'top',
-    BOTTOM: 'bottom',
-    RIGHT: 'right',
-    LEFT: 'left'
+    TOP: Symbol('top'),
+    BOTTOM: Symbol('bottom'),
+    RIGHT: Symbol('right'),
+    LEFT: Symbol('left')
 };
 
 },{}],21:[function(require,module,exports){
