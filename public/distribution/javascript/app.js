@@ -1695,8 +1695,8 @@ exports.default = {
         },
         weapons: {
             'fireball': {
-                bulletSpeed: 600,
-                lifetime: 2.5,
+                bulletSpeed: 1000,
+                lifetime: 1.5,
                 shotDelay: 300
             }
         }
