@@ -57,6 +57,9 @@ export default class GameState extends State {
         this.game.physics.arcade.collide(this.player, this.waterlayer);
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
+        this.players = this.teamManager.allPlayers();
+        this.game.physics.arcade.collide(this.player.weapon.bullets, this.players, this.bulletHitPlayer, null, this);
+
         this.keyRedGroup = this.objects.get('keyRedGroup');
         this.game.physics.arcade.overlap(this.player, this.keyRedGroup, this.playerCollectsKey, null, this);
 
@@ -82,6 +85,19 @@ export default class GameState extends State {
     }
 
     bulletHitObstacle(bullet, obstacle) {
+        var singleExplosion = this.explosions.getFirstDead();
+        singleExplosion = this.explosions.create(bullet.body.x, bullet.body.y, 'explosion');
+        singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('fireball_hit_000', 1, 9), 100, false);
+        singleExplosion.animations.play('fire');
+
+        singleExplosion.events.onAnimationComplete.add(function () {
+            singleExplosion.kill();
+        }, this);
+
+        bullet.kill();
+    }
+
+    bulletHitPlayer(bullet, player) {
         var singleExplosion = this.explosions.getFirstDead();
         singleExplosion = this.explosions.create(bullet.body.x, bullet.body.y, 'explosion');
         singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('fireball_hit_000', 1, 9), 100, false);
