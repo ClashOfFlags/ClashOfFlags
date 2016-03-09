@@ -31,10 +31,13 @@ module.exports = class Player {
         });
 
         this.socket.on('PlayerShootEvent', data => {
+            console.log('shoot', data);
+
             this.lobby.players.forEach(otherPlayer => {
                 if (otherPlayer.id === this.id) {
                     return;
                 }
+
 
                 otherPlayer.sendShoot(this, data);
             });
@@ -65,6 +68,8 @@ module.exports = class Player {
     sendShoot(player, data) {
         data.id = player.id;
         data.slot = player.roomSlot;
+
+        console.log('send shoot', data);
 
         this.emit('PlayerShootEvent', data);
     }

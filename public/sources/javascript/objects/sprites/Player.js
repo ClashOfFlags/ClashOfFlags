@@ -17,8 +17,8 @@ export default class Player extends Sprite {
         item.kill();
     }
 
-    shoot() {
-        this.weapon.shoot();
+    shoot(overwriteDirection) {
+        this.weapon.shoot(overwriteDirection);
     }
 
     changeSpriteToNormal() {

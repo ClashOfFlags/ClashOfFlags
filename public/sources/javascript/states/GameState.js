@@ -48,7 +48,6 @@ export default class GameState extends State {
 
     }
 
-
     update() {
         if (!this.player)
             return;
@@ -61,7 +60,6 @@ export default class GameState extends State {
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
         this.players = this.teamManager.allPlayers();
-        console.log('Players: ' , this.teamManager.allPlayers());
 
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.players, this.bulletHitPlayer, null, this);
         this.game.physics.arcade.collide(this.player, this.players);
