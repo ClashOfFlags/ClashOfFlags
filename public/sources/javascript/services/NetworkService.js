@@ -71,13 +71,14 @@ export default class NetworkService {
         playerSprite.x = networkPlayer.position.x;
         playerSprite.y = networkPlayer.position.y;
 
-        //playerSprite.updateName();
+        playerSprite.updateName();
     }
 
     onPlayerShoot(data) {
         var player = this.teamManager.allPlayers()[data.slot];
 
-        console.log('player shot', player.number);
+        player.shoot();
+
     }
 
     sendPosition(player) {

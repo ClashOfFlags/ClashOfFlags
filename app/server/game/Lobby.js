@@ -65,12 +65,29 @@ module.exports = class Lobby {
 
     //TODO: Move this to a room object
     freeRoomSlot() {
+        var playersInRedTeam = this.usedSlots(1,5);
+        var playersInBlueTeam = this.usedSlots(6,10);
+
+        console.log(playersInRedTeam, playersInBlueTeam);
+
         for (var i in this.roomSlots) {
-            if (!this.roomSlots[i])
+            if (!this.roomSlots[i] && (
+                    (playersInBlueTeam >= playersInRedTeam && i <= 5) || (playersInRedTeam >= playersInBlueTeam && i > 5)
+                ))
                 return i;
         }
 
         return false;
+    }
+
+    usedSlots(from, to) {
+        var count = 0;
+        for (var i in this.roomSlots) {
+            if (this.roomSlots[i] && from <= i && to >= i)
+                count++;
+        }
+
+        return count;
     }
 
 }
