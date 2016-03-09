@@ -48,6 +48,9 @@ export default class GameState extends State {
     update() {
         this.game.physics.arcade.collide(this.player, this.obstacleLayer);
         this.game.physics.arcade.collide(this.player, this.waterlayer);
+        this.game.physics.arcade.collide(this.player, this.objects.get('barrels'));
+        this.game.physics.arcade.overlap(this.player.weapon.bullets, this.objects.get('barrels'), this.bulletHitBarrel, null, this);
+        this.game.physics.arcade.collide(this.objects.get('barrels'), this.obstacleLayer);
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
         this.inputs.applyToPlayer(this.player);
@@ -68,17 +71,47 @@ export default class GameState extends State {
 
     }
 
-    bulletHitObstacle(bullet, obstacle) {
-        var singleExplosion = this.explosions.getFirstDead();
-        singleExplosion = this.explosions.create(bullet.body.x, bullet.body.y, 'explosion');
-        singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('fireball_hit_000', 1, 9), 100, false);
-        singleExplosion.animations.play('fire');
+    bulletHitBarrel(bullet, barrel) {
+      this.bulletHitObstacle(bullet);
 
-        singleExplosion.events.onAnimationComplete.add(function () {
-            singleExplosion.kill();
-        }, this);
+      this.createExplosionAnimation({
+        x: barrel.x,
+        y: barrel.y - barrel.height,
+        key: 'flame_a',
+        frameName: 'flame_a_000',
+        frameNameMax: 6,
+        frameSpeed:60,
+        repeat: false,
+        scale: 0.4
+      });
+      barrel.kill();
+    }
 
-        bullet.kill();
+    createExplosionAnimation(data) {
+      var sprite = this.game.add.sprite(data.x, data.y, data.key);
+      sprite.anchor.setTo(0.5, 0.5);
+      sprite.scale.x = data.scale;
+      sprite.scale.y = data.scale;
+      sprite.animations.add('animation', Phaser.Animation.generateFrameNames(data.frameName, 1, data.frameNameMax), data.frameSpeed, data.repeat);
+      sprite.animations.play('animation');
+
+      sprite.events.onAnimationComplete.add(function () {
+          sprite.kill();
+      }, this);
+    }
+
+    bulletHitObstacle(bullet) {
+      this.createExplosionAnimation({
+        x: bullet.x,
+        y: bullet.y,
+        key: 'explosion',
+        frameName: 'fireball_hit_000',
+        frameNameMax: 9,
+        frameSpeed:100,
+        repeat: false,
+        scale: 1
+      });
+      bullet.kill();
     }
 
     createMap() {
@@ -105,9 +138,6 @@ export default class GameState extends State {
         //collision on obstacleLayer
         this.map.setCollisionBetween(1, 2000, true, 'obstacle');
         this.map.setCollisionBetween(1, 2000, true, 'water');
-
-        this.explosions = this.game.add.group();
-        this.explosions.createMultiple(50, 'explosion');
     }
 
     createPlayer() {

@@ -38,8 +38,23 @@ var Creator = function () {
             this.createObjects();
 
             this.createTeams();
+            this.createItem('barrel');
 
             this.createMiniMap();
+        }
+    }, {
+        key: 'createItem',
+        value: function createItem(item) {
+            var group = this.game.add.group();
+            group.enableBody = true;
+
+            var result = this.objects.byType(item, 'objectsLayer');
+            result.forEach(function (element) {
+                var sprite = group.create(element.x, element.y, item);
+                sprite.anchor.setTo(0.5, 0.5);
+            }, this);
+
+            this.objects.set(item + 's', group);
         }
     }, {
         key: 'createMiniMap',
@@ -481,11 +496,20 @@ var Preloader = function () {
             this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
             this.game.load.atlas('explosion', 'assets/images/fireball_hit.png', 'assets/images/fireball_hit.json');
             this.game.load.atlas('fireball', 'assets/images/fireball.png', 'assets/images/fireball.json');
+            this.game.load.atlas('onfireanimation', 'assets/images/onfireanimation.png', 'assets/images/onfireanimation.json');
+            this.game.load.atlas('flame_a', 'assets/images/flame_a.png', 'assets/images/flame_a.json');
             this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
             this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
             this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
             this.game.load.spritesheet('player', this.paths.image('green_male_marine_flamer.png'), 46, 26);
             this.game.load.spritesheet('player_shoot', this.paths.image('green_male_marine_flamer_shoot.png'), 52, 26);
+
+            this.loadItems();
+        }
+    }, {
+        key: 'loadItems',
+        value: function loadItems() {
+            this.game.load.image('barrel', this.paths.image('barrel.png'));
         }
     }]);
 
@@ -581,6 +605,9 @@ var GameState = function (_State) {
         value: function update() {
             this.game.physics.arcade.collide(this.player, this.obstacleLayer);
             this.game.physics.arcade.collide(this.player, this.waterlayer);
+            this.game.physics.arcade.collide(this.player, this.objects.get('barrels'));
+            this.game.physics.arcade.overlap(this.player.weapon.bullets, this.objects.get('barrels'), this.bulletHitBarrel, null, this);
+            this.game.physics.arcade.collide(this.objects.get('barrels'), this.obstacleLayer);
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
             this.inputs.applyToPlayer(this.player);
@@ -598,17 +625,49 @@ var GameState = function (_State) {
             this.miniMapOverlay.dirty = true;
         }
     }, {
-        key: 'bulletHitObstacle',
-        value: function bulletHitObstacle(bullet, obstacle) {
-            var singleExplosion = this.explosions.getFirstDead();
-            singleExplosion = this.explosions.create(bullet.body.x, bullet.body.y, 'explosion');
-            singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('fireball_hit_000', 1, 9), 100, false);
-            singleExplosion.animations.play('fire');
+        key: 'bulletHitBarrel',
+        value: function bulletHitBarrel(bullet, barrel) {
+            this.bulletHitObstacle(bullet);
 
-            singleExplosion.events.onAnimationComplete.add(function () {
-                singleExplosion.kill();
+            this.createExplosionAnimation({
+                x: barrel.x,
+                y: barrel.y - barrel.height,
+                key: 'flame_a',
+                frameName: 'flame_a_000',
+                frameNameMax: 6,
+                frameSpeed: 60,
+                repeat: false,
+                scale: 0.4
+            });
+            barrel.kill();
+        }
+    }, {
+        key: 'createExplosionAnimation',
+        value: function createExplosionAnimation(data) {
+            var sprite = this.game.add.sprite(data.x, data.y, data.key);
+            sprite.anchor.setTo(0.5, 0.5);
+            sprite.scale.x = data.scale;
+            sprite.scale.y = data.scale;
+            sprite.animations.add('animation', Phaser.Animation.generateFrameNames(data.frameName, 1, data.frameNameMax), data.frameSpeed, data.repeat);
+            sprite.animations.play('animation');
+
+            sprite.events.onAnimationComplete.add(function () {
+                sprite.kill();
             }, this);
-
+        }
+    }, {
+        key: 'bulletHitObstacle',
+        value: function bulletHitObstacle(bullet) {
+            this.createExplosionAnimation({
+                x: bullet.x,
+                y: bullet.y,
+                key: 'explosion',
+                frameName: 'fireball_hit_000',
+                frameNameMax: 9,
+                frameSpeed: 100,
+                repeat: false,
+                scale: 1
+            });
             bullet.kill();
         }
     }, {
@@ -637,9 +696,6 @@ var GameState = function (_State) {
             //collision on obstacleLayer
             this.map.setCollisionBetween(1, 2000, true, 'obstacle');
             this.map.setCollisionBetween(1, 2000, true, 'water');
-
-            this.explosions = this.game.add.group();
-            this.explosions.createMultiple(50, 'explosion');
         }
     }, {
         key: 'createPlayer',

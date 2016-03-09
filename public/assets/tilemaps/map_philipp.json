@@ -1278,6 +1278,86 @@
                  "width":64,
                  "x":3190.93,
                  "y":386.468
+                }, 
+                {
+                 "gid":226,
+                 "height":64,
+                 "id":85,
+                 "name":"barrel",
+                 "properties":
+                    {
+                     "type":"barrel"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"barrel",
+                 "visible":true,
+                 "width":64,
+                 "x":3094.5,
+                 "y":820.217
+                }, 
+                {
+                 "gid":226,
+                 "height":64,
+                 "id":86,
+                 "name":"barrel",
+                 "properties":
+                    {
+                     "type":"barrel"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"barrel",
+                 "visible":true,
+                 "width":64,
+                 "x":2980.94965934898,
+                 "y":1376.61366919001
+                }, 
+                {
+                 "gid":226,
+                 "height":64,
+                 "id":87,
+                 "name":"barrel",
+                 "properties":
+                    {
+                     "type":"barrel"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"barrel",
+                 "visible":true,
+                 "width":64,
+                 "x":3397.30090840272,
+                 "y":1387.96870325511
+                }, 
+                {
+                 "gid":226,
+                 "height":64,
+                 "id":88,
+                 "name":"barrel",
+                 "properties":
+                    {
+                     "type":"barrel"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"barrel",
+                 "visible":true,
+                 "width":64,
+                 "x":2821.97918243755,
+                 "y":1838.38505450416
                 }],
          "offsetx":-22.7879,
          "offsety":144.788,
@@ -1299,7 +1379,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":85,
+ "nextobjectid":89,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tileheight":64,

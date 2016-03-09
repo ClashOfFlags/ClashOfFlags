@@ -18,14 +18,27 @@ export default class Creator {
         this.createObjects();
 
         this.createTeams();
+        this.createItem('barrel');
 
         this.createMiniMap();
+    }
 
+    createItem(item) {
+      var group = this.game.add.group();
+      group.enableBody = true;
+
+      var result = this.objects.byType(item, 'objectsLayer');
+      result.forEach(function (element) {
+          var sprite = group.create(element.x, element.y, item);
+          sprite.anchor.setTo(0.5, 0.5);
+      }, this);
+
+      this.objects.set(item + 's', group);
     }
 
     createMiniMap() {
       this.map = this.objects.get('map');
-      this.miniMapSize = 2;      
+      this.miniMapSize = 2;
 
       var miniMapBmd = this.game.add.bitmapData();
 
