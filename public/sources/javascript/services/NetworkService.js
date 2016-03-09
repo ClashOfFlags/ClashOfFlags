@@ -61,6 +61,7 @@ export default class NetworkService {
 
         if (playerSprite) {
             playerSprite.kill();
+            playerSprite.name.kill();
         }
     }
 

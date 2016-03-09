@@ -37,11 +37,28 @@ var Creator = function () {
         value: function run() {
             this.createTorchs();
 
-            this.createKeys();
+            this.createKeysRed();
+
+            this.createKeysBlue();
 
             this.createTeams();
+            this.createItem('barrel');
 
             this.createMiniMap();
+        }
+    }, {
+        key: 'createItem',
+        value: function createItem(item) {
+            var group = this.game.add.group();
+            group.enableBody = true;
+
+            var result = this.objects.byType(item, 'objectsLayer');
+            result.forEach(function (element) {
+                var sprite = group.create(element.x, element.y, item);
+                sprite.anchor.setTo(0.5, 0.5);
+            }, this);
+
+            this.objects.set(item + 's', group);
         }
     }, {
         key: 'createMiniMap',
@@ -118,17 +135,32 @@ var Creator = function () {
             }, this);
         }
     }, {
-        key: 'createKeys',
-        value: function createKeys() {
-            var keyGroup = this.game.add.group();
-            keyGroup.enableBody = true;
-            var result = this.objects.byType('key', 'objectsLayer');
+        key: 'createKeysRed',
+        value: function createKeysRed() {
+            var keyRedGroup = this.game.add.group();
+            keyRedGroup.enableBody = true;
+            var keysRed = this.objects.byProperties({ 'type': 'key_red' }, 'objectsLayer');
 
-            result.forEach(function (element) {
-                var key = keyGroup.create(element.x, element.y, "key");
+            keysRed.forEach(function (element) {
+                console.log('RedKey Create');
+                var keyRed = keyRedGroup.create(element.x, element.y, 'key');
             }, this);
 
-            this.objects.set('keyGroup', keyGroup);
+            this.objects.set('keyRedGroup', keyRedGroup);
+        }
+    }, {
+        key: 'createKeysBlue',
+        value: function createKeysBlue() {
+            var keyBlueGroup = this.game.add.group();
+            keyBlueGroup.enableBody = true;
+            var keysBlue = this.objects.byProperties({ 'type': 'key_blue' }, 'objectsLayer');
+
+            keysBlue.forEach(function (element) {
+                console.log('BlueKey Create');
+                var keyBlue = keyBlueGroup.create(element.x, element.y, 'key');
+            }, this);
+
+            this.objects.set('keyBlueGroup', keyBlueGroup);
         }
     }, {
         key: 'createControls',
@@ -325,6 +357,7 @@ var NetworkService = function () {
 
             if (playerSprite) {
                 playerSprite.kill();
+                playerSprite.name.kill();
             }
         }
     }, {
@@ -343,7 +376,7 @@ var NetworkService = function () {
         value: function onPlayerShoot(data) {
             var player = this.teamManager.allPlayers()[data.slot];
 
-            player.shoot();
+            console.log('player shot', player.number);
         }
     }, {
         key: 'sendPosition',
@@ -510,12 +543,21 @@ var Preloader = function () {
             this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
             this.game.load.atlas('explosion', 'assets/images/fireball_hit.png', 'assets/images/fireball_hit.json');
             this.game.load.atlas('fireball', 'assets/images/fireball.png', 'assets/images/fireball.json');
+            this.game.load.atlas('onfireanimation', 'assets/images/onfireanimation.png', 'assets/images/onfireanimation.json');
+            this.game.load.atlas('flame_a', 'assets/images/flame_a.png', 'assets/images/flame_a.json');
             this.game.load.spritesheet('torch', 'assets/images/torch.png', 64, 64);
             this.game.load.spritesheet('water', 'assets/images/water.png', 32, 32);
             this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
             this.game.load.spritesheet('player', this.paths.image('green_male_marine_flamer.png'), 46, 26);
             this.game.load.spritesheet('player_shoot', this.paths.image('green_male_marine_flamer_shoot.png'), 52, 26);
             this.game.load.spritesheet('key', 'assets/images/key.png', 64, 64);
+
+            this.loadItems();
+        }
+    }, {
+        key: 'loadItems',
+        value: function loadItems() {
+            this.game.load.image('barrel', this.paths.image('barrel.png'));
         }
     }]);
 
@@ -618,10 +660,22 @@ var GameState = function (_State) {
 
             this.game.physics.arcade.collide(this.player, this.obstacleLayer);
             this.game.physics.arcade.collide(this.player, this.waterlayer);
+            this.game.physics.arcade.collide(this.player, this.objects.get('barrels'));
+            this.game.physics.arcade.overlap(this.player.weapon.bullets, this.objects.get('barrels'), this.bulletHitBarrel, null, this);
+            this.game.physics.arcade.collide(this.objects.get('barrels'), this.obstacleLayer);
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
-            this.keyGroup = this.objects.get('keyGroup');
-            this.game.physics.arcade.overlap(this.player, this.keyGroup, this.playerCollectsKey, null, this);
+            this.players = this.teamManager.allPlayers();
+            console.log('Players: ', this.teamManager.allPlayers());
+
+            this.game.physics.arcade.collide(this.player.weapon.bullets, this.players, this.bulletHitPlayer, null, this);
+            this.game.physics.arcade.collide(this.player, this.players);
+
+            this.keyRedGroup = this.objects.get('keyRedGroup');
+            this.game.physics.arcade.overlap(this.player, this.keyRedGroup, this.playerCollectsKey, null, this);
+
+            this.keyBlueGroup = this.objects.get('keyBlueGroup');
+            this.game.physics.arcade.overlap(this.player, this.keyBlueGroup, this.playerCollectsKey, null, this);
 
             this.inputs.applyToPlayer(this.player);
             this.network.sendPosition(this.player);
@@ -638,8 +692,54 @@ var GameState = function (_State) {
             this.miniMapOverlay.dirty = true;
         }
     }, {
+        key: 'bulletHitBarrel',
+        value: function bulletHitBarrel(bullet, barrel) {
+            this.bulletHitObstacle(bullet);
+
+            this.createExplosionAnimation({
+                x: barrel.x,
+                y: barrel.y - barrel.height,
+                key: 'flame_a',
+                frameName: 'flame_a_000',
+                frameNameMax: 6,
+                frameSpeed: 60,
+                repeat: false,
+                scale: 0.4
+            });
+            barrel.kill();
+        }
+    }, {
+        key: 'createExplosionAnimation',
+        value: function createExplosionAnimation(data) {
+            var sprite = this.game.add.sprite(data.x, data.y, data.key);
+            sprite.anchor.setTo(0.5, 0.5);
+            sprite.scale.x = data.scale;
+            sprite.scale.y = data.scale;
+            sprite.animations.add('animation', Phaser.Animation.generateFrameNames(data.frameName, 1, data.frameNameMax), data.frameSpeed, data.repeat);
+            sprite.animations.play('animation');
+
+            sprite.events.onAnimationComplete.add(function () {
+                sprite.kill();
+            }, this);
+        }
+    }, {
         key: 'bulletHitObstacle',
-        value: function bulletHitObstacle(bullet, obstacle) {
+        value: function bulletHitObstacle(bullet) {
+            this.createExplosionAnimation({
+                x: bullet.x,
+                y: bullet.y,
+                key: 'explosion',
+                frameName: 'fireball_hit_000',
+                frameNameMax: 9,
+                frameSpeed: 100,
+                repeat: false,
+                scale: 1
+            });
+            bullet.kill();
+        }
+    }, {
+        key: 'bulletHitPlayer',
+        value: function bulletHitPlayer(bullet, player) {
             var singleExplosion = this.explosions.getFirstDead();
             singleExplosion = this.explosions.create(bullet.body.x, bullet.body.y, 'explosion');
             singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('fireball_hit_000', 1, 9), 100, false);
@@ -654,6 +754,7 @@ var GameState = function (_State) {
     }, {
         key: 'playerCollectsKey',
         value: function playerCollectsKey(player, key) {
+            console.log('Key collected');
             //TODO: collect and carry the key by the player
         }
     }, {
@@ -682,9 +783,6 @@ var GameState = function (_State) {
             //collision on obstacleLayer
             this.map.setCollisionBetween(1, 2000, true, 'obstacle');
             this.map.setCollisionBetween(1, 2000, true, 'water');
-
-            this.explosions = this.game.add.group();
-            this.explosions.createMultiple(50, 'explosion');
         }
     }, {
         key: 'createControls',
@@ -980,9 +1078,9 @@ var PlayerFactory = function (_AbstractFactory) {
             player.team = this.get('team');
             player.number = this.get('number');
 
-            var style = { font: "16px Arial", fill: player.team.name == "red" ? "#f00" : "#00f", align: "center", width: player.width };
+            var style = { font: "16px Arial", fill: "#fff", align: "center", width: player.width };
 
-            player.name = this.game.add.text(0, 0, "Player " + this.get('number') + ' ' + +this.get('networkId'), style);
+            player.name = this.game.add.text(0, 0, "Player " + this.get('number'), style);
             player.name.anchor.setTo(0.5, 0.5);
             player.updateName();
             player.health = 100;
