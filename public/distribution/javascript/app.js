@@ -326,7 +326,6 @@ var NetworkService = function () {
     }, {
         key: 'connect',
         value: function connect() {
-            console.log('connect network');
             this.socket.emit('PlayerConnectEvent');
         }
     }, {
@@ -387,8 +386,6 @@ var NetworkService = function () {
                 x: player.x,
                 y: player.y
             };
-
-            console.log('send shoot', data);
 
             this.socket.emit('PlayerShootEvent', data);
         }
@@ -1472,7 +1469,7 @@ var Weapon = function () {
             if (shootDirection === _direction2.default.BOTTOM) {
                 bullet.body.velocity.y = _config2.default.game.weapons[this.weapon].bulletSpeed;
                 bullet.angle = 180;
-            } else if (shootDirection === _direction2.default.UP) {
+            } else if (shootDirection === _direction2.default.TOP) {
                 bullet.angle = 0;
                 bullet.body.velocity.y = -_config2.default.game.weapons[this.weapon].bulletSpeed;
             } else if (shootDirection === _direction2.default.RIGHT) {

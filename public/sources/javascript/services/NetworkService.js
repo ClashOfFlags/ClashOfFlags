@@ -39,7 +39,6 @@ export default class NetworkService {
     }
 
     connect() {
-        console.log('connect network');
         this.socket.emit('PlayerConnectEvent');
     }
 
@@ -95,9 +94,6 @@ export default class NetworkService {
             x: player.x,
             y: player.y
         };
-
-        console.log('send shoot', data);
-
 
         this.socket.emit('PlayerShootEvent', data);
     }
