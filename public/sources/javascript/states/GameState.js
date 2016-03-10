@@ -60,15 +60,16 @@ export default class GameState extends State {
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
         this.game.physics.arcade.collide(this.player, this.objects.get('playerGroup'));
+        this.game.physics.arcade.collide(this.player.weapon.bullets, this.objects.get('playerGroup'));
 
         this.game.physics.arcade.collide(this.player.weapon.bullets, this.players, this.bulletHitPlayer, null, this);
         this.game.physics.arcade.collide(this.player, this.players);
 
-        this.keyRedGroup = this.objects.get('keyRedGroup');
-        this.game.physics.arcade.overlap(this.player, this.keyRedGroup, this.playerCollectsKey, null, this);
+        this.flagRedGroup = this.objects.get('flags.red');
+        this.game.physics.arcade.overlap(this.player, this.flagRedGroup, this.playerCollectsFlag, null, this);
 
-        this.keyBlueGroup = this.objects.get('keyBlueGroup');
-        this.game.physics.arcade.overlap(this.player, this.keyBlueGroup, this.playerCollectsKey, null, this);
+        this.flagBlueGroup = this.objects.get('flags.blue');
+        this.game.physics.arcade.overlap(this.player, this.flagBlueGroup, this.playerCollectsFlag, null, this);
 
         this.inputs.applyToPlayer(this.player);
         this.network.sendPosition(this.player);
@@ -152,8 +153,8 @@ export default class GameState extends State {
         bullet.kill();
     }
 
-    playerCollectsKey(player, key) {
-        key.kill();
+    playerCollectsFlag(player, flag) {
+        flag.collectFlag(player);
     }
 
     createMap() {

@@ -11,6 +11,7 @@ export default class Player extends Sprite {
         this.weapon = new Weapon(this, this.game);
         this.number = 1;
         this.networkId = null;
+        this.carryingFlag = false;
     }
 
     collect(item) {
@@ -28,5 +29,13 @@ export default class Player extends Sprite {
     updateName() {
       this.name.x = this.x;
       this.name.y = this.y - this.height * 1.2; 
+    }
+
+    getFlag() {
+        this.carryingFlag = true;
+    }
+
+    releaseFlag() {
+        this.carryingFlag = false;
     }
 }

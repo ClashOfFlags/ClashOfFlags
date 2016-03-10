@@ -1,5 +1,6 @@
 import Team from './../objects/values/Team';
 import config from './../setup/config';
+import Flag from './../objects/sprites/Flag';
 
 export default class Creator {
 
@@ -16,10 +17,9 @@ export default class Creator {
 
     run() {
         this.createTorchs();
-        this.createKeysRed();
-        this.createKeysBlue();
         this.createPlayerGroup();
         this.createTeams();
+        this.createFlags();
         this.createItem('barrel');
         this.createMiniMap();
     }
@@ -115,30 +115,20 @@ export default class Creator {
         }, this);
     }
 
-    createKeysRed() {
-        var keyRedGroup = this.game.add.group();
-        keyRedGroup.enableBody = true;
-        var keysRed = this.objects.byProperties({'type': 'key_red'}, 'objectsLayer');
+    createFlags() {
+        for (var teamName in config.game.teams) {
+            var flagGroup = this.game.add.group();
+            flagGroup.enableBody = true;
+            var flags = this.objects.byProperties({'type': 'flag_' + teamName}, 'objectsLayer');
 
-        keysRed.forEach(function (element) {
-            console.log('RedKey Create');
-            var keyRed = keyRedGroup.create(element.x, element.y, 'key');
-        }, this);
+            flags.forEach(function (element) {
+               var flag = new Flag(this.game, element.x, element.y, 'flag');
+                flag.setTeam(teamName);
+                flagGroup.add(flag);
+            }, this);
 
-        this.objects.set('keyRedGroup', keyRedGroup);
-    }
-
-    createKeysBlue() {
-        var keyBlueGroup = this.game.add.group();
-        keyBlueGroup.enableBody = true;
-        var keysBlue = this.objects.byProperties({'type': 'key_blue'}, 'objectsLayer');
-
-        keysBlue.forEach(function (element) {
-            console.log('BlueKey Create');
-            var keyBlue = keyBlueGroup.create(element.x, element.y, 'key');
-        }, this);
-
-        this.objects.set('keyBlueGroup', keyBlueGroup);
+            this.objects.set('flags.'+teamName, flagGroup);
+        }
     }
 
     createPlayerGroup() {

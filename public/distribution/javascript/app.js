@@ -15,6 +15,10 @@ var _config = require('./../setup/config');
 
 var _config2 = _interopRequireDefault(_config);
 
+var _Flag = require('./../objects/sprites/Flag');
+
+var _Flag2 = _interopRequireDefault(_Flag);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -36,10 +40,9 @@ var Creator = function () {
         key: 'run',
         value: function run() {
             this.createTorchs();
-            this.createKeysRed();
-            this.createKeysBlue();
             this.createPlayerGroup();
             this.createTeams();
+            this.createFlags();
             this.createItem('barrel');
             this.createMiniMap();
         }
@@ -132,32 +135,21 @@ var Creator = function () {
             }, this);
         }
     }, {
-        key: 'createKeysRed',
-        value: function createKeysRed() {
-            var keyRedGroup = this.game.add.group();
-            keyRedGroup.enableBody = true;
-            var keysRed = this.objects.byProperties({ 'type': 'key_red' }, 'objectsLayer');
+        key: 'createFlags',
+        value: function createFlags() {
+            for (var teamName in _config2.default.game.teams) {
+                var flagGroup = this.game.add.group();
+                flagGroup.enableBody = true;
+                var flags = this.objects.byProperties({ 'type': 'flag_' + teamName }, 'objectsLayer');
 
-            keysRed.forEach(function (element) {
-                console.log('RedKey Create');
-                var keyRed = keyRedGroup.create(element.x, element.y, 'key');
-            }, this);
+                flags.forEach(function (element) {
+                    var flag = new _Flag2.default(this.game, element.x, element.y, 'flag');
+                    flag.setTeam(teamName);
+                    flagGroup.add(flag);
+                }, this);
 
-            this.objects.set('keyRedGroup', keyRedGroup);
-        }
-    }, {
-        key: 'createKeysBlue',
-        value: function createKeysBlue() {
-            var keyBlueGroup = this.game.add.group();
-            keyBlueGroup.enableBody = true;
-            var keysBlue = this.objects.byProperties({ 'type': 'key_blue' }, 'objectsLayer');
-
-            keysBlue.forEach(function (element) {
-                console.log('BlueKey Create');
-                var keyBlue = keyBlueGroup.create(element.x, element.y, 'key');
-            }, this);
-
-            this.objects.set('keyBlueGroup', keyBlueGroup);
+                this.objects.set('flags.' + teamName, flagGroup);
+            }
         }
     }, {
         key: 'createPlayerGroup',
@@ -182,7 +174,7 @@ var Creator = function () {
 
 exports.default = Creator;
 
-},{"./../objects/values/Team":18,"./../setup/config":23}],2:[function(require,module,exports){
+},{"./../objects/sprites/Flag":14,"./../objects/values/Team":19,"./../setup/config":24}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -282,7 +274,7 @@ var InputService = function () {
 
 exports.default = InputService;
 
-},{"./../objects/values/direction":20}],3:[function(require,module,exports){
+},{"./../objects/values/direction":21}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -558,7 +550,7 @@ var Preloader = function () {
             this.game.load.spritesheet('waterStone', 'assets/images/waterStone.png', 32, 32);
             this.game.load.spritesheet('player', this.paths.image('green_male_marine_flamer.png'), 46, 26);
             this.game.load.spritesheet('player_shoot', this.paths.image('green_male_marine_flamer_shoot.png'), 52, 26);
-            this.game.load.spritesheet('key', 'assets/images/key.png', 64, 64);
+            this.game.load.spritesheet('flag', 'assets/images/flag.png', 64, 64);
 
             this.loadItems();
         }
@@ -674,15 +666,16 @@ var GameState = function (_State) {
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
             this.game.physics.arcade.collide(this.player, this.objects.get('playerGroup'));
+            this.game.physics.arcade.collide(this.player.weapon.bullets, this.objects.get('playerGroup'));
 
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.players, this.bulletHitPlayer, null, this);
             this.game.physics.arcade.collide(this.player, this.players);
 
-            this.keyRedGroup = this.objects.get('keyRedGroup');
-            this.game.physics.arcade.overlap(this.player, this.keyRedGroup, this.playerCollectsKey, null, this);
+            this.flagRedGroup = this.objects.get('flags.red');
+            this.game.physics.arcade.overlap(this.player, this.flagRedGroup, this.playerCollectsFlag, null, this);
 
-            this.keyBlueGroup = this.objects.get('keyBlueGroup');
-            this.game.physics.arcade.overlap(this.player, this.keyBlueGroup, this.playerCollectsKey, null, this);
+            this.flagBlueGroup = this.objects.get('flags.blue');
+            this.game.physics.arcade.overlap(this.player, this.flagBlueGroup, this.playerCollectsFlag, null, this);
 
             this.inputs.applyToPlayer(this.player);
             this.network.sendPosition(this.player);
@@ -768,9 +761,9 @@ var GameState = function (_State) {
             bullet.kill();
         }
     }, {
-        key: 'playerCollectsKey',
-        value: function playerCollectsKey(player, key) {
-            key.kill();
+        key: 'playerCollectsFlag',
+        value: function playerCollectsFlag(player, flag) {
+            flag.collectFlag(player);
         }
     }, {
         key: 'createMap',
@@ -846,7 +839,7 @@ var GameState = function (_State) {
 
 exports.default = GameState;
 
-},{"./../factories/PlayerFactory":11,"./../objects/sprites/Hero":14,"./../objects/sprites/Player":15,"./../objects/sprites/TestCup":17,"./State":8}],8:[function(require,module,exports){
+},{"./../factories/PlayerFactory":11,"./../objects/sprites/Hero":15,"./../objects/sprites/Player":16,"./../objects/sprites/TestCup":18,"./State":8}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1113,7 +1106,7 @@ var PlayerFactory = function (_AbstractFactory) {
 
 exports.default = PlayerFactory;
 
-},{"./../objects/sprites/Player":15,"./AbstractFactory":9,"./Builder":10}],12:[function(require,module,exports){
+},{"./../objects/sprites/Player":16,"./AbstractFactory":9,"./Builder":10}],12:[function(require,module,exports){
 'use strict';
 
 var _Bootstrapper = require('./setup/Bootstrapper');
@@ -1124,7 +1117,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _Bootstrapper2.default.bootstrap();
 
-},{"./setup/Bootstrapper":22}],13:[function(require,module,exports){
+},{"./setup/Bootstrapper":23}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1179,7 +1172,70 @@ var Bullet = function (_Sprite) {
 
 exports.default = Bullet;
 
-},{"../../setup/config":23,"./Sprite":16}],14:[function(require,module,exports){
+},{"../../setup/config":24,"./Sprite":17}],14:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Sprite2 = require('./Sprite');
+
+var _Sprite3 = _interopRequireDefault(_Sprite2);
+
+var _config = require('../../setup/config');
+
+var _config2 = _interopRequireDefault(_config);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Flag = function (_Sprite) {
+    _inherits(Flag, _Sprite);
+
+    function Flag() {
+        _classCallCheck(this, Flag);
+
+        return _possibleConstructorReturn(this, Object.getPrototypeOf(Flag).apply(this, arguments));
+    }
+
+    _createClass(Flag, [{
+        key: 'boot',
+        value: function boot() {
+            this.enableArcadePhysics();
+            this.checkWorldBounds = true;
+            this.outOfBoundsKill = true;
+
+            this.team = 'none';
+        }
+    }, {
+        key: 'collectFlag',
+        value: function collectFlag(player) {
+            if (player.team.name != this.team && player.carryingFlag == false) {
+                this.kill();
+                player.getFlag();
+            }
+        }
+    }, {
+        key: 'setTeam',
+        value: function setTeam(team) {
+            this.team = team;
+        }
+    }]);
+
+    return Flag;
+}(_Sprite3.default);
+
+exports.default = Flag;
+
+},{"../../setup/config":24,"./Sprite":17}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1212,7 +1268,7 @@ var Hero = function (_Player) {
 
 exports.default = Hero;
 
-},{"./Player":15}],15:[function(require,module,exports){
+},{"./Player":16}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1260,6 +1316,7 @@ var Player = function (_Sprite) {
             this.weapon = new _Weapon2.default(this, this.game);
             this.number = 1;
             this.networkId = null;
+            this.carryingFlag = false;
         }
     }, {
         key: 'collect',
@@ -1282,6 +1339,16 @@ var Player = function (_Sprite) {
             this.name.x = this.x;
             this.name.y = this.y - this.height * 1.2;
         }
+    }, {
+        key: 'getFlag',
+        value: function getFlag() {
+            this.carryingFlag = true;
+        }
+    }, {
+        key: 'releaseFlag',
+        value: function releaseFlag() {
+            this.carryingFlag = false;
+        }
     }]);
 
     return Player;
@@ -1289,7 +1356,7 @@ var Player = function (_Sprite) {
 
 exports.default = Player;
 
-},{"./../values/Weapon":19,"./../values/direction":20,"./Sprite":16}],16:[function(require,module,exports){
+},{"./../values/Weapon":20,"./../values/direction":21,"./Sprite":17}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1342,7 +1409,7 @@ var Sprite = function (_Phaser$Sprite) {
 
 exports.default = Sprite;
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1363,7 +1430,7 @@ var TestCup = function TestCup() {
 
 exports.default = TestCup;
 
-},{"./Sprite":16}],18:[function(require,module,exports){
+},{"./Sprite":17}],19:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1394,7 +1461,7 @@ var Team = function () {
 
 exports.default = Team;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1478,7 +1545,7 @@ var Weapon = function () {
 
 exports.default = Weapon;
 
-},{"../../setup/config":23,"../sprites/Bullet":13,"./direction":20}],20:[function(require,module,exports){
+},{"../../setup/config":24,"../sprites/Bullet":13,"./direction":21}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1491,7 +1558,7 @@ exports.default = {
     LEFT: 'left'
 };
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1558,7 +1625,7 @@ var TeamManager = function () {
 
 exports.default = TeamManager;
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -1666,7 +1733,7 @@ var Bootstrapper = function () {
 
 exports.default = Bootstrapper;
 
-},{"./../Services/Creator":1,"./../Services/InputService":2,"./../Services/NetworkService":3,"./../Services/ObjectsService":4,"./../Services/PathService":5,"./../Services/Preloader":6,"./../States/GameState":7,"./../factories/PlayerFactory":11,"./../services/TeamManager":21,"./config":23}],23:[function(require,module,exports){
+},{"./../Services/Creator":1,"./../Services/InputService":2,"./../Services/NetworkService":3,"./../Services/ObjectsService":4,"./../Services/PathService":5,"./../Services/Preloader":6,"./../States/GameState":7,"./../factories/PlayerFactory":11,"./../services/TeamManager":22,"./config":24}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

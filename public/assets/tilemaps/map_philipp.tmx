@@ -489,34 +489,34 @@
     <property name="team" value="red"/>
    </properties>
   </object>
-  <object id="20" name="key_blue_1" type="key" gid="235" x="3112.79" y="5919.21" width="64" height="64">
+  <object id="20" name="flag_blue_1" type="flag" gid="235" x="3112.79" y="5919.21" width="64" height="64">
    <properties>
-    <property name="type" value="key_blue"/>
+    <property name="type" value="flag_blue"/>
    </properties>
   </object>
-  <object id="21" name="key_blue_2" type="key" gid="235" x="3189.45" y="5917.21" width="64" height="64">
+  <object id="21" name="flag_blue_2" type="flag" gid="235" x="3189.45" y="5917.21" width="64" height="64">
    <properties>
-    <property name="type" value="key_blue"/>
+    <property name="type" value="flag_blue"/>
    </properties>
   </object>
-  <object id="22" name="key_blue_3" type="key" gid="235" x="3258.79" y="5923.21" width="64" height="64">
+  <object id="22" name="flag_blue_3" type="flag" gid="235" x="3258.79" y="5923.21" width="64" height="64">
    <properties>
-    <property name="type" value="key_blue"/>
+    <property name="type" value="flag_blue"/>
    </properties>
   </object>
-  <object id="27" name="key_red_1" type="key" gid="235" x="3123.79" y="305.212" width="64" height="64">
+  <object id="27" name="flag_red_1" type="flag" gid="235" x="3123.79" y="305.212" width="64" height="64">
    <properties>
-    <property name="type" value="key_red"/>
+    <property name="type" value="flag_red"/>
    </properties>
   </object>
-  <object id="28" name="key_red_2" type="key" gid="235" x="3189.79" y="306.212" width="64" height="64">
+  <object id="28" name="flag_red_2" type="flag" gid="235" x="3189.79" y="306.212" width="64" height="64">
    <properties>
-    <property name="type" value="key_red"/>
+    <property name="type" value="flag_red"/>
    </properties>
   </object>
-  <object id="29" name="key_red_3" type="key" gid="235" x="3254.79" y="308.212" width="64" height="64">
+  <object id="29" name="flag_red_3" type="flag" gid="235" x="3254.79" y="308.212" width="64" height="64">
    <properties>
-    <property name="type" value="key_red"/>
+    <property name="type" value="flag_red"/>
    </properties>
   </object>
   <object id="30" name="torch" type="torch" gid="237" x="3016.12" y="5810.55" width="64" height="64">
