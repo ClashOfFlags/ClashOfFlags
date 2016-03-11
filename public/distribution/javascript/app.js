@@ -239,29 +239,22 @@ var InputService = function () {
             player.body.velocity.y = 0;
 
             if (this.cursorKeys().up.isDown || this.wasd().up.isDown) {
-                player.direction = _direction2.default.UP;
-                player.angle = -90;
+                player.moveToDirection(_direction2.default.TOP);
                 player.body.velocity.y -= player.speed;
                 player.animations.play('walk');
-                player.updateName();
             } else if (this.cursorKeys().down.isDown || this.wasd().down.isDown) {
-                player.direction = _direction2.default.BOTTOM;
-                player.angle = 90;
+                player.moveToDirection(_direction2.default.BOTTOM);
+
                 player.body.velocity.y += player.speed;
                 player.animations.play('walk');
-                player.updateName();
             } else if (this.cursorKeys().left.isDown || this.wasd().left.isDown) {
-                player.direction = _direction2.default.LEFT;
-                player.angle = 180;
+                player.moveToDirection(_direction2.default.LEFT);
                 player.body.velocity.x -= player.speed;
                 player.animations.play('walk');
-                player.updateName();
             } else if (this.cursorKeys().right.isDown || this.wasd().right.isDown) {
-                player.direction = _direction2.default.RIGHT;
-                player.angle = 0;
+                player.moveToDirection(_direction2.default.RIGHT);
                 player.body.velocity.x += player.speed;
                 player.animations.play('walk');
-                player.updateName();
             } else {
                 player.animations.stop();
                 player.frame = 0;
@@ -1073,8 +1066,8 @@ var PlayerFactory = function (_AbstractFactory) {
         value: function doMake() {
             var player = new _Player2.default(this.game, this.get('position').x, this.get('position').y, this.get('key'));
 
-            player.scale.x = this.get('scale', 1.5);
-            player.scale.y = this.get('scale', 1.5);
+            player.scale.x = this.get('scale', 2.0);
+            player.scale.y = this.get('scale', 2.0);
 
             player.anchor.setTo(0.5, 0.5);
 
@@ -1086,7 +1079,7 @@ var PlayerFactory = function (_AbstractFactory) {
 
             var style = { font: "16px Arial", fill: player.team.name == "red" ? "#f00" : "#00f", align: "center", width: player.width };
 
-            player.name = this.game.add.text(0, 0, "Player " + this.get('number') + ' ' + +this.get('networkId'), style);
+            player.name = this.game.add.text(0, 0, "Player " + this.get('number'), style);
             player.name.anchor.setTo(0.5, 0.5);
             player.updateName();
             player.health = 100;
@@ -1345,6 +1338,37 @@ var Player = function (_Sprite) {
         key: 'releaseFlag',
         value: function releaseFlag() {
             this.carryingFlag = false;
+        }
+    }, {
+        key: 'moveToDirection',
+        value: function moveToDirection(newDirection) {
+            this.direction = newDirection;
+
+            switch (this.direction) {
+                case _direction2.default.TOP:
+                    {
+                        this.angle = -90;
+                        break;
+                    }
+                case _direction2.default.BOTTOM:
+                    {
+                        this.angle = 90;
+                        break;
+                    }
+
+                case _direction2.default.LEFT:
+                    {
+                        this.angle = 180;
+                        break;
+                    }
+                case _direction2.default.RIGHT:
+                    {
+                        this.angle = 0;
+                        break;
+                    }
+            }
+
+            this.updateName();
         }
     }]);
 

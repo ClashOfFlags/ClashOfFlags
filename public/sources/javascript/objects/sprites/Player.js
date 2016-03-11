@@ -38,4 +38,35 @@ export default class Player extends Sprite {
     releaseFlag() {
         this.carryingFlag = false;
     }
+
+    moveToDirection(newDirection) {
+        this.direction = newDirection;
+
+        switch (this.direction) {
+            case direction.TOP:
+            {
+                this.angle = -90;
+                break;
+            }
+            case direction.BOTTOM:
+            {
+                this.angle = 90;
+                break;
+            }
+
+            case direction.LEFT:
+            {
+                this.angle = 180;
+                break;
+            }
+            case direction.RIGHT:
+            {
+                this.angle = 0;
+                break;
+            }
+        }
+
+        this.updateName();
+
+    }
 }
