@@ -16,12 +16,54 @@ export default class Creator {
     }
 
     run() {
-        this.createTorchs();
-        this.createPlayerGroup();
-        this.createTeams();
-        this.createFlags();
-        this.createItem('barrel');
-        this.createMiniMap();
+      this.createMap();
+      this.createControls();
+      this.createTorchs();
+      this.createPlayerGroup();
+      this.createTeams();
+      this.createFlags();
+      this.createItem('barrel');
+      this.createMiniMap();
+    }
+
+    createMap() {
+        this.game.world.setBounds(0, 0, 6400, 6400);
+
+        this.objects.set('map', this.game.add.tilemap('map'));
+        this.map = this.objects.get('map');
+
+        //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
+        this.map.addTilesetImage('dungeon_tileset_64');
+        this.map.addTilesetImage('objects_tilset_64');
+
+        //create layer
+        this.backgroundlayer = this.map.createLayer('background');
+        this.waterlayer = this.map.createLayer('water');
+        this.obstacleLayer = this.map.createLayer('obstacle');
+        this.decorationslayer = this.map.createLayer('decorations');
+
+        this.backgroundlayer.resizeWorld();
+        this.waterlayer.resizeWorld();
+        this.obstacleLayer.resizeWorld();
+        this.decorationslayer.resizeWorld();
+
+        //collision on obstacleLayer
+        this.map.setCollisionBetween(1, 2000, true, 'obstacle');
+        this.map.setCollisionBetween(1, 2000, true, 'water');
+    }
+
+
+    createControls() {
+        this.cursors = this.inputs.cursorKeys();
+        this.wasd = this.inputs.wasd();
+        this.space = this.inputs.space();
+
+        this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
+
+        this.space.onDown.add(() => {
+            this.player.shoot();
+            this.network.sendShoot(this.player);
+        });
     }
 
     createItem(item) {

@@ -38,6 +38,7 @@ export default class Bootstrapper {
         this.bottle.service('Preloader', Preloader, 'game', '$container');
         this.bottle.service('TeamManager', TeamManager, 'game', '$container');
         this.bottle.service('Creator', Creator, 'game', '$container');
+        this.bottle.service('Updater', Updater, 'game', '$container');
         this.bottle.service('GameState', GameState, 'game', '$container');
     }
 
@@ -46,6 +47,3 @@ export default class Bootstrapper {
         return (new Bootstrapper()).run();
     }
 }
-
-
-
