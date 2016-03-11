@@ -155,7 +155,7 @@ var Creator = function () {
         key: 'createPlayerGroup',
         value: function createPlayerGroup() {
             var playerGroup = this.game.add.group();
-            playerGroup.enableBody = true;
+            // playerGroup.enableBody = true;
 
             this.objects.set('playerGroup', playerGroup);
         }
@@ -657,8 +657,9 @@ var GameState = function (_State) {
             this.game.physics.arcade.collide(this.objects.get('barrels'), this.obstacleLayer);
             this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
 
-            this.game.physics.arcade.collide(this.player, this.objects.get('playerGroup'));
-            this.game.physics.arcade.collide(this.player.weapon.bullets, this.objects.get('playerGroup'));
+            this.game.physics.arcade.collide(this.player, this.objects.get('playerGroup'), this.playerHitPlayer, null, this);
+            this.game.physics.arcade.overlap(this.player.weapon.bullets, this.objects.get('playerGroup'), this.bulletHitPlayer, null, this);
+            this.game.physics.arcade.collide(this.objects.get('playerGroup'), this.obstacleLayer);
 
             this.flagRedGroup = this.objects.get('flags.red');
             this.game.physics.arcade.overlap(this.player, this.flagRedGroup, this.playerCollectsFlag, null, this);
@@ -721,6 +722,11 @@ var GameState = function (_State) {
             }, this);
         }
     }, {
+        key: 'playerHitPlayer',
+        value: function playerHitPlayer(ownPlayer, otherPlayer) {
+            otherPlayer.body.moves = false;
+        }
+    }, {
         key: 'bulletHitObstacle',
         value: function bulletHitObstacle(bullet) {
             this.createExplosionAnimation({
@@ -738,16 +744,19 @@ var GameState = function (_State) {
     }, {
         key: 'bulletHitPlayer',
         value: function bulletHitPlayer(bullet, player) {
-            var singleExplosion = this.explosions.getFirstDead();
-            singleExplosion = this.explosions.create(bullet.body.x, bullet.body.y, 'explosion');
-            singleExplosion.animations.add('fire', Phaser.Animation.generateFrameNames('fireball_hit_000', 1, 9), 100, false);
-            singleExplosion.animations.play('fire');
-
-            singleExplosion.events.onAnimationComplete.add(function () {
-                singleExplosion.kill();
-            }, this);
-
-            bullet.kill();
+            if (player !== this.player) {
+                this.createExplosionAnimation({
+                    x: bullet.x,
+                    y: bullet.y,
+                    key: 'explosion',
+                    frameName: 'fireball_hit_000',
+                    frameNameMax: 9,
+                    frameSpeed: 100,
+                    repeat: false,
+                    scale: 1
+                });
+                bullet.kill();
+            }
         }
     }, {
         key: 'playerCollectsFlag',
@@ -1082,6 +1091,11 @@ var PlayerFactory = function (_AbstractFactory) {
             player.name.anchor.setTo(0.5, 0.5);
             player.updateName();
             player.health = 100;
+
+            // var health = this.game.add.bitmapData();
+
+            // miniMapBmd.ctx.fillStyle = '#0AFF12';
+            // miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
 
             var playerGroup = this.objects.get('playerGroup');
             playerGroup.add(player);
