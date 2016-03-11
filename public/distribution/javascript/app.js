@@ -235,29 +235,17 @@ var InputService = function () {
     }, {
         key: 'applyToPlayer',
         value: function applyToPlayer(player) {
-            player.body.velocity.x = 0;
-            player.body.velocity.y = 0;
 
             if (this.cursorKeys().up.isDown || this.wasd().up.isDown) {
                 player.moveToDirection(_direction2.default.TOP);
-                player.body.velocity.y -= player.speed;
-                player.animations.play('walk');
             } else if (this.cursorKeys().down.isDown || this.wasd().down.isDown) {
                 player.moveToDirection(_direction2.default.BOTTOM);
-
-                player.body.velocity.y += player.speed;
-                player.animations.play('walk');
             } else if (this.cursorKeys().left.isDown || this.wasd().left.isDown) {
                 player.moveToDirection(_direction2.default.LEFT);
-                player.body.velocity.x -= player.speed;
-                player.animations.play('walk');
             } else if (this.cursorKeys().right.isDown || this.wasd().right.isDown) {
                 player.moveToDirection(_direction2.default.RIGHT);
-                player.body.velocity.x += player.speed;
-                player.animations.play('walk');
             } else {
-                player.animations.stop();
-                player.frame = 0;
+                player.stopMoving();
             }
         }
     }]);
@@ -1342,16 +1330,20 @@ var Player = function (_Sprite) {
     }, {
         key: 'moveToDirection',
         value: function moveToDirection(newDirection) {
+
             this.direction = newDirection;
 
             switch (this.direction) {
                 case _direction2.default.TOP:
                     {
+                        this.body.velocity.y -= this.speed;
+
                         this.angle = -90;
                         break;
                     }
                 case _direction2.default.BOTTOM:
                     {
+                        this.body.velocity.y += this.speed;
                         this.angle = 90;
                         break;
                     }
@@ -1359,16 +1351,28 @@ var Player = function (_Sprite) {
                 case _direction2.default.LEFT:
                     {
                         this.angle = 180;
+                        this.body.velocity.x -= this.speed;
                         break;
                     }
                 case _direction2.default.RIGHT:
                     {
+                        this.body.velocity.x += this.speed;
                         this.angle = 0;
                         break;
                     }
             }
 
+            this.animations.play('walk');
             this.updateName();
+        }
+    }, {
+        key: 'stopMoving',
+        value: function stopMoving() {
+            this.body.velocity.x = 0;
+            this.body.velocity.y = 0;
+
+            this.animations.stop();
+            this.frame = 0;
         }
     }]);
 
