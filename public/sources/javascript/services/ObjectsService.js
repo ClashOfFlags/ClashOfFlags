@@ -4,8 +4,18 @@ export default class ObjectsService {
     }
 
     set(name, value) {
+        if(_.isObject(name)){
+            return this.setMany(name);
+        }
 
         return _.set(this.collection, name, value);
+    }
+
+    setMany(objects){
+        for(var name in objects){
+
+            this.set(name, objects[name]);
+        }
     }
 
     byType(type, layer) {

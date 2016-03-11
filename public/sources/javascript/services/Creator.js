@@ -8,23 +8,35 @@ export default class Creator {
         this.game = game;
         this.$container = $container;
 
+        this.inputs = $container.InputService;
         this.objects = this.$container.ObjectsService;
+        this.network = $container.NetworkService;
         this.playerFactory = this.$container.PlayerFactory;
-
         this.teamManager = $container.TeamManager;
 
     }
 
     run() {
+      
       this.createMap();
-      this.createControls();
       this.createTorchs();
       this.createPlayerGroup();
       this.createTeams();
       this.createFlags();
       this.createItem('barrel');
       this.createMiniMap();
+
+      this.network.init();
+
+      this.network.waitForHandshake = (hero)=> {
+          this.player = hero;
+          this.game.camera.follow(this.player);
+          this.objects.set('hero', hero);
+          this.createControls();
+      }
     }
+
+
 
     createMap() {
         this.game.world.setBounds(0, 0, 6400, 6400);
@@ -37,19 +49,19 @@ export default class Creator {
         this.map.addTilesetImage('objects_tilset_64');
 
         //create layer
-        this.backgroundlayer = this.map.createLayer('background');
-        this.waterlayer = this.map.createLayer('water');
+        this.backgroundLayer = this.map.createLayer('background');
+        this.waterLayer = this.map.createLayer('water');
         this.obstacleLayer = this.map.createLayer('obstacle');
-        this.decorationslayer = this.map.createLayer('decorations');
-
-        this.backgroundlayer.resizeWorld();
-        this.waterlayer.resizeWorld();
-        this.obstacleLayer.resizeWorld();
-        this.decorationslayer.resizeWorld();
+        this.decorationsLayer = this.map.createLayer('decorations');
 
         //collision on obstacleLayer
         this.map.setCollisionBetween(1, 2000, true, 'obstacle');
         this.map.setCollisionBetween(1, 2000, true, 'water');
+
+        this.objects.set({
+          obstacleLayer: this.obstacleLayer,
+          waterLayer: this.waterLayer
+        })
     }
 
 
@@ -179,12 +191,4 @@ export default class Creator {
 
         this.objects.set('playerGroup', playerGroup);
     }
-
-    createControls() {
-        this.cursors = this.inputs.cursorKeys();
-        this.wasd = this.inputs.wasd();
-
-        this.game.input.keyboard.removeKeyCapture(Phaser.Keyboard.One);
-    }
-
 }

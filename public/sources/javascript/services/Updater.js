@@ -5,36 +5,44 @@ export default class Updater {
   constructor(game, $container) {
       this.game = game;
       this.$container = $container;
+      this.inputs = $container.InputService;
+      this.objects = this.$container.ObjectsService;
+      this.network = $container.NetworkService;
+      this.teamManager = $container.TeamManager;
+  }
+
+  readObjects() {
+    this.obstacleLayer = this.objects.get("obstacleLayer");
+    this.waterLayer = this.objects.get("waterLayer");
+    this.obstacleLayer = this.objects.get("obstacleLayer");
+    this.flagRedGroup = this.objects.get('flags.red');
+    this.flagBlueGroup = this.objects.get('flags.blue');
+    this.barrels = this.objects.get('barrels');
+    this.player = this.objects.get('hero');
+    this.playerGroup = this.objects.get('playerGroup');
   }
 
 
   run() {
 
-    this.game.physics.arcade.collide(this.player, this.obstacleLayer);
-    this.game.physics.arcade.collide(this.player, this.waterlayer);
-    this.game.physics.arcade.collide(this.player, this.objects.get('barrels'));
-    this.game.physics.arcade.overlap(this.player.weapon.bullets, this.objects.get('barrels'), this.bulletHitBarrel, null, this);
-    this.game.physics.arcade.collide(this.objects.get('barrels'), this.obstacleLayer);
-    this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
+    this.readObjects();
 
-    this.game.physics.arcade.collide(this.player, this.objects.get('playerGroup'), this.playerHitPlayer, null, this);
-    this.game.physics.arcade.overlap(this.player.weapon.bullets, this.objects.get('playerGroup'), this.bulletHitPlayer, null, this);
-    this.game.physics.arcade.collide(this.objects.get('playerGroup'), this.obstacleLayer);
+    if (!this.player)
+        return;
 
-    this.flagRedGroup = this.objects.get('flags.red');
-    this.game.physics.arcade.overlap(this.player, this.flagRedGroup, this.playerCollectsFlag, null, this);
-
-    this.flagBlueGroup = this.objects.get('flags.blue');
-    this.game.physics.arcade.overlap(this.player, this.flagBlueGroup, this.playerCollectsFlag, null, this);
-
-    this.inputs.applyToPlayer(this.player);
-    this.network.sendPosition(this.player);
-
+    this.updateCollide();
+    this.updatePlayerPosition();
     this.updateMiniMap();
   }
 
+  updatePlayerPosition() {
+    this.inputs.applyToPlayer(this.player);
+    this.network.sendPosition(this.player);
+  }
 
   updateMiniMap() {
+    this.miniMapOverlay = this.objects.get('miniMapOverlay');
+    this.miniMapSize = this.objects.get('miniMapSize');
 
     this.miniMapOverlay.context.clearRect(0, 0, this.miniMapOverlay.width, this.miniMapOverlay.height);
 
@@ -52,6 +60,23 @@ export default class Updater {
         this.miniMapSize * 2, this.miniMapSize * 2, color);
       this.miniMapOverlay.dirty = true;
     }
+  }
+
+  updateCollide() {
+    this.game.physics.arcade.collide(this.player, this.obstacleLayer);
+    this.game.physics.arcade.collide(this.player, this.waterLayer);
+    this.game.physics.arcade.collide(this.player, this.barrels);
+    this.game.physics.arcade.collide(this.player, this.playerGroup, this.playerHitPlayer, null, this);
+    this.game.physics.arcade.overlap(this.player, this.flagRedGroup, this.playerCollectsFlag, null, this);
+    this.game.physics.arcade.overlap(this.player, this.flagBlueGroup, this.playerCollectsFlag, null, this);
+
+    this.game.physics.arcade.overlap(this.player.weapon.bullets, this.barrels, this.bulletHitBarrel, null, this);
+    this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
+    this.game.physics.arcade.overlap(this.player.weapon.bullets, this.playerGroup, this.bulletHitPlayer, null, this);
+
+    this.game.physics.arcade.collide(this.barrels, this.obstacleLayer);
+
+    this.game.physics.arcade.collide(this.playerGroup, this.obstacleLayer);
   }
 
   bulletHitBarrel(bullet, barrel) {

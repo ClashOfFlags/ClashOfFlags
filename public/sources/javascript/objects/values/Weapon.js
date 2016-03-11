@@ -36,7 +36,7 @@ export default class Weapon {
         if (shootDirection === direction.BOTTOM) {
             bullet.body.velocity.y = config.game.weapons[this.weapon].bulletSpeed;
             bullet.angle = 180;
-        } else if (shootDirection === direction.UP) {
+        } else if (shootDirection === direction.TOP) {
             bullet.angle = 0;
             bullet.body.velocity.y = -config.game.weapons[this.weapon].bulletSpeed;
         } else if (shootDirection === direction.RIGHT) {

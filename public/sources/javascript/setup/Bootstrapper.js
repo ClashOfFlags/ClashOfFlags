@@ -3,6 +3,7 @@ import InputService from './../Services/InputService';
 import PathService from './../Services/PathService';
 import Preloader from './../Services/Preloader';
 import Creator from './../Services/Creator';
+import Updater from './../Services/Updater';
 import ObjectsService from './../Services/ObjectsService';
 import NetworkService from './../Services/NetworkService';
 import PlayerFactory from './../factories/PlayerFactory';

@@ -6,12 +6,12 @@ export default class Preloader {
         this.paths = $container.PathService;
     }
 
-    run(gamestate) {
+    run() {
         this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-        gamestate.load.tilemap('map', 'assets/tilemaps/map_philipp.json', null, Phaser.Tilemap.TILED_JSON);
-        gamestate.load.image('dungeon_tileset_64', 'assets/images/dungeon_tileset_64.png');
-        gamestate.load.image('objects_tilset_64', 'assets/images/objects_tilset_64.png');
+        this.game.load.tilemap('map', 'assets/tilemaps/map_philipp.json', null, Phaser.Tilemap.TILED_JSON);
+        this.game.load.image('dungeon_tileset_64', 'assets/images/dungeon_tileset_64.png');
+        this.game.load.image('objects_tilset_64', 'assets/images/objects_tilset_64.png');
         this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
         this.game.load.atlas('explosion', 'assets/images/fireball_hit.png', 'assets/images/fireball_hit.json');
         this.game.load.atlas('fireball', 'assets/images/fireball.png', 'assets/images/fireball.json');
