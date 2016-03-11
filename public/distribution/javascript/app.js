@@ -408,8 +408,19 @@ var ObjectsService = function () {
     _createClass(ObjectsService, [{
         key: 'set',
         value: function set(name, value) {
+            if (_.isObject(name)) {
+                this.setMany(name);
+            }
 
             return _.set(this.collection, name, value);
+        }
+    }, {
+        key: 'setMany',
+        value: function setMany(objects) {
+            for (var name in objects) {
+
+                this.set(name, objects[name]);
+            }
         }
     }, {
         key: 'byType',
@@ -1330,8 +1341,14 @@ var Player = function (_Sprite) {
     }, {
         key: 'moveToDirection',
         value: function moveToDirection(newDirection) {
+            this.updateName();
+
+            if (this.isFacingDirection(newDirection, true)) {
+                return false;
+            }
 
             this.direction = newDirection;
+            this.resetVelocity();
 
             switch (this.direction) {
                 case _direction2.default.TOP:
@@ -1362,17 +1379,46 @@ var Player = function (_Sprite) {
                     }
             }
 
+            console.log('send moving');
+
             this.animations.play('walk');
-            this.updateName();
+        }
+    }, {
+        key: 'isFacingDirection',
+        value: function isFacingDirection(direction, isMoving) {
+
+            if (direction !== this.direction) {
+                return false;
+            }
+
+            if (isMoving !== this.isMoving()) {
+                return false;
+            }
+
+            return true;
+        }
+    }, {
+        key: 'isMoving',
+        value: function isMoving() {
+            return this.body.velocity.x !== 0 || this.body.velocity.y !== 0;
         }
     }, {
         key: 'stopMoving',
         value: function stopMoving() {
-            this.body.velocity.x = 0;
-            this.body.velocity.y = 0;
+            if (this.isFacingDirection(this.direction, false)) {
+                return false;
+            }
+
+            this.resetVelocity();
 
             this.animations.stop();
             this.frame = 0;
+        }
+    }, {
+        key: 'resetVelocity',
+        value: function resetVelocity() {
+            this.body.velocity.x = 0;
+            this.body.velocity.y = 0;
         }
     }]);
 

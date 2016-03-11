@@ -52,6 +52,7 @@ export default class GameState extends State {
         if (!this.player)
             return;
 
+
         this.game.physics.arcade.collide(this.player, this.obstacleLayer);
         this.game.physics.arcade.collide(this.player, this.waterlayer);
         this.game.physics.arcade.collide(this.player, this.objects.get('barrels'));
