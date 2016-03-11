@@ -155,7 +155,7 @@ var Creator = function () {
         key: 'createPlayerGroup',
         value: function createPlayerGroup() {
             var playerGroup = this.game.add.group();
-            // playerGroup.enableBody = true;
+            playerGroup.enableBody = true;
 
             this.objects.set('playerGroup', playerGroup);
         }
@@ -1091,11 +1091,6 @@ var PlayerFactory = function (_AbstractFactory) {
             player.name.anchor.setTo(0.5, 0.5);
             player.updateName();
             player.health = 100;
-
-            // var health = this.game.add.bitmapData();
-
-            // miniMapBmd.ctx.fillStyle = '#0AFF12';
-            // miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
 
             var playerGroup = this.objects.get('playerGroup');
             playerGroup.add(player);
