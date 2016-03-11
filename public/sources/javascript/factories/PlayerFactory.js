@@ -33,8 +33,8 @@ export default class PlayerFactory extends AbstractFactory {
     doMake() {
         const player = new Player(this.game, this.get('position').x, this.get('position').y, this.get('key'));
 
-        player.scale.x = this.get('scale', 1.5);
-        player.scale.y = this.get('scale', 1.5);
+        player.scale.x = this.get('scale', 2.0);
+        player.scale.y = this.get('scale', 2.0);
 
         player.anchor.setTo(0.5, 0.5);
 
@@ -46,7 +46,7 @@ export default class PlayerFactory extends AbstractFactory {
 
         var style = { font: "16px Arial", fill: (player.team.name == "red") ? "#f00" : "#00f", align: "center", width: player.width};
 
-        player.name = this.game.add.text(0, 0, "Player " + this.get('number') + ' ' + + this.get('networkId'), style);
+        player.name = this.game.add.text(0, 0, "Player " + this.get('number'), style);
         player.name.anchor.setTo(0.5, 0.5);
         player.updateName();
         player.health = 100;

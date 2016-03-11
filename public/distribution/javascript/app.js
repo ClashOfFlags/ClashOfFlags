@@ -235,36 +235,17 @@ var InputService = function () {
     }, {
         key: 'applyToPlayer',
         value: function applyToPlayer(player) {
-            player.body.velocity.x = 0;
-            player.body.velocity.y = 0;
 
             if (this.cursorKeys().up.isDown || this.wasd().up.isDown) {
-                player.direction = _direction2.default.UP;
-                player.angle = -90;
-                player.body.velocity.y -= player.speed;
-                player.animations.play('walk');
-                player.updateName();
+                player.moveToDirection(_direction2.default.TOP);
             } else if (this.cursorKeys().down.isDown || this.wasd().down.isDown) {
-                player.direction = _direction2.default.BOTTOM;
-                player.angle = 90;
-                player.body.velocity.y += player.speed;
-                player.animations.play('walk');
-                player.updateName();
+                player.moveToDirection(_direction2.default.BOTTOM);
             } else if (this.cursorKeys().left.isDown || this.wasd().left.isDown) {
-                player.direction = _direction2.default.LEFT;
-                player.angle = 180;
-                player.body.velocity.x -= player.speed;
-                player.animations.play('walk');
-                player.updateName();
+                player.moveToDirection(_direction2.default.LEFT);
             } else if (this.cursorKeys().right.isDown || this.wasd().right.isDown) {
-                player.direction = _direction2.default.RIGHT;
-                player.angle = 0;
-                player.body.velocity.x += player.speed;
-                player.animations.play('walk');
-                player.updateName();
+                player.moveToDirection(_direction2.default.RIGHT);
             } else {
-                player.animations.stop();
-                player.frame = 0;
+                player.stopMoving();
             }
         }
     }]);
@@ -1082,8 +1063,8 @@ var PlayerFactory = function (_AbstractFactory) {
         value: function doMake() {
             var player = new _Player2.default(this.game, this.get('position').x, this.get('position').y, this.get('key'));
 
-            player.scale.x = this.get('scale', 1.5);
-            player.scale.y = this.get('scale', 1.5);
+            player.scale.x = this.get('scale', 2.0);
+            player.scale.y = this.get('scale', 2.0);
 
             player.anchor.setTo(0.5, 0.5);
 
@@ -1359,6 +1340,53 @@ var Player = function (_Sprite) {
         key: 'releaseFlag',
         value: function releaseFlag() {
             this.carryingFlag = false;
+        }
+    }, {
+        key: 'moveToDirection',
+        value: function moveToDirection(newDirection) {
+
+            this.direction = newDirection;
+
+            switch (this.direction) {
+                case _direction2.default.TOP:
+                    {
+                        this.body.velocity.y -= this.speed;
+
+                        this.angle = -90;
+                        break;
+                    }
+                case _direction2.default.BOTTOM:
+                    {
+                        this.body.velocity.y += this.speed;
+                        this.angle = 90;
+                        break;
+                    }
+
+                case _direction2.default.LEFT:
+                    {
+                        this.angle = 180;
+                        this.body.velocity.x -= this.speed;
+                        break;
+                    }
+                case _direction2.default.RIGHT:
+                    {
+                        this.body.velocity.x += this.speed;
+                        this.angle = 0;
+                        break;
+                    }
+            }
+
+            this.animations.play('walk');
+            this.updateName();
+        }
+    }, {
+        key: 'stopMoving',
+        value: function stopMoving() {
+            this.body.velocity.x = 0;
+            this.body.velocity.y = 0;
+
+            this.animations.stop();
+            this.frame = 0;
         }
     }]);
 

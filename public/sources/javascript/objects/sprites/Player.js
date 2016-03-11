@@ -38,4 +38,51 @@ export default class Player extends Sprite {
     releaseFlag() {
         this.carryingFlag = false;
     }
+
+    moveToDirection(newDirection) {
+
+
+        this.direction = newDirection;
+
+        switch (this.direction) {
+            case direction.TOP:
+            {
+                this.body.velocity.y -= this.speed;
+
+                this.angle = -90;
+                break;
+            }
+            case direction.BOTTOM:
+            {
+                this.body.velocity.y += this.speed;
+                this.angle = 90;
+                break;
+            }
+
+            case direction.LEFT:
+            {
+                this.angle = 180;
+                this.body.velocity.x -= this.speed;
+                break;
+            }
+            case direction.RIGHT:
+            {
+                this.body.velocity.x += this.speed;
+                this.angle = 0;
+                break;
+            }
+        }
+
+        this.animations.play('walk');
+        this.updateName();
+
+    }
+
+    stopMoving(){
+        this.body.velocity.x = 0;
+        this.body.velocity.y = 0;
+
+        this.animations.stop();
+        this.frame = 0;
+    }
 }
