@@ -3,7 +3,8 @@
 ## Useful Commands
 
 `npm run setup` - Install global and local dependencies  
-`npm run watch` - Watch source files and build on change  
+`npm run watch` - Watch source files and build on change
+`npm run build` - Build bundled js and css files from source
 `npm start` - Start the Node.js server  
 `npm stop` - Stop the Node.js server  
 `pm2 logs` - Display server logs in realtime  
