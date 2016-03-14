@@ -11,6 +11,10 @@ export default class Bullet extends Sprite{
     this.game.time.events.add(Phaser.Timer.SECOND * config.game.weapons[this.key].lifetime, this.killBullet, this);
   }
 
+  setTeam(team) {
+    this.team = team;
+  }
+
   killBullet() {
     this.kill();
   }

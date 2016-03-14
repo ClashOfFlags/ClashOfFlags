@@ -1,4 +1,4 @@
-
+import Splatter from './../objects/sprites/Splatter';
 
 export default class Updater {
 
@@ -127,7 +127,7 @@ export default class Updater {
   }
 
   bulletHitPlayer(bullet, player) {
-    if(player !== this.player){
+    if(player !== this.player && player.visible === true){
       this.createExplosionAnimation({
         x: bullet.x,
         y: bullet.y,
@@ -139,6 +139,16 @@ export default class Updater {
         scale: 1
       });
       bullet.kill();
+
+      if(bullet.team.name !== player.team.name){
+        player.health -= 20;
+        if(player.health > 0){
+          player.healthbar.scale.x = player.health / 100;
+        }else{
+          new Splatter(this.game, player.x, player.y, 'green_marine_dead');
+          player.dead();
+        }
+      }      
     }
   }
 

@@ -29,6 +29,7 @@ export default class Weapon {
         this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.player.changeSpriteToNormal, this);
 
         var bullet = new Bullet(this.game, this.player.body.center.x, this.player.body.center.y, this.weapon);
+        bullet.setTeam(this.player.team);
         bullet.animations.add(this.weapon, Phaser.Animation.generateFrameNames(this.weapon + '_000', 1, 6), 60, true);
         bullet.animations.play(this.weapon);
         bullet.anchor.setTo(0.5, 0.5);

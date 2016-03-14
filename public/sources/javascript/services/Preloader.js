@@ -13,6 +13,7 @@ export default class Preloader {
         this.game.load.image('dungeon_tileset_64', 'assets/images/dungeon_tileset_64.png');
         this.game.load.image('objects_tilset_64', 'assets/images/objects_tilset_64.png');
         this.game.load.image('bullet', this.paths.image('flamer_projectile.png'));
+        this.game.load.image('green_marine_dead', this.paths.image('green_marine_dead.png'));
         this.game.load.atlas('explosion', 'assets/images/fireball_hit.png', 'assets/images/fireball_hit.json');
         this.game.load.atlas('fireball', 'assets/images/fireball.png', 'assets/images/fireball.json');
         this.game.load.atlas('onfireanimation', 'assets/images/onfireanimation.png', 'assets/images/onfireanimation.json');
