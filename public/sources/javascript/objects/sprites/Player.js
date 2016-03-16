@@ -1,6 +1,7 @@
 import Sprite from './Sprite';
 import direction from './../values/direction';
 import Weapon from './../values/Weapon';
+import config from '../../setup/config';
 
 export default class Player extends Sprite {
     boot() {
@@ -31,6 +32,11 @@ export default class Player extends Sprite {
         this.name.y = this.y - this.height * 1.2;
     }
 
+    updateHealthbar() {
+      this.healthbar.x = this.x - this.width / 2;
+      this.healthbar.y = this.y - this.height * 1.5;
+    }
+
     getFlag() {
         this.carryingFlag = true;
     }
@@ -41,6 +47,7 @@ export default class Player extends Sprite {
 
     moveToDirection(newDirection) {
         this.updateName();
+        this.updateHealthbar();
 
         if(this.isFacingDirection(newDirection, true)){
             return false;
@@ -117,5 +124,23 @@ export default class Player extends Sprite {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
 
+    }
+
+    dead() {
+      this.visible = false;
+      this.name.visible = false;
+      this.healthbar.visible = false;
+      this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
+    }
+
+    resetPlayer() {
+      this.reset(this.spawnPos.x, this.spawnPos.y);
+      this.visible = true;
+      this.name.visible = true;
+      this.healthbar.visible = true;
+      this.health = 100;
+      this.healthbar.scale.x = 1;
+      this.updateName();
+      this.updateHealthbar();
     }
 }

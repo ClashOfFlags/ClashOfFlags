@@ -33,6 +33,8 @@ export default class PlayerFactory extends AbstractFactory {
     doMake() {
         const player = new Player(this.game, this.get('position').x, this.get('position').y, this.get('key'));
 
+        player.spawnPos = this.get('position');
+
         player.scale.x = this.get('scale', 2.0);
         player.scale.y = this.get('scale', 2.0);
 
@@ -50,6 +52,12 @@ export default class PlayerFactory extends AbstractFactory {
         player.name.anchor.setTo(0.5, 0.5);
         player.updateName();
         player.health = 100;
+
+        var healthBMD = this.game.add.bitmapData();
+        healthBMD.ctx.fillStyle = '#0AFF12';
+        healthBMD.ctx.fillRect(0, 0, 100, 3);
+        player.healthbar = this.game.add.sprite(0,0, healthBMD);
+        player.updateHealthbar();
 
         var playerGroup = this.objects.get('playerGroup');
         playerGroup.add(player);

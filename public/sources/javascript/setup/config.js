@@ -14,6 +14,12 @@ export default{
             lifetime: 2.5,
             shotDelay: 300
           }
+        },
+        splatter: {
+          lifetime: 5
+        },
+        player: {
+          waitForRespawn: 3
         }
     }
 }
