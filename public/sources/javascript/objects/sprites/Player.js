@@ -130,19 +130,19 @@ export default class Player extends Sprite {
 
     }
 
-    hitPlayer(value) {
+    hit(value) {
       if(this.alpha === 1){
         this.health -= value;
         if(this.health > 0){
           this.healthbar.scale.x = this.health / 100;
         }else{
-          new Splatter(this.game, this.x, this.y, 'green_marine_dead');
           this.dead();
         }
       }
     }
 
     dead() {
+      new Splatter(this.game, this.x, this.y, 'green_marine_dead');
       this.visible = false;
       this.name.visible = false;
       this.healthbar.visible = false;

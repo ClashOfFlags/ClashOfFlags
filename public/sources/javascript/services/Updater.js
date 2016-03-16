@@ -95,8 +95,11 @@ export default class Updater {
       var player = this.teamManager.allPlayers()[i];
       if (this.game.physics.arcade.distanceBetween(barrel,player) < barrel.barrel.maxRange){
         var damage = Math.round((1 - (this.game.physics.arcade.distanceBetween(barrel,player) - 90) / barrel.barrel.maxRange) * barrel.barrel.maxDamage);
-        console.log(damage);
-        player.hitPlayer(damage);
+        if(damage >= 100){
+          player.dead();
+        }else{
+          player.hit(damage);
+        }
       }
     }
 
@@ -149,7 +152,7 @@ export default class Updater {
       bullet.kill();
 
       if(bullet.team.name !== player.team.name){
-        player.hitPlayer(bullet.power);
+        player.hit(bullet.power);
       }
     }
   }
