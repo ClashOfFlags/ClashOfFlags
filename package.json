@@ -17,7 +17,7 @@
   "scripts": {
     "setup": "sudo npm install -g pm2 bower gulp webpack && npm install && bower install && cp .env.example .env",
     "build": "concurrently 'gulp' 'webpack'",
-    "watch": "npm start && concurrently --kill-others 'gulp watch' 'webpack --watch'",
+    "watch": "concurrently --kill-others 'gulp watch' 'webpack --watch'",
     "start": "pm2 start pm2.json",
     "stop": "pm2 stop all"
   },
