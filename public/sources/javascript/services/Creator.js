@@ -18,15 +18,15 @@ export default class Creator {
 
     run() {
 
-      this.createMap();
-      this.createTorchs();
-      this.createPlayerGroup();
-      this.createTeams();
-      this.createFlags();
-      this.createItem('barrel');
-      this.createMiniMap();
+        this.createMap();
+        this.createTorchs();
+        this.createPlayerGroup();
+        this.createTeams();
+        this.createFlags();
+        this.createItem('barrel');
+        this.createMiniMap();
 
-      this.network.init();
+        this.network.init();
 
 
         eventSystem().on('network.handshake:after', (payload) => {

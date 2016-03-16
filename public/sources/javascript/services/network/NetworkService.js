@@ -7,7 +7,7 @@ export default class NetworkService {
         this.teamManager = $container.TeamManager;
         this.socket = io();
 
-        this.waitForHandshake = function(){
+        this.waitForHandshake = function () {
 
         };
 
@@ -42,6 +42,7 @@ export default class NetworkService {
     registerEvent(event, callback) {
         this.socket.on(event, callback.bind(this));
     }
+
     /* Convenience Functions */
 
     /* Send Functions */
@@ -78,6 +79,7 @@ export default class NetworkService {
         console.log('sendDamage', payload);
         this.broadcast('PlayerDamageEvent', payload);
     }
+
     /* Send Functions */
 
     /* Receive Functions */
@@ -102,7 +104,7 @@ export default class NetworkService {
         player.setDirection(event.direction);
         player.updateName();
 
-        if(event.moving) {
+        if (event.moving) {
             player.walkAnimation();
         } else {
             player.animations.stop();
@@ -125,6 +127,7 @@ export default class NetworkService {
 
         player.setHealth(event.health);
     }
+
     /* Receive Functions */
 
 }
