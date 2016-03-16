@@ -42,10 +42,6 @@ export default class NetworkService {
     registerEvent(event, callback) {
         this.socket.on(event, callback.bind(this));
     }
-
-    debug(message, data = '') {
-        console.log('[NetworkService]', message, data);
-    }
     /* Convenience Functions */
 
     /* Send Functions */
@@ -57,7 +53,7 @@ export default class NetworkService {
             direction: player.direction
         };
 
-        this.debug('sendPosition', payload);
+        console.log('sendPosition', payload);
         this.broadcast('PlayerPositionEvent', payload);
     }
 
@@ -67,7 +63,7 @@ export default class NetworkService {
             direction: player.direction
         };
 
-        this.debug('sendShoot', payload);
+        console.log('sendShoot', payload);
         this.broadcast('PlayerShootEvent', payload);
     }
 
@@ -78,14 +74,14 @@ export default class NetworkService {
             damage: damage
         };
 
-        this.debug('sendDamage', payload);
+        console.log('sendDamage', payload);
         this.broadcast('PlayerDamageEvent', payload);
     }
     /* Send Functions */
 
     /* Receive Functions */
     onPlayerHandshake(networkPlayer) {
-        this.debug('onPlayerHandshake', networkPlayer);
+        console.log('onPlayerHandshake', networkPlayer);
 
         const player = this.teamManager.allPlayers()[networkPlayer.slot];
         this.teamManager.hero = player;
@@ -93,7 +89,7 @@ export default class NetworkService {
     }
 
     onPlayerPosition(event) {
-        this.debug('onPlayerPosition', event);
+        console.log('onPlayerPosition', event);
 
         const player = this.teamManager.findPlayer(event.player);
         player.x = event.x;
@@ -104,7 +100,7 @@ export default class NetworkService {
     }
 
     onPlayerShoot(event) {
-        this.debug('onPlayerShoot', event);
+        console.log('onPlayerShoot', event);
 
         const player = this.teamManager.findPlayer(event.player);
 
@@ -113,7 +109,7 @@ export default class NetworkService {
     }
 
     onPlayerDamage(event) {
-        this.debug('onPlayerDamage', event);
+        console.log('onPlayerDamage', event);
 
         const player = this.teamManager.findPlayer(event.player);
 

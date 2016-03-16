@@ -1,11 +1,11 @@
 import direction from './../objects/values/direction';
 
 export default class InputService {
-    constructor(game) {
+
+    constructor(game, $container) {
         this.game = game;
-
+        this.network = $container.NetworkService;
         this.inputs = {};
-
     }
 
     cursorKeys() {
@@ -52,7 +52,8 @@ export default class InputService {
             player.moveToDirection(direction.RIGHT);
         } else {
             player.stopMoving();
-
+            this.network.sendPosition(player);
         }
     }
+
 }

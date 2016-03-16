@@ -20,7 +20,6 @@ export default class Updater {
         this.playerGroup = this.objects.get('playerGroup');
     }
 
-
     run() {
 
         this.readObjects();
