@@ -16,8 +16,8 @@ export default class Bullet extends Sprite {
         this.team = team;
     }
 
-    setShooter(player) {
-        this.player = player;
+    setShooter(shooter) {
+        this.shooter = shooter;
     }
 
     killBullet() {

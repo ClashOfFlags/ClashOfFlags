@@ -20,6 +20,10 @@ export default class Updater {
         this.playerGroup = this.objects.get('playerGroup');
     }
 
+    isHero(player) {
+        return player === this.player;
+    }
+
     run() {
 
         this.readObjects();
@@ -159,6 +163,10 @@ export default class Updater {
         }
 
         player.damage(bullet.power);
+
+        if(this.isHero(bullet.shooter)) {
+            this.network.sendDamage(player, bullet.power);
+        }
     }
 
     playerCollectsFlag(player, flag) {
