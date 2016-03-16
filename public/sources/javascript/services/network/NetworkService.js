@@ -82,11 +82,14 @@ export default class NetworkService {
 
     /* Receive Functions */
     onPlayerHandshake(networkPlayer) {
-        console.log('onPlayerHandshake', networkPlayer);
+        eventSystem().emit('network.handshake:before', networkPlayer);
 
         const player = this.teamManager.allPlayers()[networkPlayer.slot];
         this.teamManager.hero = player;
-        this.waitForHandshake(player);
+
+        eventSystem().emit('network.handshake:after', {
+            hero: player
+        });
     }
 
     onPlayerPosition(event) {

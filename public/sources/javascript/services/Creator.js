@@ -14,26 +14,28 @@ export default class Creator {
         this.network = $container.NetworkService;
         this.playerFactory = this.$container.PlayerFactory;
         this.teamManager = $container.TeamManager;
-
     }
 
     run() {
 
-        this.createMap();
-        this.createTorchs();
-        this.createPlayerGroup();
-        this.createTeams();
-        this.createFlags();
-        this.createItem('barrel');
-        this.createMiniMap();
-        this.network.connect();
+      this.createMap();
+      this.createTorchs();
+      this.createPlayerGroup();
+      this.createTeams();
+      this.createFlags();
+      this.createItem('barrel');
+      this.createMiniMap();
 
-        this.network.waitForHandshake = (hero)=> {
-            this.player = hero;
+      this.network.init();
+
+
+        eventSystem().on('network.handshake:after', (payload) => {
+            this.player = payload.hero;
             this.game.camera.follow(this.player);
-            this.objects.set('hero', hero);
+            this.objects.set('hero', payload.hero);
             this.createControls();
-        }
+
+        });
     }
 
 

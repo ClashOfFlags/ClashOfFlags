@@ -11,7 +11,7 @@ export default class GameState extends State {
         this.preloader = $container.Preloader;
         this.creator = $container.Creator;
         this.updater = $container.Updater;
-        
+
         window.clashOfFlags = this; // Publish GameState to window, Vue App needs to access pause() and unpause()
     }
 
@@ -20,7 +20,7 @@ export default class GameState extends State {
     }
 
     create() {
-      this.initPauseState();
+        this.initPauseState();
         this.creator.run();
     }
 

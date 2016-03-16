@@ -106,6 +106,12 @@ export default class Player extends Sprite {
                 return false;
             }
 
+        eventSystem().emit('player.change_direction:before', {
+            player: this
+        });
+
+        this.direction = newDirection;
+        this.resetVelocity();
             this.setDirection(newDirection);
             this.resetVelocity();
 
@@ -126,6 +132,11 @@ export default class Player extends Sprite {
 
             this.walkAnimation();
         }
+        eventSystem().emit('player.change_direction:after', {
+            player: this
+        });
+
+        return true;
     }
 
     isFacingDirection(direction, isMoving) {
@@ -145,14 +156,25 @@ export default class Player extends Sprite {
         return this.body.velocity.x !== 0 || this.body.velocity.y !== 0;
     }
 
+
     stopMoving() {
         if (this.isFacingDirection(this.direction, false)) {
             return false;
         }
 
+        eventSystem().emit('player.stop_moving:before', {
+            player: this
+        });
+
         this.resetVelocity();
         this.animations.stop();
         this.frame = 0;
+
+        eventSystem().emit('player.stop_moving:after', {
+            player: this
+        });
+
+        return true;
     }
 
     resetVelocity() {
