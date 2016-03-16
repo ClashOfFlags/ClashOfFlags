@@ -25,7 +25,7 @@ export default class Player extends Sprite {
     }
 
     isVisible() {
-        return this.alpha === 1;
+        return this.visible && this.alpha === 1;
     }
 
     canShoot() {
@@ -150,15 +150,24 @@ export default class Player extends Sprite {
 
     }
 
-    hitPlayer(value) {
-        if (this.alpha === 1) {
-            this.health -= value;
-            if (this.health > 0) {
-                this.healthbar.scale.x = this.health / 100;
-            } else {
-                new Splatter(this.game, this.x, this.y, 'green_marine_dead');
-                this.dead();
-            }
+    damage(damage) {
+        if(this.isDead() || !this.isVisible()){
+            return;
+        }
+
+        const newHealth = this.health - damage;
+
+        this.setHealth(newHealth);
+    }
+
+    setHealth(health) {
+        this.health = health;
+
+        if(this.health > 0) {
+            this.healthbar.scale.x = this.health / 100;
+        } else {
+            new Splatter(this.game, this.x, this.y, 'green_marine_dead');
+            this.dead();
         }
     }
 

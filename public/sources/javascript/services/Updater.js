@@ -36,7 +36,7 @@ export default class Updater {
     updatePlayerPosition() {
         this.inputs.applyToPlayer(this.player);
 
-        if(this.player.isMoving()) {
+        if (this.player.isMoving()) {
             this.network.sendPosition(this.player);
         }
     }
@@ -99,7 +99,7 @@ export default class Updater {
             if (this.game.physics.arcade.distanceBetween(barrel, player) < barrel.barrel.maxRange) {
                 var damage = Math.round((1 - (this.game.physics.arcade.distanceBetween(barrel, player) - 90) / barrel.barrel.maxRange) * barrel.barrel.maxDamage);
                 console.log(damage);
-                player.hitPlayer(damage);
+                player.damage(damage);
             }
         }
 
@@ -138,23 +138,28 @@ export default class Updater {
     }
 
     bulletHitPlayer(bullet, player) {
-        if (player !== this.player && player.visible === true && player.alpha === 1) {
-            this.createExplosionAnimation({
-                x: bullet.x,
-                y: bullet.y,
-                key: 'explosion',
-                frameName: 'fireball_hit_000',
-                frameNameMax: 9,
-                frameSpeed: 100,
-                repeat: false,
-                scale: 1
-            });
-            bullet.kill();
-
-            if (bullet.team.name !== player.team.name) {
-                player.hitPlayer(bullet.power);
-            }
+        if (player === this.player || !player.isVisible()) {
+            return;
         }
+
+        this.createExplosionAnimation({
+            x: bullet.x,
+            y: bullet.y,
+            key: 'explosion',
+            frameName: 'fireball_hit_000',
+            frameNameMax: 9,
+            frameSpeed: 100,
+            repeat: false,
+            scale: 1
+        });
+
+        bullet.kill();
+
+        if(bullet.team.name === player.team.name) {
+            return;
+        }
+
+        player.damage(bullet.power);
     }
 
     playerCollectsFlag(player, flag) {

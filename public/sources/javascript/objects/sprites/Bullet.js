@@ -1,23 +1,27 @@
 import Sprite from './Sprite';
 import config from '../../setup/config';
 
+export default class Bullet extends Sprite {
 
-export default class Bullet extends Sprite{
-  boot() {
-    this.enableArcadePhysics();
-    this.checkWorldBounds = true;
-    this.outOfBoundsKill = true;
-    this.power = config.game.weapons[this.key].power;
+    boot() {
+        this.enableArcadePhysics();
+        this.checkWorldBounds = true;
+        this.outOfBoundsKill = true;
+        this.power = config.game.weapons[this.key].power;
 
-    this.game.time.events.add(Phaser.Timer.SECOND * config.game.weapons[this.key].lifetime, this.killBullet, this);
-  }
+        this.game.time.events.add(Phaser.Timer.SECOND * config.game.weapons[this.key].lifetime, this.killBullet, this);
+    }
 
-  setTeam(team) {
-    this.team = team;
-  }
+    setTeam(team) {
+        this.team = team;
+    }
 
-  killBullet() {
-    this.kill();
-  }
+    setShooter(player) {
+        this.player = player;
+    }
+
+    killBullet() {
+        this.kill();
+    }
 
 }

@@ -117,7 +117,7 @@ export default class NetworkService {
 
         const player = this.teamManager.findPlayer(event.player);
 
-        player.hitPlayer(event.damage);
+        player.setHealth(event.health);
     }
     /* Receive Functions */
 
