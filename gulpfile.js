@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 /********************************************************
  *  Options
  *******************************************************/
@@ -47,7 +49,7 @@ gulp.task('watch', function () {
         ui: false,
         ghostMode: false,
         proxy: {
-            target: 'localhost:8000',
+            target: 'localhost:' + process.env.PORT,
             ws: true
         }
     });
