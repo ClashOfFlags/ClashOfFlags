@@ -42,6 +42,12 @@ module.exports = class Player {
                 otherPlayer.sendShoot(this, data);
             });
         });
+
+        this.socket.on('PlayerHitEvent', data => {
+            this.forOtherPlayers(otherPlayer => {
+                otherPlayer.emit('PlayerHitEvent', data);
+            });
+        });
     }
 
     emit(event, data) {
@@ -78,6 +84,16 @@ module.exports = class Player {
         this.lobby.roomSlots[this.roomSlot] = null;
         console.log('Emptied room slot ' + this.roomSlot + ' good bye player ' + this.id);
         this.lobby.disconnect(this);
+    }
+
+    forOtherPlayers(callback) {
+        this.lobby.players.forEach(otherPlayer => {
+            if(otherPlayer.id === this.id) {
+                return;
+            }
+
+            return callback(otherPlayer);
+        });
     }
 
 }

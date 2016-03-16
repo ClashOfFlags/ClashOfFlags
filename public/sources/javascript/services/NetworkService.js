@@ -35,6 +35,10 @@ export default class NetworkService {
             this.onPlayerHandshake(player);
         });
 
+        this.socket.on('PlayerHitEvent', data => {
+            this.onPlayerHit(data);
+        });
+
         this.connect();
     }
 
@@ -82,6 +86,14 @@ export default class NetworkService {
 
     }
 
+    onPlayerHit(data) {
+        const player = this.players[data.player];
+        console.log(player, data);
+        if(player) {
+            player.hitPlayer(data.damage);
+        }
+    }
+
     sendPosition(player) {
         var position = {
             direction:player.direction,
@@ -103,6 +115,15 @@ export default class NetworkService {
 
 
         this.socket.emit('PlayerShootEvent', data);
+    }
+
+    sendHit(player, damage) {
+        const payload = {
+            player: player.networkId,
+            damage: damage
+        };
+        console.log(payload);
+        this.socket.emit('PlayerHitEvent', payload);
     }
 
 }
