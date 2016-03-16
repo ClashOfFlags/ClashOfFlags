@@ -93,16 +93,10 @@ export default class Updater {
 
     for (var i = 1; i < Object.keys(this.teamManager.allPlayers()).length + 1; i++) {
       var player = this.teamManager.allPlayers()[i];
-      if (this.game.physics.arcade.distanceBetween(barrel,player) < barrel.barrel.range1.value){
-        if (this.game.physics.arcade.distanceBetween(barrel,player) < barrel.barrel.range2.value){
-          if (this.game.physics.arcade.distanceBetween(barrel,player) < barrel.barrel.range3.value){
-            player.hitPlayer(barrel.barrel.range3.power);
-          }else {
-            player.hitPlayer(barrel.barrel.range2.power);
-          }
-        }else {
-          player.hitPlayer(barrel.barrel.range1.power);
-        }
+      if (this.game.physics.arcade.distanceBetween(barrel,player) < barrel.barrel.maxRange){
+        var damage = Math.round((1 - (this.game.physics.arcade.distanceBetween(barrel,player) - 90) / barrel.barrel.maxRange) * barrel.barrel.maxDamage);
+        console.log(damage);
+        player.hitPlayer(damage);
       }
     }
 
