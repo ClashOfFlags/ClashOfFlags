@@ -17,7 +17,7 @@ export default{
           }
         },
         splatter: {
-          lifetime: 5
+          lifetime: 10
         },
         player: {
           waitForRespawn: 3,
