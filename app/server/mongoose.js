@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
+const connectionUrl = process.env.MONGO_CONNECTION_URL;
 
 module.exports = new Promise((resolve, reject) => {
-    mongoose.connect('mongodb://localhost/clash-of-flags', {
-        user: 'clash-of-flags',
-        pass: 'clash-of-flags'
-    });
+    mongoose.connect(connectionUrl);
 
     const db = mongoose.connection;
 
