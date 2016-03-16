@@ -26,7 +26,7 @@ export default class Weapon {
         this.nextShotAt = Date.now() + config.game.weapons.fireball.shotDelay;
 
         this.player.loadTexture('player_shoot', 0, true);
-        this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.player.changeSpriteToNormal, this);
+        this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.player.stopShooting, this.player);
 
         var bullet = new Bullet(this.game, this.player.body.center.x, this.player.body.center.y, this.weapon);
         bullet.setTeam(this.player.team);

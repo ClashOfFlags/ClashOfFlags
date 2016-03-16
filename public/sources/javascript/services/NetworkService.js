@@ -50,7 +50,8 @@ export default class NetworkService {
             player: player.number,
             x: player.x,
             y: player.y,
-            direction: player.direction
+            direction: player.direction,
+            moving: player.isMoving()
         };
 
         console.log('sendPosition', payload);
@@ -97,6 +98,12 @@ export default class NetworkService {
 
         player.setDirection(event.direction);
         player.updateName();
+
+        if(event.moving) {
+            player.walkAnimation();
+        } else {
+            player.animations.stop();
+        }
     }
 
     onPlayerShoot(event) {

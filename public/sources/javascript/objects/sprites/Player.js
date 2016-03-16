@@ -44,8 +44,20 @@ export default class Player extends Sprite {
         this.weapon.shoot(overwriteDirection);
     }
 
+    walkAnimation() {
+        this.animations.play('walk');
+    }
+
+    stopShooting() {
+        this.changeSpriteToNormal();
+
+        if(this.isMoving()) {
+            this.walkAnimation();
+        }
+    }
+
     changeSpriteToNormal() {
-        this.player.loadTexture('player', 0, true);
+        this.loadTexture('player', 0, true);
     }
 
     updateName() {
@@ -112,7 +124,7 @@ export default class Player extends Sprite {
                     break;
             }
 
-            this.animations.play('walk');
+            this.walkAnimation();
         }
     }
 
@@ -132,7 +144,6 @@ export default class Player extends Sprite {
     isMoving() {
         return this.body.velocity.x !== 0 || this.body.velocity.y !== 0;
     }
-
 
     stopMoving() {
         if (this.isFacingDirection(this.direction, false)) {

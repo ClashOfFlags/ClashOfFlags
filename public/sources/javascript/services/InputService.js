@@ -51,11 +51,13 @@ export default class InputService {
         else if (this.cursorKeys().right.isDown || this.wasd().right.isDown) {
             player.moveToDirection(direction.RIGHT);
         } else {
-            if(player.isMoving()) {
-                this.network.sendPosition(player);
-            }
+            const wasMoving = player.isMoving();
 
             player.stopMoving();
+
+            if(wasMoving) {
+                this.network.sendPosition(player);
+            }
         }
     }
 
