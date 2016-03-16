@@ -24,18 +24,8 @@ export default{
           invisible: 3
         },
         barrel: {
-          range1: {
-            value: 300,
-            power: 20
-          },
-          range2: {
-            value: 200,
-            power: 50
-          },
-          range3: {
-            value: 150,
-            power: 100
-          }
+          maxRange: 300,
+          maxDamage: 100
         }
     }
 }
