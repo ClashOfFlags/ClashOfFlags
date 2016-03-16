@@ -20,33 +20,8 @@ module.exports = class Player {
             this.disconnect();
         });
 
-        this.socket.on('PlayerPositionEvent', position => {
-            this.lobby.players.forEach(otherPlayer => {
-                if (otherPlayer.id === this.id) {
-                    return;
-                }
-
-                otherPlayer.sendPosition(this, position);
-            });
-        });
-
-        this.socket.on('PlayerShootEvent', data => {
-            console.log('shoot', data);
-
-            this.lobby.players.forEach(otherPlayer => {
-                if (otherPlayer.id === this.id) {
-                    return;
-                }
-
-
-                otherPlayer.sendShoot(this, data);
-            });
-        });
-
-        this.socket.on('PlayerHitEvent', data => {
-            this.forOtherPlayers(otherPlayer => {
-                otherPlayer.emit('PlayerHitEvent', data);
-            });
+        this.socket.on('broadcast', payload => {
+            this.socket.broadcast.emit(payload.event, payload.data);
         });
     }
 
@@ -59,41 +34,13 @@ module.exports = class Player {
     }
 
     removePlayer(player) {
-
         this.emit('PlayerDisconnectEvent', {id: player.id, slot: player.roomSlot});
-
-    }
-
-    sendPosition(player, position) {
-        this.emit('PlayerPositionEvent', {
-            id: player.id,
-            position: position
-        });
-    }
-
-    sendShoot(player, data) {
-        data.id = player.id;
-        data.slot = player.roomSlot;
-
-        console.log('send shoot', data);
-
-        this.emit('PlayerShootEvent', data);
     }
 
     disconnect() {
         this.lobby.roomSlots[this.roomSlot] = null;
         console.log('Emptied room slot ' + this.roomSlot + ' good bye player ' + this.id);
         this.lobby.disconnect(this);
-    }
-
-    forOtherPlayers(callback) {
-        this.lobby.players.forEach(otherPlayer => {
-            if(otherPlayer.id === this.id) {
-                return;
-            }
-
-            return callback(otherPlayer);
-        });
     }
 
 }

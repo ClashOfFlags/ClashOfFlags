@@ -16,14 +16,32 @@ export default class Player extends Sprite {
         this.carryingFlag = false;
     }
 
+    isAlive() {
+        return this.health > 0;
+    }
+
+    isDead() {
+        return this.health === 0;
+    }
+
+    isVisible() {
+        return this.alpha === 1;
+    }
+
+    canShoot() {
+        return this.isAlive() && this.isVisible();
+    }
+
     collect(item) {
         item.kill();
     }
 
     shoot(overwriteDirection) {
-      if(this.alpha === 1){
+        if (!this.canShoot()) {
+            return;
+        }
+
         this.weapon.shoot(overwriteDirection);
-      }
     }
 
     changeSpriteToNormal() {
@@ -36,8 +54,8 @@ export default class Player extends Sprite {
     }
 
     updateHealthbar() {
-      this.healthbar.x = this.x - this.width / 2;
-      this.healthbar.y = this.y - this.height * 1.5;
+        this.healthbar.x = this.x - this.width / 2;
+        this.healthbar.y = this.y - this.height * 1.5;
     }
 
     getFlag() {
@@ -48,78 +66,80 @@ export default class Player extends Sprite {
         this.carryingFlag = false;
     }
 
-    moveToDirection(newDirection) {
-      if(this.visible){
-        this.updateName();
-        this.updateHealthbar();
-
-        if(this.isFacingDirection(newDirection, true)){
-            return false;
-        }
-
+    setDirection(newDirection) {
         this.direction = newDirection;
-        this.resetVelocity();
 
         switch (this.direction) {
             case direction.TOP:
-            {
-                this.body.velocity.y -= this.speed;
-
                 this.angle = -90;
                 break;
-            }
             case direction.BOTTOM:
-            {
-                this.body.velocity.y += this.speed;
                 this.angle = 90;
                 break;
-            }
-
             case direction.LEFT:
-            {
                 this.angle = 180;
-                this.body.velocity.x -= this.speed;
                 break;
-            }
             case direction.RIGHT:
-            {
-                this.body.velocity.x += this.speed;
                 this.angle = 0;
                 break;
-            }
         }
+    }
 
-        console.log('send moving');
+    moveToDirection(newDirection) {
+        if (this.visible) {
+            this.updateName();
+            this.updateHealthbar();
 
-        this.animations.play('walk');
-      }
+            if (this.isFacingDirection(newDirection, true)) {
+                return false;
+            }
+
+            this.setDirection(newDirection);
+            this.resetVelocity();
+
+            switch (this.direction) {
+                case direction.TOP:
+                    this.body.velocity.y -= this.speed;
+                    break;
+                case direction.BOTTOM:
+                    this.body.velocity.y += this.speed;
+                    break;
+                case direction.LEFT:
+                    this.body.velocity.x -= this.speed;
+                    break;
+                case direction.RIGHT:
+                    this.body.velocity.x += this.speed;
+                    break;
+            }
+
+            this.animations.play('walk');
+        }
     }
 
     isFacingDirection(direction, isMoving) {
 
-        if(direction !== this.direction){
+        if (direction !== this.direction) {
             return false;
         }
 
-        if(isMoving !== this.isMoving()){
+        if (isMoving !== this.isMoving()) {
             return false;
         }
 
         return true;
     }
 
-    isMoving(){
+    isMoving() {
         return this.body.velocity.x !== 0 || this.body.velocity.y !== 0;
     }
 
 
     stopMoving() {
-        if(this.isFacingDirection(this.direction, false)){
+        if (this.isFacingDirection(this.direction, false)) {
             return false;
         }
 
         this.resetVelocity();
-
         this.animations.stop();
         this.frame = 0;
     }
@@ -131,38 +151,38 @@ export default class Player extends Sprite {
     }
 
     hitPlayer(value) {
-      if(this.alpha === 1){
-        this.health -= value;
-        if(this.health > 0){
-          this.healthbar.scale.x = this.health / 100;
-        }else{
-          new Splatter(this.game, this.x, this.y, 'green_marine_dead');
-          this.dead();
+        if (this.alpha === 1) {
+            this.health -= value;
+            if (this.health > 0) {
+                this.healthbar.scale.x = this.health / 100;
+            } else {
+                new Splatter(this.game, this.x, this.y, 'green_marine_dead');
+                this.dead();
+            }
         }
-      }
     }
 
     dead() {
-      this.visible = false;
-      this.name.visible = false;
-      this.healthbar.visible = false;
-      this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
+        this.visible = false;
+        this.name.visible = false;
+        this.healthbar.visible = false;
+        this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
     }
 
     resetPlayer() {
-      this.reset(this.spawnPos.x, this.spawnPos.y);
-      this.visible = true;
-      this.name.visible = true;
-      this.healthbar.visible = true;
-      this.health = 100;
-      this.healthbar.scale.x = 1;
-      this.updateName();
-      this.updateHealthbar();
-      this.alpha = 0.2;
-      this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.invisible, this.endInvisible, this);
+        this.reset(this.spawnPos.x, this.spawnPos.y);
+        this.visible = true;
+        this.name.visible = true;
+        this.healthbar.visible = true;
+        this.health = 100;
+        this.healthbar.scale.x = 1;
+        this.updateName();
+        this.updateHealthbar();
+        this.alpha = 0.2;
+        this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.invisible, this.endInvisible, this);
     }
 
     endInvisible() {
-      this.alpha = 1;
+        this.alpha = 1;
     }
 }

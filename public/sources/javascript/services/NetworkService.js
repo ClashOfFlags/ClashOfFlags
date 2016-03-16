@@ -6,124 +6,119 @@ export default class NetworkService {
         this.playerFactory = $container.PlayerFactory;
         this.teamManager = $container.TeamManager;
         this.socket = io();
-        this.player = null;
-        this.players = {}; // workaround, should not be here I guess
 
         this.waitForHandshake = function(){
 
-        }
+        };
+
+        this.registerEvents();
     }
 
-    init() {
-        this.socket.on('PlayerConnectEvent', player => {
-            this.onPlayerConnect(player);
-        });
-
-        this.socket.on('PlayerDisconnectEvent', player => {
-            this.onPlayerDisconnect(player);
-        });
-
-        this.socket.on('PlayerPositionEvent', player => {
-            this.onPlayerPosition(player);
-        });
-
-        this.socket.on('PlayerShootEvent', data => {
-            this.onPlayerShoot(data);
-        });
-
-        this.socket.on('PlayerHandshakeEvent', player => {
-            this.onPlayerHandshake(player);
-        });
-
-        this.socket.on('PlayerHitEvent', data => {
-            this.onPlayerHit(data);
-        });
-
-        this.connect();
+    registerEvents() {
+        this.registerEvent('PlayerHandshakeEvent', this.onPlayerHandshake);
+        this.registerEvent('PlayerPositionEvent', this.onPlayerPosition);
+        this.registerEvent('PlayerShootEvent', this.onPlayerShoot);
+        this.registerEvent('PlayerDamageEvent', this.onPlayerDamage);
     }
 
     connect() {
-        console.log('connect network');
-        this.socket.emit('PlayerConnectEvent');
+        this.emit('PlayerConnectEvent');
     }
 
+    /* Convenience Functions */
+    emit(event, data) {
+        this.socket.emit(event, data);
+    }
+
+    broadcast(event, data) {
+        const payload = {
+            event: event,
+            data: data
+        };
+
+        this.socket.emit('broadcast', payload);
+    }
+
+    registerEvent(event, callback) {
+        this.socket.on(event, callback.bind(this));
+    }
+
+    debug(message, data = '') {
+        console.log('[NetworkService]', message, data);
+    }
+    /* Convenience Functions */
+
+    /* Send Functions */
+    sendPosition(player) {
+        const payload = {
+            player: player.number,
+            x: player.x,
+            y: player.y,
+            direction: player.direction
+        };
+
+        this.debug('sendPosition', payload);
+        this.broadcast('PlayerPositionEvent', payload);
+    }
+
+    sendShoot(player) {
+        const payload = {
+            player: player.number,
+            direction: player.direction
+        };
+
+        this.debug('sendShoot', payload);
+        this.broadcast('PlayerShootEvent', payload);
+    }
+
+    sendDamage(player, damage) {
+        const payload = {
+            player: player.number,
+            health: player.health,
+            damage: damage
+        };
+
+        this.debug('sendDamage', payload);
+        this.broadcast('PlayerDamageEvent', payload);
+    }
+    /* Send Functions */
+
+    /* Receive Functions */
     onPlayerHandshake(networkPlayer) {
+        this.debug('onPlayerHandshake', networkPlayer);
+
         const player = this.teamManager.allPlayers()[networkPlayer.slot];
         this.teamManager.hero = player;
         this.waitForHandshake(player);
     }
 
+    onPlayerPosition(event) {
+        this.debug('onPlayerPosition', event);
 
-    onPlayerConnect(networkPlayer) {
-        this.players[networkPlayer.id] = this.teamManager.allPlayers()[networkPlayer.slot];
+        const player = this.teamManager.findPlayer(event.player);
+        player.x = event.x;
+        player.y = event.y;
+
+        player.setDirection(event.direction);
+        player.updateName();
     }
 
-    onPlayerDisconnect(networkPlayer) {
-        const playerSprite = this.players[networkPlayer.id];
+    onPlayerShoot(event) {
+        this.debug('onPlayerShoot', event);
 
-        if (playerSprite) {
-            playerSprite.kill();
-            playerSprite.name.kill();
-        }
-    }
+        const player = this.teamManager.findPlayer(event.player);
 
-    onPlayerPosition(networkPlayer) {
-        console.log('move player', networkPlayer.id);
-
-        const playerSprite = this.players[networkPlayer.id];
-        playerSprite.x = networkPlayer.position.x;
-        playerSprite.y = networkPlayer.position.y;
-        //playerSprite.direction = networkPlayer.position.direction;
-
-        playerSprite.updateName();
-    }
-
-    onPlayerShoot(data) {
-        var player = this.teamManager.allPlayers()[data.slot];
-
-        console.log('shoot over network', data);
-        player.shoot(data.direction);
+        player.shoot(event.direction);
 
     }
 
-    onPlayerHit(data) {
-        const player = this.players[data.player];
-        console.log(player, data);
-        if(player) {
-            player.hitPlayer(data.damage);
-        }
+    onPlayerDamage(event) {
+        this.debug('onPlayerDamage', event);
+
+        const player = this.teamManager.findPlayer(event.player);
+
+        player.hitPlayer(event.damage);
     }
-
-    sendPosition(player) {
-        var position = {
-            direction:player.direction,
-            x: player.x,
-            y: player.y
-        };
-
-        this.socket.emit('PlayerPositionEvent', position);
-    }
-
-    sendShoot(player) {
-        var data = {
-            direction:player.direction,
-            x: player.x,
-            y: player.y
-        };
-
-        console.log('send shoot', data);
-
-
-        this.socket.emit('PlayerShootEvent', data);
-    }
-
-    sendHit(player, damage) {
-        const payload = {
-            player: player.networkId,
-            damage: damage
-        };
-        console.log(payload);
-        this.socket.emit('PlayerHitEvent', payload);
-    }
+    /* Receive Functions */
 
 }

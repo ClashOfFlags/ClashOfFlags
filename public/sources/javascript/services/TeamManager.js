@@ -10,9 +10,8 @@ export default class TeamManager {
         this.teams[team.name] = team;
     }
 
-
     findPlayer(number) {
-        //TODO: iterate through teams and search for player with the number number
+        return this.allPlayers()[number];
     }
 
     allPlayers() {

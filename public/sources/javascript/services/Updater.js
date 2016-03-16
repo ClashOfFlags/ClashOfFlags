@@ -35,7 +35,10 @@ export default class Updater {
 
     updatePlayerPosition() {
         this.inputs.applyToPlayer(this.player);
-        this.network.sendPosition(this.player);
+
+        if(this.player.isMoving()) {
+            this.network.sendPosition(this.player);
+        }
     }
 
     updateMiniMap() {

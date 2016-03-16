@@ -19,24 +19,22 @@ export default class Creator {
 
     run() {
 
-      this.createMap();
-      this.createTorchs();
-      this.createPlayerGroup();
-      this.createTeams();
-      this.createFlags();
-      this.createItem('barrel');
-      this.createMiniMap();
+        this.createMap();
+        this.createTorchs();
+        this.createPlayerGroup();
+        this.createTeams();
+        this.createFlags();
+        this.createItem('barrel');
+        this.createMiniMap();
+        this.network.connect();
 
-      this.network.init();
-
-      this.network.waitForHandshake = (hero)=> {
-          this.player = hero;
-          this.game.camera.follow(this.player);
-          this.objects.set('hero', hero);
-          this.createControls();
-      }
+        this.network.waitForHandshake = (hero)=> {
+            this.player = hero;
+            this.game.camera.follow(this.player);
+            this.objects.set('hero', hero);
+            this.createControls();
+        }
     }
-
 
 
     createMap() {
@@ -60,8 +58,8 @@ export default class Creator {
         this.map.setCollisionBetween(1, 2000, true, 'water');
 
         this.objects.set({
-          obstacleLayer: this.obstacleLayer,
-          waterLayer: this.waterLayer
+            obstacleLayer: this.obstacleLayer,
+            waterLayer: this.waterLayer
         })
     }
 
@@ -80,51 +78,51 @@ export default class Creator {
     }
 
     createItem(item) {
-      var group = this.game.add.group();
-      group.enableBody = true;
+        var group = this.game.add.group();
+        group.enableBody = true;
 
-      var result = this.objects.byType(item, 'objectsLayer');
-      result.forEach(function (element) {
-          var sprite = new Item(this.game, element.x, element.y, item);
-          sprite.anchor.setTo(0.5, 0.5);
-          group.add(sprite);
-      }, this);
+        var result = this.objects.byType(item, 'objectsLayer');
+        result.forEach(function (element) {
+            var sprite = new Item(this.game, element.x, element.y, item);
+            sprite.anchor.setTo(0.5, 0.5);
+            group.add(sprite);
+        }, this);
 
-      this.objects.set(item + 's', group);
+        this.objects.set(item + 's', group);
     }
 
     createMiniMap() {
-      this.map = this.objects.get('map');
-      this.miniMapSize = 2;
+        this.map = this.objects.get('map');
+        this.miniMapSize = 2;
 
-      var miniMapBmd = this.game.add.bitmapData();
+        var miniMapBmd = this.game.add.bitmapData();
 
-      for (var l = 0; l<this.map.layers.length; l++) {
-        for (var y = 0; y < this.map.height; y++) {
-          for (var x = 0; x < this.map.width; x++) {
-            var tile = this.map.getTile(x, y, l);
-            if (tile && this.map.layers[l].name == 'background') {
-              miniMapBmd.ctx.fillStyle = '#1D2A34';
-              miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
-             }else if (tile && this.map.layers[l].name == 'water') {
-              miniMapBmd.ctx.fillStyle = '#0000ff';
-              miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
-            }else if (tile && this.map.layers[l].name == 'obstacle') {
-               miniMapBmd.ctx.fillStyle = '#cccccc';
-               miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
-             }
-           }
-         }
-       }
-       this.miniMap = this.game.add.sprite(10,390, miniMapBmd);
-       this.miniMap.fixedToCamera = true;
+        for (var l = 0; l < this.map.layers.length; l++) {
+            for (var y = 0; y < this.map.height; y++) {
+                for (var x = 0; x < this.map.width; x++) {
+                    var tile = this.map.getTile(x, y, l);
+                    if (tile && this.map.layers[l].name == 'background') {
+                        miniMapBmd.ctx.fillStyle = '#1D2A34';
+                        miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
+                    } else if (tile && this.map.layers[l].name == 'water') {
+                        miniMapBmd.ctx.fillStyle = '#0000ff';
+                        miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
+                    } else if (tile && this.map.layers[l].name == 'obstacle') {
+                        miniMapBmd.ctx.fillStyle = '#cccccc';
+                        miniMapBmd.ctx.fillRect(x * this.miniMapSize, y * this.miniMapSize, this.miniMapSize, this.miniMapSize);
+                    }
+                }
+            }
+        }
+        this.miniMap = this.game.add.sprite(10, 390, miniMapBmd);
+        this.miniMap.fixedToCamera = true;
 
-       var miniMapOverlayBmd = this.game.add.bitmapData();
-       this.miniMapOverlay = this.game.add.sprite(10,390, miniMapOverlayBmd);
-       this.miniMapOverlay.fixedToCamera = true;
+        var miniMapOverlayBmd = this.game.add.bitmapData();
+        this.miniMapOverlay = this.game.add.sprite(10, 390, miniMapOverlayBmd);
+        this.miniMapOverlay.fixedToCamera = true;
 
-       this.objects.set('miniMapOverlay', miniMapOverlayBmd);
-       this.objects.set('miniMapSize', this.miniMapSize);
+        this.objects.set('miniMapOverlay', miniMapOverlayBmd);
+        this.objects.set('miniMapSize', this.miniMapSize);
     }
 
 
@@ -178,12 +176,12 @@ export default class Creator {
             var flags = this.objects.byProperties({'type': 'flag_' + teamName}, 'objectsLayer');
 
             flags.forEach(function (element) {
-               var flag = new Flag(this.game, element.x, element.y, 'flag');
+                var flag = new Flag(this.game, element.x, element.y, 'flag');
                 flag.setTeam(teamName);
                 flagGroup.add(flag);
             }, this);
 
-            this.objects.set('flags.'+teamName, flagGroup);
+            this.objects.set('flags.' + teamName, flagGroup);
         }
     }
 
