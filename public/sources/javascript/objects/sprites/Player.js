@@ -2,6 +2,7 @@ import Sprite from './Sprite';
 import direction from './../values/direction';
 import Weapon from './../values/Weapon';
 import config from '../../setup/config';
+import Splatter from './Splatter';
 
 export default class Player extends Sprite {
     boot() {
@@ -124,6 +125,16 @@ export default class Player extends Sprite {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
 
+    }
+
+    hitPlayer(value) {
+      this.health -= value;
+      if(this.health > 0){
+        this.healthbar.scale.x = this.health / 100;
+      }else{
+        new Splatter(this.game, this.x, this.y, 'green_marine_dead');
+        this.dead();
+      }
     }
 
     dead() {

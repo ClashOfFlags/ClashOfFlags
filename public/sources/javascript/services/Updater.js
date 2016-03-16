@@ -1,5 +1,3 @@
-import Splatter from './../objects/sprites/Splatter';
-
 export default class Updater {
 
   constructor(game, $container) {
@@ -92,6 +90,22 @@ export default class Updater {
       repeat: false,
       scale: 0.4
     });
+
+    for (var i = 1; i < Object.keys(this.teamManager.allPlayers()).length + 1; i++) {
+      var player = this.teamManager.allPlayers()[i];
+      if (this.game.physics.arcade.distanceBetween(barrel,player) < barrel.barrel.range1.value){
+        if (this.game.physics.arcade.distanceBetween(barrel,player) < barrel.barrel.range2.value){
+          if (this.game.physics.arcade.distanceBetween(barrel,player) < barrel.barrel.range3.value){
+            player.hitPlayer(barrel.barrel.range3.power);
+          }else {
+            player.hitPlayer(barrel.barrel.range2.power);
+          }
+        }else {
+          player.hitPlayer(barrel.barrel.range1.power);
+        }
+      }
+    }
+
     barrel.kill();
   }
 
@@ -141,14 +155,8 @@ export default class Updater {
       bullet.kill();
 
       if(bullet.team.name !== player.team.name){
-        player.health -= 20;
-        if(player.health > 0){
-          player.healthbar.scale.x = player.health / 100;
-        }else{
-          new Splatter(this.game, player.x, player.y, 'green_marine_dead');
-          player.dead();
-        }
-      }      
+        player.hitPlayer(bullet.power);
+      }
     }
   }
 

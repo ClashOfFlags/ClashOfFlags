@@ -1,6 +1,7 @@
 import Team from './../objects/values/Team';
 import config from './../setup/config';
 import Flag from './../objects/sprites/Flag';
+import Item from './../objects/sprites/Item';
 
 export default class Creator {
 
@@ -17,7 +18,7 @@ export default class Creator {
     }
 
     run() {
-      
+
       this.createMap();
       this.createTorchs();
       this.createPlayerGroup();
@@ -84,8 +85,9 @@ export default class Creator {
 
       var result = this.objects.byType(item, 'objectsLayer');
       result.forEach(function (element) {
-          var sprite = group.create(element.x, element.y, item);
+          var sprite = new Item(this.game, element.x, element.y, item);
           sprite.anchor.setTo(0.5, 0.5);
+          group.add(sprite);
       }, this);
 
       this.objects.set(item + 's', group);

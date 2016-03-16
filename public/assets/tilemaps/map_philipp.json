@@ -58,6 +58,11 @@
                      "player":"6",
                      "team":"blue"
                     },
+                 "propertytypes":
+                    {
+                     "player":"string",
+                     "team":"string"
+                    },
                  "rotation":0,
                  "type":"spawn",
                  "visible":true,
@@ -73,6 +78,11 @@
                     {
                      "player":"7",
                      "team":"blue"
+                    },
+                 "propertytypes":
+                    {
+                     "player":"string",
+                     "team":"string"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -90,6 +100,11 @@
                      "player":"8",
                      "team":"blue"
                     },
+                 "propertytypes":
+                    {
+                     "player":"string",
+                     "team":"string"
+                    },
                  "rotation":0,
                  "type":"spawn",
                  "visible":true,
@@ -105,6 +120,11 @@
                     {
                      "player":"9",
                      "team":"blue"
+                    },
+                 "propertytypes":
+                    {
+                     "player":"string",
+                     "team":"string"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -122,6 +142,11 @@
                      "player":"10",
                      "team":"blue"
                     },
+                 "propertytypes":
+                    {
+                     "player":"string",
+                     "team":"string"
+                    },
                  "rotation":0,
                  "type":"spawn",
                  "visible":true,
@@ -137,6 +162,11 @@
                     {
                      "player":"1",
                      "team":"red"
+                    },
+                 "propertytypes":
+                    {
+                     "player":"string",
+                     "team":"string"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -154,6 +184,11 @@
                      "player":"2",
                      "team":"red"
                     },
+                 "propertytypes":
+                    {
+                     "player":"string",
+                     "team":"string"
+                    },
                  "rotation":0,
                  "type":"spawn",
                  "visible":true,
@@ -169,6 +204,11 @@
                     {
                      "player":"3",
                      "team":"red"
+                    },
+                 "propertytypes":
+                    {
+                     "player":"string",
+                     "team":"string"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -186,6 +226,11 @@
                      "player":"4",
                      "team":"red"
                     },
+                 "propertytypes":
+                    {
+                     "player":"string",
+                     "team":"string"
+                    },
                  "rotation":0,
                  "type":"spawn",
                  "visible":true,
@@ -201,6 +246,11 @@
                     {
                      "player":"5",
                      "team":"red"
+                    },
+                 "propertytypes":
+                    {
+                     "player":"string",
+                     "team":"string"
                     },
                  "rotation":0,
                  "type":"spawn",
@@ -218,6 +268,10 @@
                     {
                      "type":"flag_blue"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"flag",
                  "visible":true,
@@ -233,6 +287,10 @@
                  "properties":
                     {
                      "type":"flag_blue"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"flag",
@@ -250,6 +308,10 @@
                     {
                      "type":"flag_blue"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"flag",
                  "visible":true,
@@ -265,6 +327,10 @@
                  "properties":
                     {
                      "type":"flag_red"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"flag",
@@ -282,6 +348,10 @@
                     {
                      "type":"flag_red"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"flag",
                  "visible":true,
@@ -297,6 +367,10 @@
                  "properties":
                     {
                      "type":"flag_red"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"flag",
@@ -314,6 +388,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -329,6 +407,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -346,6 +428,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -361,6 +447,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -378,6 +468,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -393,6 +487,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -410,6 +508,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -425,6 +527,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -442,6 +548,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -457,6 +567,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -474,6 +588,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -489,6 +607,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -506,6 +628,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -521,6 +647,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -538,6 +668,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -553,6 +687,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -570,6 +708,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -585,6 +727,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -602,6 +748,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -617,6 +767,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -634,6 +788,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -649,6 +807,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -666,6 +828,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -681,6 +847,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -698,6 +868,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -713,6 +887,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -730,6 +908,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -745,6 +927,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -762,6 +948,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -777,6 +967,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -794,6 +988,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -809,6 +1007,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -826,6 +1028,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -841,6 +1047,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -858,6 +1068,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -873,6 +1087,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -890,6 +1108,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -905,6 +1127,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -922,6 +1148,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -937,6 +1167,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -954,6 +1188,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -969,6 +1207,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -986,6 +1228,10 @@
                     {
                      "type":"torch"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"torch",
                  "visible":true,
@@ -1001,6 +1247,10 @@
                  "properties":
                     {
                      "type":"torch"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"torch",
@@ -1018,6 +1268,10 @@
                     {
                      "type":"playerStart"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"",
                  "visible":true,
@@ -1033,6 +1287,10 @@
                  "properties":
                     {
                      "type":"barrel"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"barrel",
@@ -1050,6 +1308,10 @@
                     {
                      "type":"barrel"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"barrel",
                  "visible":true,
@@ -1065,6 +1327,10 @@
                  "properties":
                     {
                      "type":"barrel"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
                     },
                  "rotation":0,
                  "type":"barrel",
@@ -1082,12 +1348,136 @@
                     {
                      "type":"barrel"
                     },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
                  "rotation":0,
                  "type":"barrel",
                  "visible":true,
                  "width":64,
                  "x":2821.98,
                  "y":1838.39
+                }, 
+                {
+                 "gid":226,
+                 "height":64,
+                 "id":89,
+                 "name":"barrel",
+                 "properties":
+                    {
+                     "type":"barrel"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"barrel",
+                 "visible":true,
+                 "width":64,
+                 "x":3850.33538752363,
+                 "y":2919.6754442344
+                }, 
+                {
+                 "gid":226,
+                 "height":64,
+                 "id":90,
+                 "name":"barrel",
+                 "properties":
+                    {
+                     "type":"barrel"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"barrel",
+                 "visible":true,
+                 "width":64,
+                 "x":2379.63595463138,
+                 "y":3679.59982986767
+                }, 
+                {
+                 "gid":226,
+                 "height":64,
+                 "id":91,
+                 "name":"barrel",
+                 "properties":
+                    {
+                     "type":"barrel"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"barrel",
+                 "visible":true,
+                 "width":64,
+                 "x":3846.55466918715,
+                 "y":4155.97034026465
+                }, 
+                {
+                 "gid":226,
+                 "height":64,
+                 "id":92,
+                 "name":"barrel",
+                 "properties":
+                    {
+                     "type":"barrel"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"barrel",
+                 "visible":true,
+                 "width":64,
+                 "x":3528.9743289225,
+                 "y":5611.54689981096
+                }, 
+                {
+                 "gid":226,
+                 "height":64,
+                 "id":93,
+                 "name":"barrel",
+                 "properties":
+                    {
+                     "type":"barrel"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"barrel",
+                 "visible":true,
+                 "width":64,
+                 "x":2992.11232514178,
+                 "y":5660.69623818525
+                }, 
+                {
+                 "gid":226,
+                 "height":64,
+                 "id":94,
+                 "name":"barrel",
+                 "properties":
+                    {
+                     "type":"barrel"
+                    },
+                 "propertytypes":
+                    {
+                     "type":"string"
+                    },
+                 "rotation":0,
+                 "type":"barrel",
+                 "visible":true,
+                 "width":64,
+                 "x":2614.04049149338,
+                 "y":4726.85880907372
                 }],
          "offsetx":-22.7879,
          "offsety":144.788,
@@ -1109,12 +1499,8 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":89,
+ "nextobjectid":95,
  "orientation":"orthogonal",
- "properties":
-    {
-
-    },
  "renderorder":"right-down",
  "tileheight":64,
  "tilesets":[
@@ -1126,10 +1512,6 @@
          "imagewidth":512,
          "margin":0,
          "name":"dungeon_tileset_64",
-         "properties":
-            {
-
-            },
          "spacing":0,
          "tilecount":88,
          "tileheight":64,
@@ -1143,10 +1525,6 @@
          "imagewidth":256,
          "margin":0,
          "name":"floor_shadow_tileset_64",
-         "properties":
-            {
-
-            },
          "spacing":0,
          "tilecount":28,
          "tileheight":64,
@@ -1160,10 +1538,6 @@
          "imagewidth":640,
          "margin":0,
          "name":"objects_tilset_64",
-         "properties":
-            {
-
-            },
          "spacing":0,
          "tilecount":130,
          "tileheight":64,
@@ -1177,10 +1551,6 @@
          "imagewidth":705,
          "margin":0,
          "name":"tiles",
-         "properties":
-            {
-
-            },
          "spacing":0,
          "tilecount":3520,
          "tileheight":16,
