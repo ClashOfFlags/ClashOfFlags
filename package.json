@@ -17,7 +17,7 @@
   "scripts": {
     "setup": "sudo npm install -g pm2 bower gulp webpack && npm install && bower install && cp .env.example .env",
     "build": "concurrently 'gulp' 'webpack'",
-    "watch": "concurrently --kill-others 'gulp watch' 'webpack --watch'",
+    "watch": "npm start && concurrently --kill-others 'gulp watch' 'webpack --watch'",
     "start": "pm2 start pm2.json",
     "stop": "pm2 stop all"
   },
@@ -37,6 +37,7 @@
     "babel-preset-es2015": "^6.5.0",
     "babel-runtime": "^6.5.0",
     "babelify": "^7.2.0",
+    "browser-sync": "^2.11.1",
     "browserify": "^13.0.0",
     "concurrently": "^2.0.0",
     "css-loader": "^0.23.1",

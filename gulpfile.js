@@ -30,6 +30,7 @@ var rename = require('gulp-rename');
 var sassdoc = require('sassdoc');
 var esdoc = require("gulp-esdoc");
 var save = require('gulp-save');
+var browserSync = require('browser-sync').create();
 
 var folder_source = options.folders.app_package + options.folders.source;
 var folder_dest = options.folders.app_package + options.folders.dest;
@@ -42,9 +43,18 @@ gulp.task('default', ['css', 'js'], function () {
 });
 
 gulp.task('watch', function () {
+    browserSync.init({
+        ui: false,
+        ghostMode: false,
+        proxy: {
+            target: 'localhost:8000',
+            ws: true
+        }
+    });
+
     gulp.watch(folder_source + '/scss/**/*.scss', ['css']);
     gulp.watch(folder_source + '/javascript/**/*.js', ['js']);
-
+    gulp.watch(folder_dest + '/**/*').on('change', browserSync.reload);
     //buildScript('index.js', true);
 });
 
