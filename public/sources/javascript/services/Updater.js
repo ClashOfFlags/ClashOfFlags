@@ -12,7 +12,7 @@ export default class Updater {
     readObjects() {
         this.obstacleLayer = this.objects.get('obstacleLayer');
         this.waterLayer = this.objects.get('waterLayer');
-        this.obstacleLayer = this.objects.get("obstacleLayer");
+        this.obstacleLayer = this.objects.get('obstacleLayer');
         this.flagRedGroup = this.objects.get('flags.red');
         this.flagBlueGroup = this.objects.get('flags.blue');
         this.barrels = this.objects.get('barrels');
