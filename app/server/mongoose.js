@@ -6,7 +6,10 @@ module.exports = new Promise((resolve, reject) => {
 
     const db = mongoose.connection;
 
-    db.on('error', err => console.error(err));
+    db.on('error', err => {
+        console.error('MongoDB connection failed!');
+        console.error(err);
+    });
 
     db.once('open', () => {
         return resolve(); // Connected to MongoDB
