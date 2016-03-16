@@ -7,6 +7,7 @@ export default class Bullet extends Sprite{
     this.enableArcadePhysics();
     this.checkWorldBounds = true;
     this.outOfBoundsKill = true;
+    this.power = config.game.weapons[this.key].power;
 
     this.game.time.events.add(Phaser.Timer.SECOND * config.game.weapons[this.key].lifetime, this.killBullet, this);
   }

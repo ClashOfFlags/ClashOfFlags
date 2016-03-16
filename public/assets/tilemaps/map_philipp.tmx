@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="64" tileheight="64" nextobjectid="89">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="64" tileheight="64" nextobjectid="95">
  <tileset firstgid="1" name="dungeon_tileset_64" tilewidth="64" tileheight="64" tilecount="88" columns="8">
   <image source="../images/dungeon_tileset_64.png" width="512" height="704"/>
  </tileset>
@@ -760,6 +760,36 @@
    </properties>
   </object>
   <object id="88" name="barrel" type="barrel" gid="226" x="2821.98" y="1838.39" width="64" height="64">
+   <properties>
+    <property name="type" value="barrel"/>
+   </properties>
+  </object>
+  <object id="89" name="barrel" type="barrel" gid="226" x="3850.34" y="2919.68" width="64" height="64">
+   <properties>
+    <property name="type" value="barrel"/>
+   </properties>
+  </object>
+  <object id="90" name="barrel" type="barrel" gid="226" x="2379.64" y="3679.6" width="64" height="64">
+   <properties>
+    <property name="type" value="barrel"/>
+   </properties>
+  </object>
+  <object id="91" name="barrel" type="barrel" gid="226" x="3846.55" y="4155.97" width="64" height="64">
+   <properties>
+    <property name="type" value="barrel"/>
+   </properties>
+  </object>
+  <object id="92" name="barrel" type="barrel" gid="226" x="3528.97" y="5611.55" width="64" height="64">
+   <properties>
+    <property name="type" value="barrel"/>
+   </properties>
+  </object>
+  <object id="93" name="barrel" type="barrel" gid="226" x="2992.11" y="5660.7" width="64" height="64">
+   <properties>
+    <property name="type" value="barrel"/>
+   </properties>
+  </object>
+  <object id="94" name="barrel" type="barrel" gid="226" x="2614.04" y="4726.86" width="64" height="64">
    <properties>
     <property name="type" value="barrel"/>
    </properties>
