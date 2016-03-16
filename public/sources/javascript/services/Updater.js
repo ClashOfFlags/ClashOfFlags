@@ -141,7 +141,7 @@ export default class Updater {
   }
 
   bulletHitPlayer(bullet, player) {
-    if(player !== this.player && player.visible === true){
+    if(player !== this.player && player.visible === true && player.alpha === 1){
       this.createExplosionAnimation({
         x: bullet.x,
         y: bullet.y,

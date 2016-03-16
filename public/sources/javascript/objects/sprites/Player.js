@@ -21,7 +21,9 @@ export default class Player extends Sprite {
     }
 
     shoot(overwriteDirection) {
+      if(this.alpha === 1){
         this.weapon.shoot(overwriteDirection);
+      }
     }
 
     changeSpriteToNormal() {
@@ -128,13 +130,15 @@ export default class Player extends Sprite {
     }
 
     hitPlayer(value) {
-      this.health -= value;
-      if(this.health > 0){
-        this.healthbar.scale.x = this.health / 100;
-      }else{
-        new Splatter(this.game, this.x, this.y, 'green_marine_dead');
-        this.dead();
-      }
+      if(this.alpha === 1){
+        this.health -= value;
+        if(this.health > 0){
+          this.healthbar.scale.x = this.health / 100;
+        }else{
+          new Splatter(this.game, this.x, this.y, 'green_marine_dead');
+          this.dead();
+        }
+      }      
     }
 
     dead() {
@@ -153,5 +157,11 @@ export default class Player extends Sprite {
       this.healthbar.scale.x = 1;
       this.updateName();
       this.updateHealthbar();
+      this.alpha = 0.2;
+      this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.invisible, this.endInvisible, this);
+    }
+
+    endInvisible() {
+      this.alpha = 1;
     }
 }

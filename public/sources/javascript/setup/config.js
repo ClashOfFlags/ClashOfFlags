@@ -20,7 +20,8 @@ export default{
           lifetime: 5
         },
         player: {
-          waitForRespawn: 3
+          waitForRespawn: 3,
+          invisible: 3
         },
         barrel: {
           range1: {
