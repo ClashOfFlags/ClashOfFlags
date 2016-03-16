@@ -49,6 +49,7 @@ export default class Player extends Sprite {
     }
 
     moveToDirection(newDirection) {
+      if(this.visible){
         this.updateName();
         this.updateHealthbar();
 
@@ -90,8 +91,8 @@ export default class Player extends Sprite {
 
         console.log('send moving');
 
-
         this.animations.play('walk');
+      }
     }
 
     isFacingDirection(direction, isMoving) {
@@ -138,7 +139,7 @@ export default class Player extends Sprite {
           new Splatter(this.game, this.x, this.y, 'green_marine_dead');
           this.dead();
         }
-      }      
+      }
     }
 
     dead() {
