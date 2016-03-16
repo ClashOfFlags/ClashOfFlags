@@ -172,10 +172,11 @@ export default class Player extends Sprite {
     }
 
     dead() {
-        this.visible = false;
-        this.name.visible = false;
-        this.healthbar.visible = false;
-        this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
+      new Splatter(this.game, this.x, this.y, 'green_marine_dead');
+      this.visible = false;
+      this.name.visible = false;
+      this.healthbar.visible = false;
+      this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
     }
 
     resetPlayer() {
