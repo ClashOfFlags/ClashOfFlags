@@ -98,6 +98,12 @@ export default class NetworkService {
         console.log('onPlayerPosition', event);
 
         const player = this.teamManager.findPlayer(event.player);
+
+        if(!player) {
+            console.warn('Player number ' + event.player + ' not found yet!');
+            return;
+        }
+
         player.x = event.x;
         player.y = event.y;
 
