@@ -19,6 +19,11 @@ export default class NetworkService {
         this.registerEvent('PlayerPositionEvent', this.onPlayerPosition);
         this.registerEvent('PlayerShootEvent', this.onPlayerShoot);
         this.registerEvent('PlayerDamageEvent', this.onPlayerDamage);
+
+        eventSystem().on('bullet.shoot', (payload) => {
+             console.log(payload.bullet);
+             this.objects.get('bulletGroup').add(payload.bullet);
+         });
     }
 
     connect() {
@@ -55,7 +60,6 @@ export default class NetworkService {
             moving: player.isMoving()
         };
 
-        console.log('sendPosition', payload);
         this.broadcast('PlayerPositionEvent', payload);
     }
 
@@ -135,5 +139,8 @@ export default class NetworkService {
     }
 
     /* Receive Functions */
+
+
+
 
 }

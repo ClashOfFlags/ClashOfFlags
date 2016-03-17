@@ -18,6 +18,7 @@ export default class Updater {
         this.barrels = this.objects.get('barrels');
         this.player = this.objects.get('hero');
         this.playerGroup = this.objects.get('playerGroup');
+        this.bulletGroup = this.objects.get('bulletGroup');
     }
 
     isHero(player) {
@@ -67,19 +68,18 @@ export default class Updater {
     }
 
     updateCollide() {
-        this.game.physics.arcade.collide(this.player, this.obstacleLayer);
-        this.game.physics.arcade.collide(this.player, this.waterLayer);
-        this.game.physics.arcade.collide(this.player, this.barrels);
-        this.game.physics.arcade.collide(this.player, this.playerGroup, this.playerHitPlayer, null, this);
-        this.game.physics.arcade.overlap(this.player, this.flagRedGroup, this.playerCollectsFlag, null, this);
-        this.game.physics.arcade.overlap(this.player, this.flagBlueGroup, this.playerCollectsFlag, null, this);
+        this.game.physics.arcade.collide(this.playerGroup, this.obstacleLayer);
+        this.game.physics.arcade.collide(this.playerGroup, this.waterLayer);
+        this.game.physics.arcade.collide(this.playerGroup, this.barrels);
+        this.game.physics.arcade.collide(this.playerGroup, this.playerGroup, this.playerHitPlayer, null, this);
+        this.game.physics.arcade.overlap(this.playerGroup, this.flagRedGroup, this.playerCollectsFlag, null, this);
+        this.game.physics.arcade.overlap(this.playerGroup, this.flagBlueGroup, this.playerCollectsFlag, null, this);
 
-        this.game.physics.arcade.overlap(this.player.weapon.bullets, this.barrels, this.bulletHitBarrel, null, this);
-        this.game.physics.arcade.collide(this.player.weapon.bullets, this.obstacleLayer, this.bulletHitObstacle, null, this);
-        this.game.physics.arcade.overlap(this.player.weapon.bullets, this.playerGroup, this.bulletHitPlayer, null, this);
+        this.game.physics.arcade.overlap(this.bulletGroup, this.barrels, this.bulletHitBarrel, null, this);
+        this.game.physics.arcade.collide(this.bulletGroup, this.obstacleLayer, this.bulletHitObstacle, null, this);
+        this.game.physics.arcade.overlap(this.bulletGroup, this.playerGroup, this.bulletHitPlayer, null, this);
 
         this.game.physics.arcade.collide(this.barrels, this.obstacleLayer);
-
         this.game.physics.arcade.collide(this.playerGroup, this.obstacleLayer);
     }
 
@@ -151,7 +151,7 @@ export default class Updater {
     }
 
     bulletHitPlayer(bullet, player) {
-        if (player === this.player || !player.isVisible()) {
+        if (player === bullet.shooter || !player.isVisible()) {
             return;
         }
 
