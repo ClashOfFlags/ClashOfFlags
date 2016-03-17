@@ -17,7 +17,6 @@ export default class Creator {
     }
 
     run() {
-
         this.createMap();
         this.createTorchs();
         this.createPlayerGroup();
@@ -26,8 +25,7 @@ export default class Creator {
         this.createItem('barrel');
         this.createMiniMap();
 
-        this.network.init();
-
+        this.network.connect();
 
         eventSystem().on('network.handshake:after', (payload) => {
             this.player = payload.hero;
@@ -37,7 +35,6 @@ export default class Creator {
 
         });
     }
-
 
     createMap() {
         this.game.world.setBounds(0, 0, 6400, 6400);
