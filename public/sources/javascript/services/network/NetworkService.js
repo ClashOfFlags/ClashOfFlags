@@ -111,17 +111,19 @@ export default class NetworkService {
             return;
         }
 
+        if(player.number == this.teamManager.hero.number){
+            console.error('Reposition the hero. ', player.number, this.teamManager.hero.number );
+            return;
+        }
+
         player.x = event.x;
         player.y = event.y;
 
-        player.setDirection(event.direction);
-        player.updateName();
+        if(event.moving)
+            player.moveToDirection(event.direction);
+        else
+            player.stopMoving(event.direction);
 
-        if (event.moving) {
-            player.walkAnimation();
-        } else {
-            player.animations.stop();
-        }
     }
 
     onPlayerShoot(event) {
@@ -140,10 +142,5 @@ export default class NetworkService {
 
         player.setHealth(event.health);
     }
-
-    /* Receive Functions */
-
-
-
 
 }

@@ -101,6 +101,7 @@ export default class Player extends Sprite {
         if (!this.visible) {
             return false;
         }
+
         this.updateName();
         this.updateHealthbar();
 
@@ -113,7 +114,6 @@ export default class Player extends Sprite {
         });
 
         this.direction = newDirection;
-        this.resetVelocity();
         this.setDirection(newDirection);
         this.resetVelocity();
 
@@ -158,7 +158,11 @@ export default class Player extends Sprite {
     }
 
 
-    stopMoving() {
+    stopMoving(newDirection = false) {
+        if(newDirection){
+            this.direction = newDirection;
+        }
+
         if (this.isFacingDirection(this.direction, false)) {
             return false;
         }
