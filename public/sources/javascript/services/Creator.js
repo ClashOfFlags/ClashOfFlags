@@ -25,7 +25,8 @@ export default class Creator {
         this.createItem('barrel');
         this.createMiniMap();
 
-        this.network.connect();
+        this.network.init();
+
 
         eventSystem().on('network.handshake:after', (payload) => {
             this.player = payload.hero;
@@ -34,6 +35,8 @@ export default class Creator {
             this.createControls();
 
         });
+
+        this.network.connect();
     }
 
     createMap() {
