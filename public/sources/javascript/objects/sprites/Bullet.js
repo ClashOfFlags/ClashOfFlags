@@ -20,6 +20,10 @@ export default class Bullet extends Sprite {
         this.shooter = shooter;
     }
 
+    isShooter(player) {
+        return player === this.shooter;
+    }
+
     killBullet() {
         this.kill();
     }

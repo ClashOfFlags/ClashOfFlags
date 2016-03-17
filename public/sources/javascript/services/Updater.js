@@ -85,6 +85,7 @@ export default class Updater {
 
     bulletHitBarrel(bullet, barrel) {
         this.bulletHitObstacle(bullet);
+        barrel.kill();
 
         this.createExplosionAnimation({
             x: barrel.x,
@@ -97,16 +98,25 @@ export default class Updater {
             scale: 0.4
         });
 
-        for (var i = 1; i < Object.keys(this.teamManager.allPlayers()).length + 1; i++) {
-            var player = this.teamManager.allPlayers()[i];
-            if (this.game.physics.arcade.distanceBetween(barrel, player) < barrel.barrel.maxRange) {
-                var damage = Math.round((1 - (this.game.physics.arcade.distanceBetween(barrel, player) - 90) / barrel.barrel.maxRange) * barrel.barrel.maxDamage);
-                console.log(damage);
-                player.damage(damage);
-            }
+        if(!this.isHero(bullet.shooter)) {
+            return;
         }
 
-        barrel.kill();
+        const players = this.teamManager.allPlayers();
+
+        _.forIn(players, player => {
+            const distanceToBarrel = this.game.physics.arcade.distanceBetween(barrel, player);
+            const barrelMaxRange = barrel.barrel.maxRange;
+
+            if(distanceToBarrel > barrelMaxRange) {
+                return;
+            }
+
+            const damage = Math.round((1 - (distanceToBarrel - 90) / barrelMaxRange) * barrel.barrel.maxDamage);
+
+            player.damage(damage);
+            this.network.sendDamage(player, damage);
+        });
     }
 
     createExplosionAnimation(data) {
