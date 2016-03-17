@@ -120,12 +120,12 @@ export default class NetworkService {
     onPlayerShoot(event) {
         const player = this.teamManager.findPlayer(event.player);
 
-        if(!player){
-            return false;
+        if(!player) {
+            console.warn('Player number ' + event.player + ' not found yet!');
+            return;
         }
 
         player.shoot(event.direction);
-
     }
 
     onPlayerDamage(event) {
