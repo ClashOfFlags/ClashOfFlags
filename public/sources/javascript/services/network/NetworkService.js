@@ -118,17 +118,17 @@ export default class NetworkService {
     }
 
     onPlayerShoot(event) {
-        console.log('onPlayerShoot', event);
-
         const player = this.teamManager.findPlayer(event.player);
 
-        player.shoot(event.direction);
+        if(!player) {
+            console.warn('Player number ' + event.player + ' not found yet!');
+            return;
+        }
 
+        player.shoot(event.direction);
     }
 
     onPlayerDamage(event) {
-        console.log('onPlayerDamage', event);
-
         const player = this.teamManager.findPlayer(event.player);
 
         player.setHealth(event.health);
