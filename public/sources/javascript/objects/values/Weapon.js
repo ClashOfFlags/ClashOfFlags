@@ -50,5 +50,9 @@ export default class Weapon {
         }
 
         this.bullets.add(bullet);
+
+        eventSystem().emit('bullet.shoot', {
+           bullet: bullet
+       });
     }
 }
