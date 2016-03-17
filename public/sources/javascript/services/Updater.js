@@ -73,6 +73,7 @@ export default class Updater {
 
         this.game.physics.arcade.overlap(this.bulletGroup, this.barrels, this.bulletHitBarrel, null, this);
         this.game.physics.arcade.collide(this.bulletGroup, this.obstacleLayer, this.bulletHitObstacle, null, this);
+        this.game.physics.arcade.overlap(this.bulletGroup, this.playerGroup, this.bulletHitPlayer, null, this);
 
         this.game.physics.arcade.collide(this.barrels, this.obstacleLayer);
         this.game.physics.arcade.collide(this.playerGroup, this.obstacleLayer);
@@ -125,6 +126,10 @@ export default class Updater {
         sprite.events.onAnimationComplete.add(function () {
             sprite.kill();
         }, this);
+    }
+
+    playerHitPlayer(ownPlayer, otherPlayer) {
+        otherPlayer.body.moves = false;
     }
 
     bulletHitObstacle(bullet) {
