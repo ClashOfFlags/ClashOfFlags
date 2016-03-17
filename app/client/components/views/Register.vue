@@ -9,7 +9,7 @@
                     <input id="email"
                            type="email"
                            class="form-control"
-                           placeholder="EmailCl"
+                           placeholder="Email"
                            v-model="email"
                            v-validate:email="{ email: true }">
                     <validation-messages :field="$validation.email">
