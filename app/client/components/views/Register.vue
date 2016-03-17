@@ -19,7 +19,7 @@
                 <!-- Email -->
                 <!-- Username -->
                 <form-group :field="$validation.username">
-                    <label for="username">Username</label>
+                    <label class="form-control-label" for="username">Username</label>
                     <input id="username"
                            type="text"
                            class="form-control"
@@ -35,7 +35,7 @@
                 <!-- Username -->
                 <!-- Password -->
                 <form-group :field="$validation.password">
-                    <label for="password">Password</label>
+                    <label class="form-control-label" for="password">Password</label>
                     <input id="password"
                            type="password"
                            class="form-control"
