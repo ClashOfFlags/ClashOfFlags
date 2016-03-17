@@ -9,7 +9,7 @@
                     <input id="email"
                            type="email"
                            class="form-control"
-                           placeholder="name@domain.com"
+                           placeholder="EmailCl"
                            v-model="email"
                            v-validate:email="{ email: true }">
                     <validation-messages :field="$validation.email">
@@ -41,9 +41,8 @@
                            class="form-control"
                            placeholder="Password"
                            v-model="password"
-                           v-validate:password="{ required: true, minlength: 8, maxlength: 100 }">
+                           v-validate:password="{ minlength: 8, maxlength: 100 }">
                     <validation-messages :field="$validation.password">
-                        <span v-show="$validation.password.required">Please enter a password</span>
                         <span v-show="$validation.password.minlength">Your password should be at least 8 characters long</span>
                         <br>
                         <span v-show="$validation.password.maxlength">Your password cannot be longer than 100 characters</span>
