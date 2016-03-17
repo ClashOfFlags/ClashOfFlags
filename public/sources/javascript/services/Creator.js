@@ -25,8 +25,6 @@ export default class Creator {
         this.createItem('barrel');
         this.createMiniMap();
 
-        this.network.init();
-
 
         eventSystem().on('network.handshake:after', (payload) => {
             this.player = payload.hero;

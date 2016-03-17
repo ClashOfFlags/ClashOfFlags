@@ -51,7 +51,7 @@ export default class Player extends Sprite {
     stopShooting() {
         this.changeSpriteToNormal();
 
-        if(this.isMoving()) {
+        if (this.isMoving()) {
             this.walkAnimation();
         }
     }
@@ -98,13 +98,15 @@ export default class Player extends Sprite {
     }
 
     moveToDirection(newDirection) {
-        if (this.visible) {
-            this.updateName();
-            this.updateHealthbar();
+        if (!this.visible) {
+            return false;
+        }
+        this.updateName();
+        this.updateHealthbar();
 
-            if (this.isFacingDirection(newDirection, true)) {
-                return false;
-            }
+        if (this.isFacingDirection(newDirection, true)) {
+            return false;
+        }
 
         eventSystem().emit('player.change_direction:before', {
             player: this
@@ -112,31 +114,30 @@ export default class Player extends Sprite {
 
         this.direction = newDirection;
         this.resetVelocity();
-            this.setDirection(newDirection);
-            this.resetVelocity();
+        this.setDirection(newDirection);
+        this.resetVelocity();
 
-            switch (this.direction) {
-                case direction.TOP:
-                    this.body.velocity.y -= this.speed;
-                    break;
-                case direction.BOTTOM:
-                    this.body.velocity.y += this.speed;
-                    break;
-                case direction.LEFT:
-                    this.body.velocity.x -= this.speed;
-                    break;
-                case direction.RIGHT:
-                    this.body.velocity.x += this.speed;
-                    break;
-            }
-
-            this.walkAnimation();
+        switch (this.direction) {
+            case direction.TOP:
+                this.body.velocity.y -= this.speed;
+                break;
+            case direction.BOTTOM:
+                this.body.velocity.y += this.speed;
+                break;
+            case direction.LEFT:
+                this.body.velocity.x -= this.speed;
+                break;
+            case direction.RIGHT:
+                this.body.velocity.x += this.speed;
+                break;
         }
+
+        this.walkAnimation();
+
         eventSystem().emit('player.change_direction:after', {
             player: this
         });
 
-        return true;
     }
 
     isFacingDirection(direction, isMoving) {
@@ -184,7 +185,7 @@ export default class Player extends Sprite {
     }
 
     damage(damage) {
-        if(this.isDead() || !this.isVisible()){
+        if (this.isDead() || !this.isVisible()) {
             return;
         }
 
@@ -196,7 +197,7 @@ export default class Player extends Sprite {
     setHealth(health) {
         this.health = health;
 
-        if(this.health > 0) {
+        if (this.health > 0) {
             this.healthbar.scale.x = this.health / 100;
         } else {
             new Splatter(this.game, this.x, this.y, 'green_marine_dead');
@@ -205,11 +206,11 @@ export default class Player extends Sprite {
     }
 
     dead() {
-      new Splatter(this.game, this.x, this.y, 'green_marine_dead');
-      this.visible = false;
-      this.name.visible = false;
-      this.healthbar.visible = false;
-      this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
+        new Splatter(this.game, this.x, this.y, 'green_marine_dead');
+        this.visible = false;
+        this.name.visible = false;
+        this.healthbar.visible = false;
+        this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
     }
 
     resetPlayer() {

@@ -7,10 +7,6 @@ export default class NetworkService {
         this.teamManager = $container.TeamManager;
         this.socket = io();
 
-        this.waitForHandshake = function () {
-
-        };
-
         this.registerEvents();
     }
 
@@ -19,6 +15,14 @@ export default class NetworkService {
         this.registerEvent('PlayerPositionEvent', this.onPlayerPosition);
         this.registerEvent('PlayerShootEvent', this.onPlayerShoot);
         this.registerEvent('PlayerDamageEvent', this.onPlayerDamage);
+
+        eventSystem().on('player.change_direction:after', (payload) => {
+            this.sendPosition(payload.player);
+        });
+
+        eventSystem().on('player.stop_moving:after', (payload) => {
+            this.sendPosition(payload.player);
+        });
     }
 
     connect() {
@@ -99,7 +103,7 @@ export default class NetworkService {
 
         const player = this.teamManager.findPlayer(event.player);
 
-        if(!player) {
+        if (!player) {
             console.warn('Player number ' + event.player + ' not found yet!');
             return;
         }
@@ -120,7 +124,7 @@ export default class NetworkService {
     onPlayerShoot(event) {
         const player = this.teamManager.findPlayer(event.player);
 
-        if(!player) {
+        if (!player) {
             console.warn('Player number ' + event.player + ' not found yet!');
             return;
         }
