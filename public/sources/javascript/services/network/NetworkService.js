@@ -21,10 +21,18 @@ export default class NetworkService {
          });
 
         eventSystem().on('player.change_direction:after', (payload) => {
+            if(payload.source == "network"){
+                return;
+            }
+
             this.sendPosition(payload.player);
         });
 
         eventSystem().on('player.stop_moving:after', (payload) => {
+            if(payload.source == "network"){
+                return;
+            }
+
             this.sendPosition(payload.player);
         });
     }
@@ -120,9 +128,9 @@ export default class NetworkService {
         player.y = event.y;
 
         if(event.moving)
-            player.moveToDirection(event.direction);
+            player.moveToDirection(event.direction, "network");
         else
-            player.stopMoving(event.direction);
+            player.stopMoving(event.direction, "network");
 
     }
 
