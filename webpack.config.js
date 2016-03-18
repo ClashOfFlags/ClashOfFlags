@@ -2,7 +2,8 @@ module.exports = {
     entry: './app/client/app.js',
     output: {
         path: __dirname + '/public/distribution/javascript',
-        filename: 'app-vue.js'
+        filename: 'app-vue.js',
+        publicPath: 'public'
     },
     externals: {
         vue: 'Vue',
@@ -18,6 +19,10 @@ module.exports = {
             {
                 test: /\.vue$/,
                 loader: 'vue'
+            },
+            {
+                test: /\.png$/,
+                loader: 'file-loader'
             }
         ]
     },
