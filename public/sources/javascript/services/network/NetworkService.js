@@ -17,8 +17,8 @@ export default class NetworkService {
         this.registerEvent('PlayerDamageEvent', this.onPlayerDamage);
 
         eventSystem().on('bullet.shoot', (payload) => {
-             this.objects.get('bulletGroup').add(payload.bullet);
-         });
+            this.objects.get('bulletGroup').add(payload.bullet);
+        });
 
          eventSystem().on('player_dead', (payload) => {
               this.teamManager.teams[payload.team].points--;
@@ -26,10 +26,19 @@ export default class NetworkService {
           });
 
         eventSystem().on('player.change_direction:after', (payload) => {
+            console.log(' ' + payload.source);
+            if (payload.source == "network") {
+                return;
+            }
+
             this.sendPosition(payload.player);
         });
 
         eventSystem().on('player.stop_moving:after', (payload) => {
+            if (payload.source == "network") {
+                return;
+            }
+
             this.sendPosition(payload.player);
         });
     }
@@ -116,18 +125,19 @@ export default class NetworkService {
             return;
         }
 
-        if(player.number == this.teamManager.hero.number){
-            console.error('Reposition the hero. ', player.number, this.teamManager.hero.number );
+        if (player.number == this.teamManager.hero.number) {
+            console.error('Reposition the hero. ', player.number, this.teamManager.hero.number);
             return;
         }
 
         player.x = event.x;
         player.y = event.y;
 
-        if(event.moving)
-            player.moveToDirection(event.direction);
+        if (event.moving) {
+            player.moveToDirection(event.direction, "network");
+        }
         else
-            player.stopMoving(event.direction);
+            player.stopMoving(event.direction, "network");
 
     }
 

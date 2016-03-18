@@ -67,7 +67,7 @@ export default class Updater {
         this.game.physics.arcade.collide(this.playerGroup, this.obstacleLayer);
         this.game.physics.arcade.collide(this.playerGroup, this.waterLayer);
         this.game.physics.arcade.collide(this.playerGroup, this.barrels);
-        this.game.physics.arcade.collide(this.player, this.playerGroup, this.playerHitPlayer, null, this);
+        //this.game.physics.arcade.collide(this.player, this.playerGroup, this.playerHitPlayer, null, this);
         this.game.physics.arcade.overlap(this.playerGroup, this.flagRedGroup, this.playerCollectsFlag, null, this);
         this.game.physics.arcade.overlap(this.playerGroup, this.flagBlueGroup, this.playerCollectsFlag, null, this);
 
