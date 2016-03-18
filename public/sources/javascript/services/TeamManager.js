@@ -4,6 +4,7 @@ export default class TeamManager {
         this.$container = $container;
         this.teams = {};
         this.hero = null;
+        this.maxPoints = 300;
     }
 
     add(team) {

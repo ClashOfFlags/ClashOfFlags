@@ -7,13 +7,20 @@ export default class Weapon {
         this.game = game;
         this.player = player;
         this.nextShotAt = Date.now() + config.game.weapons.fireball.shotDelay;
-
-        this.bullets = game.add.group();
-        this.bullets.enableBody = true;
-        this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-
         this.weapon = 'fireball';
 
+        this.currentWeapon();
+    }
+
+    currentWeapon() {
+      this.weaponSprite = this.game.add.sprite(30, 20, this.weapon);
+      this.weaponSprite.animations.add(this.weapon, Phaser.Animation.generateFrameNames(this.weapon + '_000', 1, 6), 60, true);
+      this.weaponSprite.animations.play(this.weapon);
+      this.weaponSprite.anchor.setTo(0.5, 0.5);
+      this.weaponSprite.angle = 90;
+      this.weaponSprite.scale.x = 0.7;
+      this.weaponSprite.scale.y = 0.7;
+      this.weaponSprite.fixedToCamera = true;
     }
 
     shoot(overwriteDirection = null) {
@@ -48,8 +55,6 @@ export default class Weapon {
             bullet.angle = -90;
             bullet.body.velocity.x = -config.game.weapons[this.weapon].bulletSpeed;
         }
-
-        this.bullets.add(bullet);
 
         eventSystem().emit('bullet.shoot', {
            bullet: bullet

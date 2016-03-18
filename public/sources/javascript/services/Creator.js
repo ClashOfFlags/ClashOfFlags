@@ -25,6 +25,7 @@ export default class Creator {
         this.createFlags();
         this.createItem('barrel');
         this.createMiniMap();
+        this.createStatusbar();
 
 
         eventSystem().on('network.handshake:after', (payload) => {
@@ -198,5 +199,28 @@ export default class Creator {
         bulletGroup.enableBody = true;
 
         this.objects.set('bulletGroup', bulletGroup);
+    }
+
+    createStatusbar() {
+      var graphics = this.game.add.graphics();
+      graphics.beginFill(0xffffff);
+      graphics.drawRect(0, 40, 800, 3);
+      graphics.drawRect(400, 0, 3, 40);
+      graphics.endFill();
+      graphics.fixedToCamera = true;
+      window.graphics = graphics;
+
+      for (var teamName in this.teamManager.teams) {
+        var style = { font: "23px Arial", fill: (teamName === "red") ? "#f00" : "#00f", align: "center"};
+        var text = this.game.add.text((teamName === "red") ? 150 : 600, 5, this.teamManager.teams[teamName].points + "/" + this.teamManager.maxPoints, style);
+        text.fixedToCamera = true;
+        this.objects.set('points.' + teamName, text);
+
+        for (var i = 0; i < 3; i++) {
+          var flag = this.game.add.sprite((teamName === "red") ? 300 + 30 * i: 410 + 30 * i, 5, 'flag');
+          flag.fixedToCamera = true;
+          this.objects.set('statusFlag' + i + '.' + teamName, flag);
+        }
+      }
     }
 }

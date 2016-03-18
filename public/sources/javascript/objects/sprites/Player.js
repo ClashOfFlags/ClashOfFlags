@@ -97,7 +97,7 @@ export default class Player extends Sprite {
         }
     }
 
-    moveToDirection(newDirection) {
+    moveToDirection(newDirection, source = "user") {
         if (!this.visible) {
             return false;
         }
@@ -110,7 +110,8 @@ export default class Player extends Sprite {
         }
 
         eventSystem().emit('player.change_direction:before', {
-            player: this
+            player: this,
+            source: source
         });
 
         this.direction = newDirection;
@@ -135,7 +136,8 @@ export default class Player extends Sprite {
         this.walkAnimation();
 
         eventSystem().emit('player.change_direction:after', {
-            player: this
+            player: this,
+            source: source
         });
 
     }
@@ -158,7 +160,7 @@ export default class Player extends Sprite {
     }
 
 
-    stopMoving(newDirection = false) {
+    stopMoving(newDirection = false, source = "user") {
         if(newDirection){
             this.direction = newDirection;
         }
@@ -168,7 +170,8 @@ export default class Player extends Sprite {
         }
 
         eventSystem().emit('player.stop_moving:before', {
-            player: this
+            player: this,
+            source: source
         });
 
         this.resetVelocity();
@@ -176,7 +179,8 @@ export default class Player extends Sprite {
         this.frame = 0;
 
         eventSystem().emit('player.stop_moving:after', {
-            player: this
+            player: this,
+            source: source
         });
 
         return true;
@@ -215,6 +219,10 @@ export default class Player extends Sprite {
         this.name.visible = false;
         this.healthbar.visible = false;
         this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
+
+        eventSystem().emit('player_dead', {
+           team: this.team.name
+       });
     }
 
     resetPlayer() {
