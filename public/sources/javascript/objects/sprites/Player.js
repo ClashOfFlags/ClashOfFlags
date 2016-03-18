@@ -215,6 +215,10 @@ export default class Player extends Sprite {
         this.name.visible = false;
         this.healthbar.visible = false;
         this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
+
+        eventSystem().emit('player_dead', {
+           team: this.team.name
+       });
     }
 
     resetPlayer() {

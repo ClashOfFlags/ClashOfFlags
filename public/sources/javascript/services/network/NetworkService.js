@@ -20,6 +20,11 @@ export default class NetworkService {
              this.objects.get('bulletGroup').add(payload.bullet);
          });
 
+         eventSystem().on('player_dead', (payload) => {
+              this.teamManager.teams[payload.team].points--;
+              this.objects.get('points.' + payload.team).setText(this.teamManager.teams[payload.team].points + '/' + this.teamManager.maxPoints);
+          });
+
         eventSystem().on('player.change_direction:after', (payload) => {
             this.sendPosition(payload.player);
         });

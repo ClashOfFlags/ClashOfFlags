@@ -154,7 +154,7 @@ export default class Updater {
         this.createExplosionAnimation({
             x: bullet.x,
             y: bullet.y,
-            key: 'explosion',
+            key: 'fireball_hit',
             frameName: 'fireball_hit_000',
             frameNameMax: 9,
             frameSpeed: 100,
