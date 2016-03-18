@@ -19,7 +19,8 @@
     "build": "concurrently 'gulp' 'webpack'",
     "watch": "concurrently --kill-others 'gulp watch' 'webpack --watch'",
     "start": "pm2 start pm2.json",
-    "stop": "pm2 stop all"
+    "stop": "pm2 stop all",
+    "deploy": "git push deploy master"
   },
   "dependencies": {
     "co": "^4.6.0",
