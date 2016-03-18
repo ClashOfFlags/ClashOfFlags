@@ -3,13 +3,13 @@
         route: {
             activate() {
                 setTimeout(() => {
-                    $('#game').show();
+                    $('#game-container').show();
                     window.clashOfFlags.unpause();
                 }, 1);
             },
             deactivate() {
                 window.clashOfFlags.pause();
-                $('#game').hide();
+                $('#game-container').hide();
             }
         }
     }
