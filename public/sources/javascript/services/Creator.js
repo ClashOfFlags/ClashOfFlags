@@ -20,12 +20,11 @@ export default class Creator {
         this.createMap();
         this.createTorchs();
         this.createPlayerGroup();
+        this.createBulletGroup();
         this.createTeams();
         this.createFlags();
         this.createItem('barrel');
         this.createMiniMap();
-
-        this.network.init();
 
 
         eventSystem().on('network.handshake:after', (payload) => {
@@ -192,5 +191,12 @@ export default class Creator {
         playerGroup.enableBody = true;
 
         this.objects.set('playerGroup', playerGroup);
+    }
+
+    createBulletGroup() {
+        var bulletGroup = this.game.add.group();
+        bulletGroup.enableBody = true;
+
+        this.objects.set('bulletGroup', bulletGroup);
     }
 }

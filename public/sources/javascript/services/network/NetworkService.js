@@ -7,10 +7,6 @@ export default class NetworkService {
         this.teamManager = $container.TeamManager;
         this.socket = io();
 
-        this.waitForHandshake = function () {
-
-        };
-
         this.registerEvents();
     }
 
@@ -19,6 +15,18 @@ export default class NetworkService {
         this.registerEvent('PlayerPositionEvent', this.onPlayerPosition);
         this.registerEvent('PlayerShootEvent', this.onPlayerShoot);
         this.registerEvent('PlayerDamageEvent', this.onPlayerDamage);
+
+        eventSystem().on('bullet.shoot', (payload) => {
+             this.objects.get('bulletGroup').add(payload.bullet);
+         });
+
+        eventSystem().on('player.change_direction:after', (payload) => {
+            this.sendPosition(payload.player);
+        });
+
+        eventSystem().on('player.stop_moving:after', (payload) => {
+            this.sendPosition(payload.player);
+        });
     }
 
     connect() {
@@ -55,7 +63,6 @@ export default class NetworkService {
             moving: player.isMoving()
         };
 
-        console.log('sendPosition', payload);
         this.broadcast('PlayerPositionEvent', payload);
     }
 
@@ -99,28 +106,30 @@ export default class NetworkService {
 
         const player = this.teamManager.findPlayer(event.player);
 
-        if(!player) {
+        if (!player) {
             console.warn('Player number ' + event.player + ' not found yet!');
+            return;
+        }
+
+        if(player.number == this.teamManager.hero.number){
+            console.error('Reposition the hero. ', player.number, this.teamManager.hero.number );
             return;
         }
 
         player.x = event.x;
         player.y = event.y;
 
-        player.setDirection(event.direction);
-        player.updateName();
+        if(event.moving)
+            player.moveToDirection(event.direction);
+        else
+            player.stopMoving(event.direction);
 
-        if (event.moving) {
-            player.walkAnimation();
-        } else {
-            player.animations.stop();
-        }
     }
 
     onPlayerShoot(event) {
         const player = this.teamManager.findPlayer(event.player);
 
-        if(!player) {
+        if (!player) {
             console.warn('Player number ' + event.player + ' not found yet!');
             return;
         }
@@ -133,7 +142,5 @@ export default class NetworkService {
 
         player.setHealth(event.health);
     }
-
-    /* Receive Functions */
 
 }
