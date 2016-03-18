@@ -17,5 +17,7 @@ function* handle(request) {
         password: request.password
     };
 
-    return yield userService.register(userData);
+    const user = yield userService.register(userData);
+
+    return user;
 }

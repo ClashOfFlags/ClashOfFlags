@@ -24,11 +24,13 @@
   },
   "dependencies": {
     "bcryptjs": "^2.3.0",
+    "chance": "^1.0.1",
     "co": "^4.6.0",
     "connect-history-api-fallback": "^1.1.0",
     "dotenv": "^2.0.0",
     "express": "^4.13.4",
     "lodash": "^4.5.1",
+    "mailgun-js": "^0.7.7",
     "mongoose": "^4.4.4",
     "socket.io": "^1.4.5"
   },
