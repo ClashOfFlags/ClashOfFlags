@@ -45,7 +45,7 @@ function handleRequest(endpoint, request, callback) {
             return callback(response);
         })
         .catch(err => {
-            console.error(err);
+            console.error(err.stack);
 
             return callback(SERVER_ERROR);
         });

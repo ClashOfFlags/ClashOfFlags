@@ -2,6 +2,7 @@
     <div class="row">
         <div class="col-xs-4 center-block">
             <h1>Login</h1>
+            <div class="alert alert-danger" v-if="failed">Invalid username or password!</div>
             <validator name="validation">
                 <!-- Username -->
                 <form-group :field="$validation.username">
@@ -36,7 +37,7 @@
                 </form-group>
                 <!-- Password -->
                 <!-- Submit -->
-                <button type="button" class="btn btn-primary btn-block" :disabled="$validation.invalid" @click="login()">Login</button>
+                <button type="button" class="btn btn-primary btn-block" :disabled="submitDisabled" @click="login()">Login</button>
                 <!-- Submit -->
             </validator>
             <hr>
@@ -54,18 +55,39 @@
 </style>
 
 <script type="text/babel">
-    import api from '../../api';
+    import authService from '../../services/authService';
 
     export default {
         data() {
             return {
                 username: '',
-                password: ''
+                password: '',
+                failed: false,
+                pending: false
             };
+        },
+        computed: {
+            submitDisabled() {
+                return this.$validation.invalid || this.pending;
+            }
         },
         methods: {
             login() {
-                api.login(this.username, this.password);
+                this.failed = false;
+                this.pending = true;
+
+                authService.login(this.username, this.password)
+                    .then(result => {
+                        this.pending = false;
+
+                        if(!result) {
+                            this.failed = true;
+                            return;
+                        }
+
+                        toastr.info('Welcome back ' + authService.user.username);
+                        this.$route.router.go('/profile');
+                    });
             }
         }
     };

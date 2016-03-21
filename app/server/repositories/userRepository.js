@@ -22,8 +22,8 @@ class UserRepository {
         return User.findOne({ verificationToken: token });
     }
 
-    byName(username) {
-        return User.findOne({ username: username });
+    byNameOrEmail(input) {
+        return User.findOne().or([ { username: input }, { email: input } ]);
     }
 
 }

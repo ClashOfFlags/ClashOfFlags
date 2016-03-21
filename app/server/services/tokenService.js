@@ -10,11 +10,7 @@ if(!secret) {
 class TokenService {
 
     sign(payload) {
-        return new Promise(resolve => {
-            jwt.sign(payload, secret, token => {
-                return resolve(token);
-            });
-        });
+        return jwt.sign(payload, secret);
     }
 
     verify(token) {

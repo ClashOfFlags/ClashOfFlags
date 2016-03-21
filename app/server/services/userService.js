@@ -2,6 +2,7 @@
 
 const hashService = require('./hashService');
 const mailService = require('./mailService');
+const tokenService = require('./tokenService');
 const userRepository = require('../repositories/userRepository');
 
 class UserService {
@@ -48,18 +49,29 @@ class UserService {
     }
 
     login(username, password) {
-        return userRepository.byName(username)
+        return userRepository.byNameOrEmail(username)
             .then(user => {
                 if(!user) {
                     return false;
                 }
 
-                return hashService.compare(password, user.passwod);
-            })
-            .then(correctPassword => {
-                if(!correctPassword) {
-                    return false;
-                } 
+                return hashService.compare(password, user.password)
+                    .then(correctPassword => {
+                        if(!correctPassword) {
+                            return false;
+                        }
+
+                        const token = tokenService.sign({ username: user.username });
+
+                        return {
+                            token: token,
+                            user: {
+                                email: user.email,
+                                username: user.username,
+                                createdAt: user.createdAt
+                            }
+                        };
+                    });
             });
     }
 
