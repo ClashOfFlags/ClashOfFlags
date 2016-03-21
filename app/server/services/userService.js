@@ -36,20 +36,14 @@ class UserService {
         return userRepository.byToken(token)
             .then(user => {
                 if(!user) {
-                    return {
-                        verified: false,
-                        invalid: true
-                    };
+                    return false;
                 }
 
                 user.verified = true;
 
                 user.save();
 
-                return {
-                    verified: true,
-                    invalid: false
-                };
+                return true;
             });
     }
 

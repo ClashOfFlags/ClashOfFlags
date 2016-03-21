@@ -22,9 +22,13 @@
         data() {
             return {
                 pending: true,
-                verified: false,
-                invalid: false
+                verified: false
             };
+        },
+        computed: {
+            invalid() {
+                return !this.pending && !this.verified;
+            }
         },
         route: {
             activate() {
@@ -33,8 +37,7 @@
                 api.verify(token)
                         .then(result => {
                             this.pending = false;
-                            this.verified = result.verified;
-                            this.invalid = result.invalid;
+                            this.verified = result;
                         });
             }
         }
