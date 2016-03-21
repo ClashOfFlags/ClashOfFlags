@@ -1,4 +1,5 @@
 module.exports = [
     require('./register'),
-    require('./login')
+    require('./login'),
+    require('./verify')
 ];

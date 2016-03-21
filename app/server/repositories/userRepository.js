@@ -18,6 +18,10 @@ class UserRepository {
         });
     }
 
+    byToken(token) {
+        return User.findOne({ verificationToken: token });
+    }
+
 }
 
 module.exports = new UserRepository();

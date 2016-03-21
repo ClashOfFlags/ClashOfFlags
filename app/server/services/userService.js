@@ -32,6 +32,27 @@ class UserService {
         return mailService.send(to, subject, html.join(''));
     }
 
+    verify(token) {
+        return userRepository.byToken(token)
+            .then(user => {
+                if(!user) {
+                    return {
+                        verified: false,
+                        invalid: true
+                    };
+                }
+
+                user.verified = true;
+
+                user.save();
+
+                return {
+                    verified: true,
+                    invalid: false
+                };
+            });
+    }
+
 }
 
 module.exports = new UserService();
