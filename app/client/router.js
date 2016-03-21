@@ -5,6 +5,7 @@ import Game from './components/views/Game.vue';
 import Login from './components/views/Login.vue';
 import Register from './components/views/Register.vue';
 import About from './components/views/About.vue';
+import Verify from './components/views/Verify.vue';
 /* Views */
 
 const routerOptions = {
@@ -30,6 +31,9 @@ router.map({
     },
     '/about': {
         component: About
+    },
+    '/verify/:token': {
+        component: Verify
     }
 });
 
