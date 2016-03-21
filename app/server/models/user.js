@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const Chance = require('chance');
+const chance = new Chance();
 
 module.exports = mongoose.model('User', {
     email: String,
@@ -6,5 +8,9 @@ module.exports = mongoose.model('User', {
     password: String,
     createdAt: { type: Date, default: Date.now },
     verified: { type: Boolean, default: false },
-    verifyToken: String
+    verificationToken: { type: String, default: generateVerificationToken }
 });
+
+function generateVerificationToken() {
+    return chance.hash();
+}
