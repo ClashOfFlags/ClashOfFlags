@@ -1,3 +1,5 @@
+const userService = require('../../services/userService');
+
 module.exports = {
     event: 'login',
     rules: {
@@ -8,5 +10,7 @@ module.exports = {
 };
 
 function* handle(request) {
-    return true;
+    const username = request.user
+
+    return yield userService.login(username, password);
 }

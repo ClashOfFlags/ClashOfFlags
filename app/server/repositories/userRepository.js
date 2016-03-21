@@ -22,6 +22,10 @@ class UserRepository {
         return User.findOne({ verificationToken: token });
     }
 
+    byName(username) {
+        return User.findOne({ username: username });
+    }
+
 }
 
 module.exports = new UserRepository();

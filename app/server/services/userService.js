@@ -47,6 +47,22 @@ class UserService {
             });
     }
 
+    login(username, password) {
+        return userRepository.byName(username)
+            .then(user => {
+                if(!user) {
+                    return false;
+                }
+
+                return hashService.compare(password, user.passwod);
+            })
+            .then(correctPassword => {
+                if(!correctPassword) {
+                    return false;
+                } 
+            });
+    }
+
 }
 
 module.exports = new UserService();

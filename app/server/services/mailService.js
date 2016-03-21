@@ -5,7 +5,7 @@ const apiKey = process.env.MAILGUN_API_KEY;
 const mailgunApi = mailgun({ apiKey: apiKey, domain: 'clash-of-flags.com' });
 
 if(!apiKey) {
-    console.warn('Please insert Mailgun API Key into the .env file!');
+    console.warn('MAILGUN_API_KEY missing in .env file!');
 }
 
 class MailService {
