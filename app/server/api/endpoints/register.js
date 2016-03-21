@@ -1,4 +1,5 @@
 const userService = require('../../services/userService');
+const mailService = require('../../services/mailService');
 
 module.exports = {
     event: 'register',
@@ -19,5 +20,9 @@ function* handle(request) {
 
     const user = yield userService.register(userData);
 
-    return user;
+    mailService.send(user.email, 'Please verify your account', user.verificationToken)
+        .then(data => console.log(data))
+        .catch(err => console.error(err));
+
+    return true;
 }
