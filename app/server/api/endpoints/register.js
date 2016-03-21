@@ -20,9 +20,7 @@ function* handle(request) {
 
     const user = yield userService.register(userData);
 
-    mailService.send(user.email, 'Please verify your account', user.verificationToken)
-        .then(data => console.log(data))
-        .catch(err => console.error(err));
+    userService.sendRegistrationMail(user);
 
     return true;
 }

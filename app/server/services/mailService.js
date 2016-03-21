@@ -10,12 +10,12 @@ if(!apiKey) {
 
 class MailService {
 
-    send(to, subject, text) {
+    send(to, subject, html) {
         const mailData = {
             from: 'Clash of Flags <welcome@clash-of-flags.com>',
             to: to,
             subject: subject,
-            text: text
+            html: html
         };
 
         return new Promise((resolve, reject) => {
