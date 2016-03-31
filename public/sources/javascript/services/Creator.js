@@ -14,6 +14,7 @@ export default class Creator {
         this.network = $container.NetworkService;
         this.playerFactory = this.$container.PlayerFactory;
         this.teamManager = $container.TeamManager;
+        this.tutorial = $container.Tutorial;
     }
 
     run() {
@@ -77,6 +78,7 @@ export default class Creator {
         this.space.onDown.add(() => {
             this.player.shoot();
             this.network.sendShoot(this.player);
+            this.tutorial.hideShootHint();
         });
     }
 
@@ -227,6 +229,41 @@ export default class Creator {
 
     createTutorialHints(){
       this.createMoveHint();
+      this.createShootHint();
+    }
+
+    createShootHint() {
+      var graphics = this.game.add.graphics();
+      var shootHint = this.game.add.group();
+      var style = { font: "18px Arial", fill: "#fff"};
+
+      var startHintX = 10;
+      var startHintY = 60;
+
+      graphics.beginFill(0xffffff);
+      graphics.drawRect(startHintX, startHintY, 250, 90);
+      graphics.endFill();
+
+      var text = this.game.add.text(90, startHintY + 5, "shoot with", style);
+      text.fixedToCamera = true;
+      shootHint.add(text);
+
+      graphics.beginFill(0xffff00);
+      graphics.drawRect(startHintX + 10, startHintY + 40, 230, 30);
+      graphics.endFill();
+
+      var text = this.game.add.text(110, startHintY + 45, "space", style);
+      text.fixedToCamera = true;
+      shootHint.add(text);
+
+      graphics.alpha = 0.5;
+      graphics.fixedToCamera = true;
+      window.graphics = graphics;
+      shootHint.add(graphics);
+
+      this.objects.set('shootHint', shootHint);
+
+      shootHint.visible = false;
     }
 
     createMoveHint() {

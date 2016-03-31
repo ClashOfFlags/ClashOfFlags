@@ -56,6 +56,8 @@ export default class Weapon {
             bullet.body.velocity.x = -config.game.weapons[this.weapon].bulletSpeed;
         }
 
+        this.player.bulletsShot++;
+
         eventSystem().emit('bullet.shoot', {
            bullet: bullet
        });

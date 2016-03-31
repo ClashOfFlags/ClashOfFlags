@@ -5,6 +5,7 @@ import Preloader from './../services/Preloader';
 import Creator from './../services/Creator';
 import Updater from './../services/Updater';
 import ObjectsService from './../services/ObjectsService';
+import Tutorial from './../services/Tutorial';
 import NetworkService from './../services/network/NetworkService';
 import PlayerFactory from './../factories/PlayerFactory';
 import TeamManager from './../services/TeamManager';
@@ -43,9 +44,9 @@ export default class Bootstrapper {
         this.bottle.service('TeamManager', TeamManager, 'game', '$container');
         this.bottle.service('Creator', Creator, 'game', '$container');
         this.bottle.service('Updater', Updater, 'game', '$container');
+        this.bottle.service('Tutorial', Tutorial, 'game', '$container');
         this.bottle.service('GameState', GameState, 'game', '$container');
         this.bottle.service('EventDispatcher', EventDispatcher, '$container');
-
     }
 
 
