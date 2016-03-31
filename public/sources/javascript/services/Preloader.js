@@ -16,6 +16,7 @@ export default class Preloader {
         this.loadPlayer();
         this.loadMap();
         this.loadItems();
+        this.loadRanks();
     }
 
     loadTilemaps() {
@@ -52,6 +53,16 @@ export default class Preloader {
 
     loadItems() {
       this.game.load.image('barrel', this.paths.imageItem('barrel.png'));
+    }
+    
+    loadRanks() {
+        for(let i = 1; i <= 75; i++) {
+            const assetKey = 'rank' + i;
+            const imageName = 'Rank_' + i + '.png';
+            const imageUrl = this.paths.imageRank(imageName)
+
+            this.game.load.image(assetKey, imageUrl);
+        }
     }
 
 }
