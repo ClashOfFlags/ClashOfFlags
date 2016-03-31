@@ -230,6 +230,59 @@ export default class Creator {
     createTutorialHints(){
       this.createMoveHint();
       this.createShootHint();
+      this.createMapHint();
+    }
+
+    createMapHint() {
+      var graphics = this.game.add.graphics();
+      var mapHint = this.game.add.group();
+      var style = { font: "18px Arial", fill: "#fff"};
+
+      var startHintX = 250;
+      var startHintY = 470;
+
+      graphics.beginFill(0xffffff);
+      graphics.drawRect(startHintX, startHintY, 510, 60);
+      graphics.endFill();
+
+      var text = this.game.add.text(startHintX + 10, startHintY + 5, "There are two teams in this game. \nYou have to steal all the flags out of the enemy‘s base.", style);
+      text.fixedToCamera = true;
+      mapHint.add(text);
+
+      graphics.beginFill(0xff0000);
+      graphics.drawCircle(110, 410, 60);
+      graphics.endFill();
+
+      graphics.beginFill(0x0000ff);
+      graphics.drawCircle(110, 570, 60);
+      graphics.endFill();
+
+      var startX = 160;
+      var startY = 430;
+      var width = 30;
+      var height = 120;
+
+      graphics.beginFill(0xffff00);
+      graphics.moveTo(startX, startY);
+      graphics.lineTo(startX - width, startY + height/4);
+      graphics.lineTo(startX - width / 2, startY + height/4);
+      graphics.lineTo(startX - width / 2, startY + height - height/4);
+      graphics.lineTo(startX - width, startY + height - height/4);
+      graphics.lineTo(startX, startY + height);
+      graphics.lineTo(startX + width, startY + height - height/4);
+      graphics.lineTo(startX + width / 2, startY + height - height/4);
+      graphics.lineTo(startX + width / 2, startY + height/4);
+      graphics.lineTo(startX + width, startY + height/4);
+      graphics.endFill();
+
+      graphics.alpha = 0.5;
+      graphics.fixedToCamera = true;
+      window.graphics = graphics;
+      mapHint.add(graphics);
+
+      this.objects.set('mapHint', mapHint);
+
+      mapHint.visible = false;
     }
 
     createShootHint() {
