@@ -13,7 +13,7 @@
                 let hasDanger = false;
 
                 if(field) {
-                    hasDanger = field.invalid && field.touched;
+                    hasDanger = field.invalid && field.dirty;
                 }
 
                 return {

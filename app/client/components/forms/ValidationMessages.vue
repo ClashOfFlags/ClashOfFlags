@@ -1,5 +1,5 @@
 <template>
-    <p class="text-danger" v-show="invalidAndTouched">
+    <p class="text-danger" v-show="invalidAndDirty">
         <slot></slot>
     </p>
 </template>
@@ -8,11 +8,11 @@
     export default {
         props: [ 'field' ],
         computed: {
-            invalidAndTouched() {
+            invalidAndDirty() {
                 const field = this.field;
 
                 if(field) {
-                    return field.invalid && field.touched;
+                    return field.invalid && field.dirty;
                 }
 
                 return false;
