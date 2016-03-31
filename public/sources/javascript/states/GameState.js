@@ -1,8 +1,4 @@
 import State from './State';
-import Hero from './../objects/sprites/Hero';
-import Player from './../objects/sprites/Player';
-import TestCup from './../objects/sprites/TestCup';
-import PlayerFactory from './../factories/PlayerFactory';
 
 export default class GameState extends State {
     constructor(game, $container) {

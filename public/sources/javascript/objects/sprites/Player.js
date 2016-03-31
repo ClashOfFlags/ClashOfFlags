@@ -70,6 +70,11 @@ export default class Player extends Sprite {
         this.healthbar.y = this.y - this.height * 1.5;
     }
 
+    updateRank() {
+        this.rankSprite.x = this.healthbar.x - this.rankSprite.width - 5;
+        this.rankSprite.y = this.healthbar.y - (this.rankSprite.height / 3);
+    }
+
     getFlag() {
         this.carryingFlag = true;
     }
@@ -104,6 +109,7 @@ export default class Player extends Sprite {
 
         this.updateName();
         this.updateHealthbar();
+        this.updateRank();
 
         if (this.isFacingDirection(newDirection, true)) {
             return false;
@@ -218,6 +224,7 @@ export default class Player extends Sprite {
         this.visible = false;
         this.name.visible = false;
         this.healthbar.visible = false;
+        this.rankSprite.visible = false;
         this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
 
         eventSystem().emit('player_dead', {
@@ -230,10 +237,12 @@ export default class Player extends Sprite {
         this.visible = true;
         this.name.visible = true;
         this.healthbar.visible = true;
+        this.rankSprite.visible = true;
         this.health = 100;
         this.healthbar.scale.x = 1;
         this.updateName();
         this.updateHealthbar();
+        this.updateRank();
         this.alpha = 0.2;
         this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.invisible, this.endInvisible, this);
     }
