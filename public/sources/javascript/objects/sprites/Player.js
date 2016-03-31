@@ -288,6 +288,8 @@ export default class Player extends Sprite {
         if(newRanks > 0) {
             this.createRankSprite();
         }
+
+        console.log('Got ' + amount + ' exp and reached ' + newRanks + ' new ranks');
     }
 
     rank() {
