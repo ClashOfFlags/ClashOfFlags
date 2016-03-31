@@ -5,6 +5,7 @@ import config from '../../setup/config';
 import Splatter from './Splatter';
 
 export default class Player extends Sprite {
+
     boot() {
         this.speed = 400;
         this.enableArcadePhysics();
@@ -14,12 +15,7 @@ export default class Player extends Sprite {
         this.number = 1;
         this.networkId = null;
         this.carryingFlag = false;
-        this.rank = 1;
         this.exp = 0;
-
-        for(let i = 1; i <= 75; i++) {
-            console.log('Level:', i, 'Exp:', this.expFor(i));
-        }
     }
 
     isAlive() {
@@ -77,6 +73,10 @@ export default class Player extends Sprite {
     }
 
     updateRank() {
+        if(!this.rankSprite) {
+            return;
+        }
+
         this.rankSprite.x = this.healthbar.x - this.rankSprite.width - 5;
         this.rankSprite.y = this.healthbar.y - (this.rankSprite.height / 3);
     }
@@ -88,7 +88,13 @@ export default class Player extends Sprite {
             this.rankSprite = null;
         }
 
-        const rankSpriteKey = 'rank' + this.rank;
+        const rank = this.rank();
+
+        if(rank === 0) {
+            return;
+        }
+
+        const rankSpriteKey = 'rank' + rank;
         this.rankSprite = this.game.add.sprite(0, 0, rankSpriteKey);
         this.rankSprite.scale.x = 0.1;
         this.rankSprite.scale.y = 0.1;
@@ -276,11 +282,28 @@ export default class Player extends Sprite {
     }
 
     addExp(amount) {
+        const rankBefore = this.rank();
+        this.exp += amount;
+        const rankAfter = this.rank();
+        const newRanks = rankAfter - rankBefore;
 
+        if(newRanks > 0) {
+            this.createRankSprite();
+        }
     }
 
-    expFor(level) {
-        return Math.round(10 + level * (Math.log(level) / Math.LN10));
+    rank() {
+        for(let rank = 1; rank <= 75; rank++) {
+            const maxExp = this.expFor(rank);
+
+            if(this.exp < maxExp) {
+                return rank - 1;
+            }
+        }
+    }
+
+    expFor(rank) {
+        return Math.round(10 + rank * rank * Math.log(rank));
     }
 
 }
