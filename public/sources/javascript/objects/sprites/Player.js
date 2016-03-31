@@ -16,6 +16,7 @@ export default class Player extends Sprite {
         this.networkId = null;
         this.carryingFlag = false;
         this.exp = 0;
+        this.killStreak = 0;
     }
 
     isAlive() {
@@ -73,10 +74,6 @@ export default class Player extends Sprite {
     }
 
     updateRank() {
-        if(!this.rankSprite) {
-            return;
-        }
-
         this.rankSprite.x = this.healthbar.x - this.rankSprite.width - 5;
         this.rankSprite.y = this.healthbar.y - (this.rankSprite.height / 3);
     }
@@ -89,11 +86,6 @@ export default class Player extends Sprite {
         }
 
         const rank = this.rank();
-
-        if(rank === 0) {
-            return;
-        }
-
         const rankSpriteKey = 'rank' + rank;
         this.rankSprite = this.game.add.sprite(0, 0, rankSpriteKey);
         this.rankSprite.scale.x = 0.1;
@@ -104,10 +96,14 @@ export default class Player extends Sprite {
 
     getFlag() {
         this.carryingFlag = true;
+
+        this.addExp(4);
     }
 
     releaseFlag() {
         this.carryingFlag = false;
+
+        this.addExp(10);
     }
 
     setDirection(newDirection) {
@@ -255,6 +251,8 @@ export default class Player extends Sprite {
         this.name.visible = false;
         this.healthbar.visible = false;
         this.rankSprite.visible = false;
+        this.killStreak = 0;
+
         this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
 
         eventSystem().emit('player_dead', {
@@ -297,13 +295,35 @@ export default class Player extends Sprite {
             const maxExp = this.expFor(rank);
 
             if(this.exp < maxExp) {
-                return rank - 1;
+                return rank;
             }
         }
     }
 
     expFor(rank) {
         return Math.round(10 + rank * rank * Math.log(rank));
+    }
+
+    killedPlayer() {
+        this.killStreak++;
+
+        const exp = this.expForKillStreak();
+
+        this.addExp(exp);
+    }
+
+    expForKillStreak() {
+        if(this.killStreak >= 5) {
+            return 16;
+        }
+
+        switch(this.killStreak) {
+            case 1: return 1;
+            case 2: return 2;
+            case 3: return 4;
+            case 4: return 8;
+            default: return 1;
+        }
     }
 
 }
