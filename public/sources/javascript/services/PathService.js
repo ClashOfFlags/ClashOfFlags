@@ -1,7 +1,4 @@
 export default class PathService {
-    constructor() {
-
-    }
 
     imageWeapon(imageName) {
       return 'assets/images/weapon/' + imageName;
@@ -33,5 +30,9 @@ export default class PathService {
 
     tilemaps(imageName) {
       return 'assets/tilemaps/' + imageName;
+    }
+
+    imageRank(imageName) {
+        return 'assets/images/ranks/' + imageName;
     }
 }

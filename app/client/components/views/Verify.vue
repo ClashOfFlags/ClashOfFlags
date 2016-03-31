@@ -1,7 +1,7 @@
 <template>
     <br>
     <div class="row">
-        <div class="col-xs-6 center-block">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 center-block">
             <div class="alert alert-info" v-if="pending">Verifying your account, please wait.</div>
             <div class="alert alert-success" v-if="verified">
                 Your account has been verified!<br>

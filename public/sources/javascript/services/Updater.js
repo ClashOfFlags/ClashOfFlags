@@ -112,6 +112,10 @@ export default class Updater {
 
             player.damage(damage);
             this.network.sendDamage(player, damage);
+
+            if(player.isDead() && player.team.name !== bullet.shooter.team.name) {
+                bullet.shooter.killedPlayer();
+            }
         });
     }
 
@@ -170,6 +174,10 @@ export default class Updater {
 
         player.damage(bullet.power);
 
+        if(player.isDead()) {
+            bullet.shooter.killedPlayer();
+        }
+        
         if(this.isHero(bullet.shooter)) {
             this.network.sendDamage(player, bullet.power);
         }
