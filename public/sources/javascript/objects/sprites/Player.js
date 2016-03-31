@@ -14,6 +14,12 @@ export default class Player extends Sprite {
         this.number = 1;
         this.networkId = null;
         this.carryingFlag = false;
+        this.rank = 1;
+        this.exp = 0;
+
+        for(let i = 1; i <= 75; i++) {
+            console.log('Level:', i, 'Exp:', this.expFor(i));
+        }
     }
 
     isAlive() {
@@ -73,6 +79,21 @@ export default class Player extends Sprite {
     updateRank() {
         this.rankSprite.x = this.healthbar.x - this.rankSprite.width - 5;
         this.rankSprite.y = this.healthbar.y - (this.rankSprite.height / 3);
+    }
+
+    createRankSprite() {
+        if(this.rankSprite) {
+            this.rankSprite.kill();
+
+            this.rankSprite = null;
+        }
+
+        const rankSpriteKey = 'rank' + this.rank;
+        this.rankSprite = this.game.add.sprite(0, 0, rankSpriteKey);
+        this.rankSprite.scale.x = 0.1;
+        this.rankSprite.scale.y = 0.1;
+
+        this.updateRank();
     }
 
     getFlag() {
@@ -250,4 +271,13 @@ export default class Player extends Sprite {
     endInvisible() {
         this.alpha = 1;
     }
+
+    addExp(amount) {
+
+    }
+
+    expFor(level) {
+        return Math.round(10 + level * (Math.log(level) / Math.LN10));
+    }
+
 }

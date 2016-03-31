@@ -60,10 +60,7 @@ export default class PlayerFactory extends AbstractFactory {
         player.updateHealthbar();
 
         /* Rank */
-        player.rankSprite = this.game.add.sprite(0, 0, 'rank1');
-        player.rankSprite.scale.x = 0.1;
-        player.rankSprite.scale.y = 0.1;
-        player.updateRank();
+        player.createRankSprite();
         /* Rank */
 
         var playerGroup = this.objects.get('playerGroup');
