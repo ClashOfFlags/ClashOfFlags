@@ -135,7 +135,7 @@ function buildScript(file, watch) {
             .pipe(buffer())
 
             .pipe(save('before-uglify'))
-            .pipe(uglify())
+            // .pipe(uglify())
             .pipe(rename('app.min.js'))
             .pipe(gulp.dest(folder_dest + '/javascript/'))
             .pipe(save.restore('before-uglify'))

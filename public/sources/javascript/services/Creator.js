@@ -26,6 +26,7 @@ export default class Creator {
         this.createItem('barrel');
         this.createMiniMap();
         this.createStatusbar();
+        this.createTutorialHints();
 
 
         eventSystem().on('network.handshake:after', (payload) => {
@@ -222,5 +223,62 @@ export default class Creator {
           this.objects.set('statusFlag' + i + '.' + teamName, flag);
         }
       }
+    }
+
+    createTutorialHints(){
+      this.createMoveHint();
+    }
+
+    createMoveHint() {
+      var graphics = this.game.add.graphics();
+      var moveHint = this.game.add.group();
+      var style = { font: "18px Arial", fill: "#fff"};
+
+      var startHintX = 10;
+      var startHintY = 60;
+
+      graphics.beginFill(0xffffff);
+      graphics.drawRect(startHintX, startHintY, 250, 150);
+      graphics.endFill();
+
+      var keyWidth = 30;
+      var keyStartY = startHintX + 160;
+      var keyStartX;
+
+      for (var i = 0; i < 2; i++) {
+        keyStartX = 130 * i + startHintX + 10;
+        graphics.beginFill(0xffff00);
+        graphics.drawRect(keyStartX, keyStartY, keyWidth, keyWidth);
+        var text = this.game.add.text(keyStartX + ((i === 0)? 8: 7), keyStartY + 2, (i === 0)? "A": "←", style);
+        text.fixedToCamera = true;
+        moveHint.add(text);
+        graphics.drawRect(keyStartX + keyWidth + 5, keyStartY, keyWidth, keyWidth);
+        var text = this.game.add.text(keyStartX + ((i === 0)? 8: 10) + keyWidth + 5, keyStartY + 2, (i === 0)? "S": "↓", style);
+        text.fixedToCamera = true;
+        moveHint.add(text);
+        graphics.drawRect(keyStartX + keyWidth + 5, keyStartY - keyWidth - 5, keyWidth, keyWidth);
+        var text = this.game.add.text(keyStartX + ((i === 0)? 7: 10) + keyWidth +5, keyStartY + 2 - keyWidth - 5, (i === 0)? "W": "↑", style);
+        text.fixedToCamera = true;
+        moveHint.add(text);
+        graphics.drawRect(keyStartX + keyWidth * 2 + 10, keyStartY, keyWidth, keyWidth);
+        var text = this.game.add.text(keyStartX + 7 + keyWidth * 2 + 10, keyStartY + 2, (i === 0)? "D": "→", style);
+        text.fixedToCamera = true;
+        moveHint.add(text);
+        graphics.endFill();
+      }
+
+      var text = this.game.add.text(90, startHintY + 5, "move with", style);
+      text.fixedToCamera = true;
+      moveHint.add(text);
+      var text = this.game.add.text(130, startHintY + 40, "or", style);
+      text.fixedToCamera = true;
+      moveHint.add(text);
+
+      graphics.alpha = 0.5;
+      graphics.fixedToCamera = true;
+      window.graphics = graphics;
+      moveHint.add(graphics);
+
+      this.objects.set('moveHint', moveHint);
     }
 }

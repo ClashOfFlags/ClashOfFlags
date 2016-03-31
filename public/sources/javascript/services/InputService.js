@@ -5,6 +5,7 @@ export default class InputService {
     constructor(game, $container) {
         this.game = game;
         this.network = $container.NetworkService;
+        this.objects = $container.ObjectsService;
         this.inputs = {};
     }
 
@@ -41,15 +42,27 @@ export default class InputService {
 
         if (this.cursorKeys().up.isDown || this.wasd().up.isDown) {
             player.moveToDirection(direction.TOP);
+            if(this.objects.get("moveHint").alpha === 1){
+              var tween = this.game.add.tween(this.objects.get("moveHint")).to({alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
+            }
         }
         else if (this.cursorKeys().down.isDown || this.wasd().down.isDown) {
             player.moveToDirection(direction.BOTTOM);
+            if(this.objects.get("moveHint").alpha === 1){
+              var tween = this.game.add.tween(this.objects.get("moveHint")).to({alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
+            }
         }
         else if (this.cursorKeys().left.isDown || this.wasd().left.isDown) {
             player.moveToDirection(direction.LEFT);
+            if(this.objects.get("moveHint").alpha === 1){
+              var tween = this.game.add.tween(this.objects.get("moveHint")).to({alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
+            }
         }
         else if (this.cursorKeys().right.isDown || this.wasd().right.isDown) {
             player.moveToDirection(direction.RIGHT);
+            if(this.objects.get("moveHint").alpha === 1){
+              var tween = this.game.add.tween(this.objects.get("moveHint")).to({alpha: 0}, 1000, Phaser.Easing.Linear.None, true);
+            }
         } else {
             const wasMoving = player.isMoving();
 

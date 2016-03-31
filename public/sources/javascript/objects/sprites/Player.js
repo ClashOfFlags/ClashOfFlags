@@ -99,6 +99,8 @@ export default class Player extends Sprite {
 
     moveToDirection(newDirection, source = "user") {
         if (!this.visible) {
+            this.body.velocity.y = 0;
+            this.body.velocity.x = 0;
             return false;
         }
 
@@ -208,6 +210,7 @@ export default class Player extends Sprite {
         if (this.health > 0) {
             this.healthbar.scale.x = this.health / 100;
         } else {
+            this.health = 0;
             new Splatter(this.game, this.x, this.y, 'green_marine_dead');
             this.dead();
         }
