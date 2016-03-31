@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-xs-4 center-block">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 center-block">
             <h1>Register</h1>
             <validator name="validation">
                 <!-- Email -->
@@ -73,14 +73,29 @@
             return {
                 email: '',
                 username: '',
-                password: ''
+                password: '',
+                pending: false
             };
+        },
+        computed: {
+            submitDisabled() {
+                return this.$validation.invalid || this.pending;
+            }
         },
         methods: {
             register() {
+                this.pending = true;
+
                 api.register(this.email, this.username, this.password)
                     .then(data => {
-                        console.log(data);
+                        this.pending = false;
+
+                        if(data === 'true') {
+                            return;
+                        }
+
+                        toastr.success('You can login now', 'Successfully registered!');
+                        this.$route.router.go('/login');
                     });
             }
         }

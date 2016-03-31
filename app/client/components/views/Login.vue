@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-xs-4 center-block">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 center-block">
             <h1>Login</h1>
             <div class="alert alert-danger" v-if="failed">Invalid username or password!</div>
             <validator name="validation">
@@ -85,7 +85,7 @@
                             return;
                         }
 
-                        toastr.info('Welcome back ' + authService.user.username);
+                        toastr.success('Welcome back ' + this.username, 'Successfully logged in!');
                         this.$route.router.go('/profile');
                     });
             }

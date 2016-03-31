@@ -29,7 +29,7 @@
         methods: {
             logout(event) {
                 event.preventDefault();
-                toastr.info('Good bye ' + this.authService.user.username);
+                toastr.info('Good bye ' + this.authService.user.username, 'Logged out');
                 authService.logout();
             }
         }
