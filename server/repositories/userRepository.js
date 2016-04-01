@@ -31,7 +31,16 @@ class UserRepository {
     }
 
     saveExp(id, exp) {
-        return User.findOneAndUpdate({ _id: id}, { exp: exp });
+        return User.findOne({ _id: id })
+            .then(user => {
+                if(!user || user.exp > exp) {
+                    return;
+                }
+
+                user.exp = exp;
+
+                return user.save();
+            });
     }
 
 }
