@@ -15,7 +15,6 @@
     "url": "https://github.com/ClashOfFlags/ClashOfFlags.git"
   },
   "scripts": {
-    "setup": "sudo npm install -g pm2 bower gulp webpack && npm install && bower install && cp .env.example .env",
     "build": "gulp",
     "watch": "gulp watch",
     "start": "pm2 start pm2.json",
@@ -34,6 +33,7 @@
     "lodash": "^4.5.1",
     "mailgun-js": "^0.7.7",
     "mongoose": "^4.4.4",
+    "pm2": "^1.0.2",
     "socket.io": "^1.4.5"
   },
   "devDependencies": {
