@@ -51,8 +51,16 @@ export default class Preloader {
 
       for (var i = 0; i < 2; i++) {
         var color = (i===0)? "red" : "blue";
-        // loadPlayerWithColor(color, "flamer", 46, 26, 52, 26);
         this.loadPlayerWithColor(color, "pistol", 43, 22, 48, 23);
+        this.loadPlayerWithColor(color, "flamer", 45, 27, 54, 26);
+        this.loadPlayerWithColor(color, "laser", 44, 26, 45, 23);
+        this.loadPlayerWithColor(color, "plasma", 45, 24, 52, 24);
+        this.loadPlayerWithColor(color, "rifle", 43, 25, 59, 24);
+        this.loadPlayerWithColor(color, "pistol2", 38, 22, 46, 23);
+        this.loadPlayerWithColor(color, "flamer2", 46, 26, 52, 25);
+        this.loadPlayerWithColor(color, "laser2", 44, 25, 45, 22);
+        this.loadPlayerWithColor(color, "plasma2", 45, 22, 50, 23);
+        this.loadPlayerWithColor(color, "rifle2", 44, 22, 57, 23);
       }
     }
 

@@ -62,6 +62,7 @@ export default class PlayerFactory extends AbstractFactory {
 
         /* Rank */
         player.createRankSprite();
+        player.checkNewPlayerSprite();
         /* Rank */
 
         var playerGroup = this.objects.get('playerGroup');

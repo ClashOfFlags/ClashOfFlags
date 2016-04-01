@@ -60,7 +60,7 @@ export default class Player extends Sprite {
     }
 
     changeSpriteToNormal() {
-        this.loadTexture('player_'+this.team.name+'_pistol', 0, true);
+        this.loadTexture('player_'+this.team.name+'_'+this.playerSprite, 0, true);
     }
 
     updateName() {
@@ -92,6 +92,33 @@ export default class Player extends Sprite {
         this.rankSprite.scale.y = 0.1;
 
         this.updateRank();
+    }
+
+    checkNewPlayerSprite() {
+      const rank = this.rank();
+      if(rank >= 0 && rank < 7){
+        this.playerSprite = "pistol";
+      }else if(rank >= 7 && rank < 14){
+        this.playerSprite = "flamer";
+      }else if(rank >= 14 && rank < 21){
+        this.playerSprite = "rifle";
+      }else if(rank >= 21 && rank < 28){
+        this.playerSprite = "laser";
+      }else if(rank >= 28 && rank < 35){
+        this.playerSprite = "plasma";
+      }else if(rank >= 35 && rank < 42){
+        this.playerSprite = "pistol2";
+      }else if(rank >= 42 && rank < 49){
+        this.playerSprite = "flamer2";
+      }else if(rank >= 49 && rank < 56){
+        this.playerSprite = "rifle2";
+      }else if(rank >= 56 && rank < 63){
+        this.playerSprite = "laser2";
+      }else if(rank >= 63 && rank < 70){
+        this.playerSprite = "plasma2";
+      }
+
+      this.loadTexture('player_'+this.team.name+'_'+this.playerSprite, 0, true);
     }
 
     getFlag() {
@@ -286,6 +313,7 @@ export default class Player extends Sprite {
 
         if(newRanks > 0) {
             this.createRankSprite();
+            this.checkNewPlayerSprite();
         }
 
         console.log('Got ' + amount + ' exp and reached ' + newRanks + ' new ranks');
