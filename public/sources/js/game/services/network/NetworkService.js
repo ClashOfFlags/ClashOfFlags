@@ -5,6 +5,7 @@ export default class NetworkService {
         this.objects = $container.ObjectsService;
         this.playerFactory = $container.PlayerFactory;
         this.teamManager = $container.TeamManager;
+        this.authService = $container.AuthService;
         this.socket = io();
 
         this.registerEvents();
@@ -40,6 +41,21 @@ export default class NetworkService {
             }
 
             this.sendPosition(payload.player);
+        });
+
+        eventSystem().on('player.exp', payload => {
+            const player = payload.player;
+            const hero = this.objects.get('hero');
+
+            if(player !== hero) {
+                return;
+            }
+
+            if(!this.authService.isLoggedIn()) {
+                return;
+            }
+
+            this.sendExp(hero);
         });
     }
 
@@ -101,6 +117,17 @@ export default class NetworkService {
         this.broadcast('PlayerDamageEvent', payload);
     }
 
+    sendExp(player) {
+        const token = this.authService.token();
+        const payload = {
+            token: token,
+            exp: player.exp
+        };
+
+        console.log('sendExp', payload);
+        this.emit('exp', payload);
+    }
+    
     /* Send Functions */
 
     /* Receive Functions */

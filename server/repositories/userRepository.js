@@ -25,6 +25,14 @@ class UserRepository {
     byNameOrEmail(input) {
         return User.findOne().or([ { username: input }, { email: input } ]);
     }
+    
+    byId(id) {
+        return User.findOne({ _id: id });
+    }
+
+    saveExp(id, exp) {
+        return User.findOneAndUpdate({ _id: id}, { exp: exp });
+    }
 
 }
 

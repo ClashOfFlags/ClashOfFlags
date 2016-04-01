@@ -220,7 +220,6 @@ export default class Player extends Sprite {
     resetVelocity() {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
-
     }
 
     damage(damage) {
@@ -288,6 +287,11 @@ export default class Player extends Sprite {
         if(newRanks > 0) {
             this.createRankSprite();
         }
+
+        eventSystem().emit('player.exp', {
+            player: this,
+            exp: this.exp
+        });
 
         console.log('Got ' + amount + ' exp and reached ' + newRanks + ' new ranks');
     }
