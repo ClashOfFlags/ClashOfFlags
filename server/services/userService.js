@@ -61,7 +61,10 @@ class UserService {
                             return false;
                         }
 
-                        const token = tokenService.sign({ username: user.username });
+                        const token = tokenService.sign({
+                            id: user._id,
+                            username: user.username
+                        });
 
                         return {
                             token: token,
@@ -73,6 +76,28 @@ class UserService {
                         };
                     });
             });
+    }
+    
+    saveExp(token, exp) {
+        return tokenService.verify(token)
+            .then(userData => {
+                return userRepository.saveExp(userData.id, exp)
+                    .catch(err => console.error(err));
+            });
+    }
+    
+    getExp(token) {
+        return tokenService.verify(token)
+            .then(userData => {
+                return userRepository.byId(userData.id);
+            })
+            .then(user => {
+                if(!user || !user.exp) {
+                    return 0;
+                }
+
+                return user.exp;
+            })
     }
 
 }

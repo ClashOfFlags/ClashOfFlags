@@ -7,11 +7,11 @@ import Updater from './../services/Updater';
 import ObjectsService from './../services/ObjectsService';
 import Tutorial from './../services/Tutorial';
 import NetworkService from './../services/network/NetworkService';
+import AuthService from './../services/AuthService';
 import PlayerFactory from './../factories/PlayerFactory';
 import TeamManager from './../services/TeamManager';
 import config from './config';
 import EventDispatcher from './../events/EventDispatcher';
-
 
 export default class Bootstrapper {
     constructor() {
@@ -47,6 +47,7 @@ export default class Bootstrapper {
         this.bottle.service('Tutorial', Tutorial, 'game', '$container');
         this.bottle.service('GameState', GameState, 'game', '$container');
         this.bottle.service('EventDispatcher', EventDispatcher, '$container');
+        this.bottle.service('AuthService', AuthService);
     }
 
 

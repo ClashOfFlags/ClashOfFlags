@@ -247,7 +247,6 @@ export default class Player extends Sprite {
     resetVelocity() {
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
-
     }
 
     damage(damage) {
@@ -305,9 +304,9 @@ export default class Player extends Sprite {
         this.alpha = 1;
     }
 
-    addExp(amount) {
+    setExp(exp) {
         const rankBefore = this.rank();
-        this.exp += amount;
+        this.exp = exp;
         const rankAfter = this.rank();
         const newRanks = rankAfter - rankBefore;
 
@@ -315,8 +314,15 @@ export default class Player extends Sprite {
             this.createRankSprite();
             this.checkNewPlayerSprite();
         }
+    }
 
-        console.log('Got ' + amount + ' exp and reached ' + newRanks + ' new ranks');
+    addExp(amount) {
+        this.setExp(this.exp + amount);
+
+        eventSystem().emit('player.exp', {
+            player: this,
+            exp: this.exp
+        });
     }
 
     rank() {

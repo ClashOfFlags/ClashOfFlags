@@ -27,6 +27,7 @@ class AuthService {
 
                 this.setUser(this.user);
                 this.setToken(token);
+                eventSystem().emit('login', result);
 
                 return true;
             });

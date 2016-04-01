@@ -8,7 +8,8 @@ module.exports = mongoose.model('User', {
     password: String,
     createdAt: { type: Date, default: Date.now },
     verified: { type: Boolean, default: false },
-    verificationToken: { type: String, default: generateVerificationToken }
+    verificationToken: { type: String, default: generateVerificationToken },
+    exp: { type: Number, default: 0 }
 });
 
 function generateVerificationToken() {

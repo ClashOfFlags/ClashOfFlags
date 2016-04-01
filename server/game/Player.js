@@ -1,5 +1,6 @@
 'use strict';
 
+const userService = require('../services/userService');
 let playerId = 0; // Not optimal, should be changed later
 
 module.exports = class Player {
@@ -22,6 +23,25 @@ module.exports = class Player {
 
         this.socket.on('broadcast', payload => {
             this.socket.broadcast.emit(payload.event, payload.data);
+        });
+
+        this.socket.on('exp:set', payload => {
+            if(!payload.token || !payload.exp) {
+                return;
+            }
+
+            userService.saveExp(payload.token, payload.exp);
+        });
+        
+        this.socket.on('exp:get', payload => {
+            if(!payload.token) {
+                return;
+            } 
+            
+            userService.getExp(payload.token)
+                .then(exp => {
+                    this.emit('exp:get', { exp: exp }); 
+                });
         });
     }
 
