@@ -82,7 +82,6 @@ class UserService {
         return tokenService.verify(token)
             .then(userData => {
                 return userRepository.saveExp(userData.id, exp)
-                    .then(data => console.log(data))
                     .catch(err => console.error(err));
             });
     }
