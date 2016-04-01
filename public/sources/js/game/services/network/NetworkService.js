@@ -16,6 +16,8 @@ export default class NetworkService {
         this.registerEvent('PlayerPositionEvent', this.onPlayerPosition);
         this.registerEvent('PlayerShootEvent', this.onPlayerShoot);
         this.registerEvent('PlayerDamageEvent', this.onPlayerDamage);
+        this.registerEvent('AskForExp', this.answerWithExp);
+        this.registerEvent('AnswerWithExp', this.onAnswerWithExp);
         this.registerEvent('exp:get', this.onExpGet);
 
         eventSystem().on('bullet.shoot', (payload) => {
@@ -142,6 +144,19 @@ export default class NetworkService {
 
         this.emit('exp:get', { token: token });
     }
+
+    askForExp() {
+        this.broadcast('AskForExp');
+    }
+
+    answerWithExp() {
+        const hero = this.objects.get('hero');
+
+        this.broadcast('AnswerWithExp', {
+            player: hero.number,
+            exp: hero.exp
+        });
+    }
     
     /* Send Functions */
 
@@ -157,6 +172,7 @@ export default class NetworkService {
         });
         
         this.getExp();
+        this.askForExp();
     }
 
     onPlayerPosition(event) {
@@ -206,6 +222,13 @@ export default class NetworkService {
         const hero = this.objects.get('hero');
         
         hero.setExp(event.exp);
+        this.answerWithExp();
+    }
+
+    onAnswerWithExp(event) {
+        const player = this.teamManager.findPlayer(event.player);
+
+        player.setExp(event.exp);
     }
 
 }
