@@ -278,22 +278,24 @@ export default class Player extends Sprite {
         this.alpha = 1;
     }
 
-    addExp(amount) {
+    setExp(exp) {
         const rankBefore = this.rank();
-        this.exp += amount;
+        this.exp = exp;
         const rankAfter = this.rank();
         const newRanks = rankAfter - rankBefore;
 
         if(newRanks > 0) {
             this.createRankSprite();
         }
+    }
+
+    addExp(amount) {
+        this.setExp(this.exp + amount);
 
         eventSystem().emit('player.exp', {
             player: this,
             exp: this.exp
         });
-
-        console.log('Got ' + amount + ' exp and reached ' + newRanks + ' new ranks');
     }
 
     rank() {

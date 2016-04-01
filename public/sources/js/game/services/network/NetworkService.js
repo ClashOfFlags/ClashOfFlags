@@ -16,6 +16,7 @@ export default class NetworkService {
         this.registerEvent('PlayerPositionEvent', this.onPlayerPosition);
         this.registerEvent('PlayerShootEvent', this.onPlayerShoot);
         this.registerEvent('PlayerDamageEvent', this.onPlayerDamage);
+        this.registerEvent('exp:get', this.onExpGet);
 
         eventSystem().on('bullet.shoot', (payload) => {
             this.objects.get('bulletGroup').add(payload.bullet);
@@ -56,6 +57,10 @@ export default class NetworkService {
             }
 
             this.sendExp(hero);
+        });
+        
+        eventSystem().on('login', () => {
+            this.getExp();
         });
     }
 
@@ -125,7 +130,17 @@ export default class NetworkService {
         };
 
         console.log('sendExp', payload);
-        this.emit('exp', payload);
+        this.emit('exp:set', payload);
+    }
+    
+    getExp() {
+        if(!this.authService.isLoggedIn()) {
+            return;
+        }
+
+        const token = this.authService.token();
+
+        this.emit('exp:get', { token: token });
     }
     
     /* Send Functions */
@@ -140,6 +155,8 @@ export default class NetworkService {
         eventSystem().emit('network.handshake:after', {
             hero: player
         });
+        
+        this.getExp();
     }
 
     onPlayerPosition(event) {
@@ -183,6 +200,12 @@ export default class NetworkService {
         const player = this.teamManager.findPlayer(event.player);
 
         player.setHealth(event.health);
+    }
+    
+    onExpGet(event) {
+        const hero = this.objects.get('hero');
+        
+        hero.setExp(event.exp);
     }
 
 }

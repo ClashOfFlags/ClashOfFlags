@@ -85,6 +85,20 @@ class UserService {
                     .catch(err => console.error(err));
             });
     }
+    
+    getExp(token) {
+        return tokenService.verify(token)
+            .then(userData => {
+                return userRepository.byId(userData.id);
+            })
+            .then(user => {
+                if(!user || !user.exp) {
+                    return 0;
+                }
+
+                return user.exp;
+            })
+    }
 
 }
 

@@ -25,13 +25,24 @@ module.exports = class Player {
             this.socket.broadcast.emit(payload.event, payload.data);
         });
 
-        this.socket.on('exp', payload => {
+        this.socket.on('exp:set', payload => {
             if(!payload.token || !payload.exp) {
                 return;
             }
 
             userService.saveExp(payload.token, payload.exp);
-        })
+        });
+        
+        this.socket.on('exp:get', payload => {
+            if(!payload.token) {
+                return;
+            } 
+            
+            userService.getExp(payload.token)
+                .then(exp => {
+                    this.emit('exp:get', { exp: exp }); 
+                });
+        });
     }
 
     emit(event, data) {
