@@ -20,8 +20,8 @@ export default class PathService {
       return 'assets/images/others/' + imageName;
     }
 
-    imagePlayer(imageName) {
-      return 'assets/images/player/' + imageName;
+    imagePlayers(imageName) {
+      return 'assets/images/players/' + imageName;
     }
 
     imageTilset(imageName) {

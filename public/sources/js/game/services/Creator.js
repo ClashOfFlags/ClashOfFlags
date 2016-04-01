@@ -154,7 +154,7 @@ export default class Creator {
                 .position(spawn)
                 .team(team)
                 .number(playerNumber)
-                .key('player')
+                .key('player_'+team.name+'_pistol')
                 .make();
 
             this.objects.set('player.' + playerNumber, player);

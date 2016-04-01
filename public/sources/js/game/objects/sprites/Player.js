@@ -60,7 +60,7 @@ export default class Player extends Sprite {
     }
 
     changeSpriteToNormal() {
-        this.loadTexture('player', 0, true);
+        this.loadTexture('player_'+this.team.name+'_pistol', 0, true);
     }
 
     updateName() {
@@ -239,13 +239,12 @@ export default class Player extends Sprite {
             this.healthbar.scale.x = this.health / 100;
         } else {
             this.health = 0;
-            new Splatter(this.game, this.x, this.y, 'green_marine_dead');
             this.dead();
         }
     }
 
     dead() {
-        new Splatter(this.game, this.x, this.y, 'green_marine_dead');
+        new Splatter(this.game, this.x, this.y, this.team.name + '_dead');
         this.visible = false;
         this.name.visible = false;
         this.healthbar.visible = false;

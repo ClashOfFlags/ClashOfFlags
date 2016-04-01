@@ -46,15 +46,25 @@ export default class Preloader {
     }
 
     loadPlayer() {
-      this.game.load.spritesheet('player', this.paths.imagePlayer('green_male_marine_flamer.png'), 46, 26);
-      this.game.load.spritesheet('player_shoot', this.paths.imagePlayer('green_male_marine_flamer_shoot.png'), 52, 26);
-      this.game.load.image('green_marine_dead', this.paths.imagePlayer('green_marine_dead.png'));
+      this.game.load.image('red_dead', this.paths.imagePlayers('red_dead.png'));
+      this.game.load.image('blue_dead', this.paths.imagePlayers('blue_dead.png'));
+
+      for (var i = 0; i < 2; i++) {
+        var color = (i===0)? "red" : "blue";
+        // loadPlayerWithColor(color, "flamer", 46, 26, 52, 26);
+        this.loadPlayerWithColor(color, "pistol", 43, 22, 48, 23);
+      }
+    }
+
+    loadPlayerWithColor(color, type, width, height, shootWidth, shootHeight){
+      this.game.load.spritesheet('player_'+color+'_'+type, this.paths.imagePlayers(color+'_'+type+'.png'), width, height);
+      this.game.load.spritesheet('player_'+color+'_'+type+'_shoot', this.paths.imagePlayers(color+'_'+type+'_shoot.png'), shootWidth, shootHeight);
     }
 
     loadItems() {
       this.game.load.image('barrel', this.paths.imageItem('barrel.png'));
     }
-    
+
     loadRanks() {
         for(let i = 1; i <= 75; i++) {
             const assetKey = 'rank' + i;
