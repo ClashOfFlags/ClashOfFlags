@@ -1,8 +1,7 @@
 module.exports = {
-    entry: './app/client/app.js',
     output: {
-        path: __dirname + '/public/distribution/javascript',
-        filename: 'app-vue.js',
+        path: __dirname + '/public/distribution/js',
+        filename: 'app.js',
         publicPath: 'public'
     },
     externals: {

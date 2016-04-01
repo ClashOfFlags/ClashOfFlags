@@ -2,8 +2,8 @@
   "apps": [
     {
       "name": "clash-of-flags",
-      "script": "app/server/app.js",
-      "watch": "app/server",
+      "script": "server/app.js",
+      "watch": "server",
       "ignore_watch": [ "node_modules" ],
       "watch_options": {
         "usePolling": true

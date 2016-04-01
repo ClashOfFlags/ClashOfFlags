@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="64" tileheight="64" nextobjectid="95">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="64" tileheight="64" nextobjectid="97">
  <tileset firstgid="1" name="dungeon_tileset_64" tilewidth="64" tileheight="64" tilecount="88" columns="8">
-  <image source="../images/dungeon_tileset_64.png" width="512" height="704"/>
+  <image source="../images/tilset/dungeon_tileset_64.png" width="512" height="704"/>
  </tileset>
  <tileset firstgid="89" name="floor_shadow_tileset_64" tilewidth="64" tileheight="64" tilecount="28" columns="4">
-  <image source="../images/floor_shadow_tileset_64.png" width="256" height="448"/>
+  <image source="../images/tilset/floor_shadow_tileset_64.png" width="256" height="448"/>
  </tileset>
  <tileset firstgid="117" name="objects_tilset_64" tilewidth="64" tileheight="64" tilecount="130" columns="10">
-  <image source="../images/objects_tilset_64.png" width="640" height="832"/>
+  <image source="../images/tilset/objects_tilset_64.png" width="640" height="832"/>
  </tileset>
- <tileset firstgid="247" name="tiles" tilewidth="16" tileheight="16" tilecount="3520" columns="44">
+ <tileset firstgid="247" name="tiles" tilewidth="16" tileheight="16" tilecount="1" columns="44">
   <image source="../images/tiles.png" width="705" height="1280"/>
  </tileset>
  <layer name="background" width="100" height="100">
@@ -489,32 +489,12 @@
     <property name="team" value="red"/>
    </properties>
   </object>
-  <object id="20" name="flag_blue_1" type="flag" gid="235" x="3112.79" y="5919.21" width="64" height="64">
+  <object id="21" name="flag_blue" type="flag" gid="235" x="3189.45" y="5917.21" width="64" height="64">
    <properties>
     <property name="type" value="flag_blue"/>
    </properties>
   </object>
-  <object id="21" name="flag_blue_2" type="flag" gid="235" x="3189.45" y="5917.21" width="64" height="64">
-   <properties>
-    <property name="type" value="flag_blue"/>
-   </properties>
-  </object>
-  <object id="22" name="flag_blue_3" type="flag" gid="235" x="3258.79" y="5923.21" width="64" height="64">
-   <properties>
-    <property name="type" value="flag_blue"/>
-   </properties>
-  </object>
-  <object id="27" name="flag_red_1" type="flag" gid="235" x="3123.79" y="305.212" width="64" height="64">
-   <properties>
-    <property name="type" value="flag_red"/>
-   </properties>
-  </object>
-  <object id="28" name="flag_red_2" type="flag" gid="235" x="3189.79" y="306.212" width="64" height="64">
-   <properties>
-    <property name="type" value="flag_red"/>
-   </properties>
-  </object>
-  <object id="29" name="flag_red_3" type="flag" gid="235" x="3254.79" y="308.212" width="64" height="64">
+  <object id="28" name="flag_red" type="flag" gid="235" x="3191.79" y="297.212" width="64" height="64">
    <properties>
     <property name="type" value="flag_red"/>
    </properties>
@@ -737,11 +717,6 @@
   <object id="75" name="torch" type="torch" gid="237" x="1750.79" y="1973.21" width="64" height="64">
    <properties>
     <property name="type" value="torch"/>
-   </properties>
-  </object>
-  <object id="83" name="playerStart" gid="3465" x="3190.93" y="386.468" width="64" height="64">
-   <properties>
-    <property name="type" value="playerStart"/>
    </properties>
   </object>
   <object id="85" name="barrel" type="barrel" gid="226" x="3094.5" y="820.217" width="64" height="64">
