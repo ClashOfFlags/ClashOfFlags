@@ -1104,6 +1104,36 @@
                  "width":64,
                  "x":2614.04,
                  "y":4726.86
+                }, 
+                {
+                 "height":444,
+                 "id":97,
+                 "name":"base_red",
+                 "properties":
+                    {
+                     "team":"red"
+                    },
+                 "rotation":0,
+                 "type":"base",
+                 "visible":true,
+                 "width":510.666666666667,
+                 "x":2968.12123333333,
+                 "y":51.212
+                }, 
+                {
+                 "height":449.333333333334,
+                 "id":98,
+                 "name":"base_blue",
+                 "properties":
+                    {
+                     "team":"blue"
+                    },
+                 "rotation":0,
+                 "type":"base",
+                 "visible":true,
+                 "width":509.333333333333,
+                 "x":2969.45456666667,
+                 "y":5683.212
                 }],
          "offsetx":-22.7879,
          "offsety":144.788,
@@ -1125,7 +1155,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":97,
+ "nextobjectid":102,
  "orientation":"orthogonal",
  "properties":
     {
@@ -1198,7 +1228,7 @@
 
             },
          "spacing":0,
-         "tilecount":1,
+         "tilecount":0,
          "tileheight":16,
          "tilewidth":16
         }],

@@ -19,6 +19,7 @@ export default class Updater {
         this.player = this.objects.get('hero');
         this.playerGroup = this.objects.get('playerGroup');
         this.bulletGroup = this.objects.get('bulletGroup');
+        this.baseGroup = this.objects.get('bases');
     }
 
     isHero(player) {
@@ -77,6 +78,16 @@ export default class Updater {
 
         this.game.physics.arcade.collide(this.barrels, this.obstacleLayer);
         this.game.physics.arcade.collide(this.playerGroup, this.obstacleLayer);
+
+        this.game.physics.arcade.overlap(this.playerGroup, this.baseGroup, this.playerEntersBase, null, this);
+    }
+
+    playerEntersBase(player, base) {
+        if(player.carryingFlag) {
+            if(player.team.name == base.team) {
+                player.releaseFlag();
+            }
+        }
     }
 
     bulletHitBarrel(bullet, barrel) {

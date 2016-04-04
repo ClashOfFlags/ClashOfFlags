@@ -2,6 +2,7 @@ import Team from './../objects/values/Team';
 import config from './../setup/config';
 import Flag from './../objects/sprites/Flag';
 import Item from './../objects/sprites/Item';
+import Base from './../objects/sprites/Base';
 
 export default class Creator {
 
@@ -28,6 +29,7 @@ export default class Creator {
         this.createMiniMap();
         this.createStatusbar();
         this.createTutorialHints();
+        this.createBases();
 
 
         eventSystem().on('network.handshake:after', (payload) => {
@@ -370,5 +372,18 @@ export default class Creator {
       moveHint.add(graphics);
 
       this.objects.set('moveHint', moveHint);
+    }
+
+    createBases() {
+        var baseGroup = this.game.add.group();
+        baseGroup.enableBody = true;
+        var bases = this.objects.byProperties({'type': 'base'}, 'objectsLayer');
+        bases.forEach(function (element) {
+            var base = new Base(this.game, element.x, element.y, 'basearea');
+            base.setTeam(element.properties.team);
+            console.log(base);
+            baseGroup.add(base);
+        }, this);
+        this.objects.set('bases', baseGroup);
     }
 }
