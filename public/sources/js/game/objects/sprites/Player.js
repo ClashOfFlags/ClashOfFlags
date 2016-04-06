@@ -280,6 +280,8 @@ export default class Player extends Sprite {
         this.healthbar.visible = false;
         this.rankSprite.visible = false;
         this.killStreak = 0;
+        this.carryingFlag = false;
+        this.flag.respawn();
 
         this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
 
