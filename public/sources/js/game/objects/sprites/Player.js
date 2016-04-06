@@ -8,7 +8,7 @@ import Flag from './Flag';
 export default class Player extends Sprite {
 
     boot() {
-        this.speed = 1200;
+        this.speed = 400;
         this.enableArcadePhysics();
         this.body.collideWorldBounds = true;
         this.direction = direction.RIGHT;
