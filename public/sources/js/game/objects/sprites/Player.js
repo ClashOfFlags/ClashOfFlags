@@ -3,11 +3,12 @@ import direction from './../values/direction';
 import Weapon from './../values/Weapon';
 import config from '../../setup/config';
 import Splatter from './Splatter';
+import Flag from './Flag';
 
 export default class Player extends Sprite {
 
     boot() {
-        this.speed = 400;
+        this.speed = 1200;
         this.enableArcadePhysics();
         this.body.collideWorldBounds = true;
         this.direction = direction.RIGHT;
@@ -15,6 +16,7 @@ export default class Player extends Sprite {
         this.number = 1;
         this.networkId = null;
         this.carryingFlag = false;
+        this.flag = null;
         this.exp = 0;
         this.killStreak = 0;
     }
@@ -121,15 +123,16 @@ export default class Player extends Sprite {
       this.loadTexture('player_'+this.team.name+'_'+this.playerSprite, 0, true);
     }
 
-    getFlag() {
+    getFlag(flag) {
         this.carryingFlag = true;
-
+        this.flag = flag;
         this.addExp(4);
     }
 
     releaseFlag() {
         this.carryingFlag = false;
-
+        this.flag.respawn();
+        this.flag = null;
         this.addExp(10);
     }
 

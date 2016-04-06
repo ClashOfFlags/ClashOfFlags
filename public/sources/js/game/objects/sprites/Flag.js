@@ -7,20 +7,34 @@ export default class Flag extends Sprite{
         this.enableArcadePhysics();
         this.checkWorldBounds = true;
         this.outOfBoundsKill = true;
+        this.spawnx = 0;
+        this.spawny = 0;
 
         this.team = 'none';
+        this.collected = false;
 
     }
 
     collectFlag(player) {
-        if(player.team.name != this.team && player.carryingFlag == false) {
-            this.kill();
-            player.getFlag();
+        if(player.team.name != this.team && player.carryingFlag == false && this.collected == false) {
+            this.collected = true;
+            this.visible = false;
+            player.getFlag(this);
         }
+    }
+
+    respawn() {
+        this.collected = false;
+        this.reset(this.spawnx, this.spawny);
     }
 
     setTeam(team) {
         this.team = team;
+    }
+
+    setSpawn(x, y) {
+        this.spawnx = x;
+        this.spawny = y;
     }
 
 }

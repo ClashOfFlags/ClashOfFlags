@@ -185,6 +185,7 @@ export default class Creator {
             flags.forEach(function (element) {
                 var flag = new Flag(this.game, element.x, element.y, 'flag');
                 flag.setTeam(teamName);
+                flag.setSpawn(element.x, element.y);
                 flagGroup.add(flag);
             }, this);
 
