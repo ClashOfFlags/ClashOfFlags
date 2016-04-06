@@ -48,20 +48,38 @@ export default class Updater {
 
         this.miniMapOverlay.context.clearRect(0, 0, this.miniMapOverlay.width, this.miniMapOverlay.height);
 
-        for (var i = 0; i < this.teamManager.teams[this.player.team.name].players.length; i++) {
-            var teamPlayer = this.teamManager.teams[this.player.team.name].players[i];
-            var color = '#0AFF12';
+        const players = this.teamManager.allPlayers();
 
-            if (teamPlayer === this.player) {
-                color = '#FFFF00';
+        _.forIn(players, player => {
+            if(player.team.name === this.player.team.name){
+              var teamPlayer = player;
+              var color = '#0AFF12';
+
+              if (teamPlayer.carryingFlag === true) {
+                  color = '#0000FF';
+              }
+
+              if (teamPlayer === this.player) {
+                  color = '#FFFF00';
+              }
+
+              this.miniMapOverlay.rect(
+                  Math.floor(teamPlayer.x / 64) * this.miniMapSize,
+                  Math.floor(teamPlayer.y / 64) * this.miniMapSize,
+                  this.miniMapSize * 2, this.miniMapSize * 2, color);
+              this.miniMapOverlay.dirty = true;
+          }else{
+            if (player.carryingFlag === true) {
+                color = '#FF0000';
+
+                this.miniMapOverlay.rect(
+                    Math.floor(player.x / 64) * this.miniMapSize,
+                    Math.floor(player.y / 64) * this.miniMapSize,
+                    this.miniMapSize * 2, this.miniMapSize * 2, color);
+                this.miniMapOverlay.dirty = true;
             }
-
-            this.miniMapOverlay.rect(
-                Math.floor(teamPlayer.x / 64) * this.miniMapSize,
-                Math.floor(teamPlayer.y / 64) * this.miniMapSize,
-                this.miniMapSize * 2, this.miniMapSize * 2, color);
-            this.miniMapOverlay.dirty = true;
-        }
+          }
+        });
     }
 
     updateCollide() {
@@ -189,7 +207,7 @@ export default class Updater {
         if(player.isDead()) {
             bullet.shooter.killedPlayer();
         }
-        
+
         if(this.isHero(bullet.shooter)) {
             this.network.sendDamage(player, bullet.power);
         }
