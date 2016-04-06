@@ -75,6 +75,10 @@ export default class Player extends Sprite {
         this.healthbar.y = this.y - this.height * 1.5;
     }
 
+    showCarryingFlag() {
+        //TODO: Show Flag sign next to player
+    }
+
     updateRank() {
         this.rankSprite.x = this.healthbar.x - this.rankSprite.width - 5;
         this.rankSprite.y = this.healthbar.y - (this.rankSprite.height / 3);
@@ -127,6 +131,7 @@ export default class Player extends Sprite {
         this.carryingFlag = true;
         this.flag = flag;
         this.addExp(4);
+        this.showCarryingFlag();
     }
 
     releaseFlag() {
