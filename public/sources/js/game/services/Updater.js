@@ -116,12 +116,12 @@ export default class Updater {
         this.createExplosionAnimation({
             x: barrel.x,
             y: barrel.y - barrel.height,
-            key: 'flame_a',
-            frameName: 'flame_a_000',
-            frameNameMax: 6,
+            key: 'smoke',
+            frameName: 'smoke_plume_000',
+            frameNameMax: 9,
             frameSpeed: 60,
             repeat: false,
-            scale: 0.4
+            scale: 1
         });
 
         if(!this.isHero(bullet.shooter)) {
