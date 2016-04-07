@@ -31,6 +31,8 @@ export default class Preloader {
     loadWeapon() {
       this.game.load.atlas('fireball_hit', this.paths.imageWeapon('fireball_hit.png'), this.paths.imageWeapon('fireball_hit.json'));
       this.game.load.atlas('fireball', this.paths.imageWeapon('fireball.png'), this.paths.imageWeapon('fireball.json'));
+      this.game.load.atlas('fireball_red_hit', this.paths.imageWeapon('fireball_red_hit.png'), this.paths.imageWeapon('fireball_red_hit.json'));
+      this.game.load.atlas('fireball_red', this.paths.imageWeapon('fireball_red.png'), this.paths.imageWeapon('fireball_red.json'));
     }
 
     loadAnimation() {

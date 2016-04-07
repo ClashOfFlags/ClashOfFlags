@@ -6,8 +6,8 @@ export default class Weapon {
     constructor(player, game) {
         this.game = game;
         this.player = player;
-        this.nextShotAt = Date.now() + config.game.weapons.fireball.shotDelay;
         this.weapon = 'fireball';
+        this.nextShotAt = Date.now() + config.game.weapons[this.weapon].shotDelay;
 
         this.currentWeapon();
     }
@@ -30,7 +30,7 @@ export default class Weapon {
 
         var shootDirection = (overwriteDirection) ? overwriteDirection : this.player.direction;
 
-        this.nextShotAt = Date.now() + config.game.weapons.fireball.shotDelay;
+        this.nextShotAt = Date.now() + config.game.weapons[this.weapon].shotDelay;
 
         this.player.loadTexture('player_'+this.player.team.name+'_'+this.player.playerSprite+'_shoot', 0, true);
         this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.player.stopShooting, this.player);
@@ -38,6 +38,7 @@ export default class Weapon {
         var bullet = new Bullet(this.game, this.player.body.center.x, this.player.body.center.y, this.weapon);
         bullet.setTeam(this.player.team);
         bullet.setShooter(this.player);
+        bullet.setWeapon(this.weapon);
         bullet.animations.add(this.weapon, Phaser.Animation.generateFrameNames(this.weapon + '_000', 1, 6), 60, true);
         bullet.animations.play(this.weapon);
         bullet.anchor.setTo(0.5, 0.5);

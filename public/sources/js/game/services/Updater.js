@@ -170,8 +170,8 @@ export default class Updater {
         this.createExplosionAnimation({
             x: bullet.x,
             y: bullet.y,
-            key: 'fireball_hit',
-            frameName: 'fireball_hit_000',
+            key: bullet.weapon + '_hit',
+            frameName: bullet.weapon + '_hit_000',
             frameNameMax: 9,
             frameSpeed: 100,
             repeat: false,
@@ -188,8 +188,8 @@ export default class Updater {
         this.createExplosionAnimation({
             x: bullet.x,
             y: bullet.y,
-            key: 'fireball_hit',
-            frameName: 'fireball_hit_000',
+            key: bullet.weapon + '_hit',
+            frameName: bullet.weapon + '_hit_000',
             frameNameMax: 9,
             frameSpeed: 100,
             repeat: false,

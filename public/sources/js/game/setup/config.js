@@ -14,6 +14,12 @@ export default{
             lifetime: 2.5,
             shotDelay: 300,
             power: 20
+          },
+          'fireball_red': {
+            bulletSpeed: 1000,
+            lifetime: 1,
+            shotDelay: 400,
+            power: 40
           }
         },
         splatter: {
