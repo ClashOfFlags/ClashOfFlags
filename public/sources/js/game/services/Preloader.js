@@ -38,6 +38,7 @@ export default class Preloader {
     loadAnimation() {
       this.game.load.atlas('onfireanimation', this.paths.imageAnimation('onfireanimation.png'), this.paths.imageAnimation('onfireanimation.json'));
       this.game.load.atlas('flame_a', this.paths.imageAnimation('flame_a.png'), this.paths.imageAnimation('flame_a.json'));
+      this.game.load.atlas('splatter_animation', this.paths.imageAnimation('splatter_animation.png'), this.paths.imageAnimation('splatter_animation.json'));
     }
 
     loadMap() {
