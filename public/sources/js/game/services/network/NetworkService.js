@@ -24,6 +24,10 @@ export default class NetworkService {
             this.objects.get('bulletGroup').add(payload.bullet);
         });
 
+        eventSystem().on('treasureChest.newStatus', (payload) => {
+            // payload.treasureChest.setStatus(payload.newStatus);
+        });
+
          eventSystem().on('player_dead', (payload) => {
               this.teamManager.teams[payload.team].points--;
               this.objects.get('points.' + payload.team).setText(this.teamManager.teams[payload.team].points + '/' + this.teamManager.maxPoints);
@@ -60,7 +64,7 @@ export default class NetworkService {
 
             this.sendExp(hero);
         });
-        
+
         eventSystem().on('login', () => {
             this.getExp();
         });
@@ -134,7 +138,7 @@ export default class NetworkService {
         console.log('sendExp', payload);
         this.emit('exp:set', payload);
     }
-    
+
     getExp() {
         if(!this.authService.isLoggedIn()) {
             return;
@@ -157,7 +161,7 @@ export default class NetworkService {
             exp: hero.exp
         });
     }
-    
+
     /* Send Functions */
 
     /* Receive Functions */
@@ -170,7 +174,7 @@ export default class NetworkService {
         eventSystem().emit('network.handshake:after', {
             hero: player
         });
-        
+
         this.getExp();
         this.askForExp();
     }
@@ -217,10 +221,10 @@ export default class NetworkService {
 
         player.setHealth(event.health);
     }
-    
+
     onExpGet(event) {
         const hero = this.objects.get('hero');
-        
+
         hero.setExp(event.exp);
         this.answerWithExp();
     }

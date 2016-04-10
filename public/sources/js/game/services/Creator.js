@@ -3,6 +3,7 @@ import config from './../setup/config';
 import Flag from './../objects/sprites/Flag';
 import Item from './../objects/sprites/Item';
 import Base from './../objects/sprites/Base';
+import TreasureChest from './../objects/sprites/TreasureChest';
 
 export default class Creator {
 
@@ -26,6 +27,7 @@ export default class Creator {
         this.createTeams();
         this.createFlags();
         this.createItem('barrel');
+        this.createTreasureChest();
         this.createMiniMap();
         this.createStatusbar();
         this.createTutorialHints();
@@ -96,6 +98,20 @@ export default class Creator {
         }, this);
 
         this.objects.set(item + 's', group);
+    }
+
+    createTreasureChest() {
+        var group = this.game.add.group();
+        group.enableBody = true;
+
+        var result = this.objects.byType('treasureChest', 'objectsLayer');
+        result.forEach(function (element) {
+            var sprite = new TreasureChest(this.game, element.x, element.y, 'treasureChest_full');
+            sprite.anchor.setTo(0.5, 0.5);            
+            group.add(sprite);
+        }, this);
+
+        this.objects.set('treasureChests', group);
     }
 
     createMiniMap() {

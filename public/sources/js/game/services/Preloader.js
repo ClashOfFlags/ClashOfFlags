@@ -75,6 +75,9 @@ export default class Preloader {
 
     loadItems() {
       this.game.load.image('barrel', this.paths.imageItem('barrel.png'));
+      this.game.load.image('treasureChest_full', this.paths.imageItem('treasureChest_full.png'));
+      this.game.load.image('treasureChest_empty', this.paths.imageItem('treasureChest_empty.png'));
+      this.game.load.image('treasureChest_close', this.paths.imageItem('treasureChest_close.png'));
     }
 
     loadRanks() {

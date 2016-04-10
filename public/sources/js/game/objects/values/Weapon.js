@@ -9,7 +9,8 @@ export default class Weapon {
         this.weapon = 'fireball';
         this.nextShotAt = Date.now() + config.game.weapons[this.weapon].shotDelay;
 
-        this.currentWeapon();
+        // this.currentWeapon();
+
     }
 
     currentWeapon() {
@@ -21,6 +22,10 @@ export default class Weapon {
       this.weaponSprite.scale.x = 0.7;
       this.weaponSprite.scale.y = 0.7;
       this.weaponSprite.fixedToCamera = true;
+    }
+
+    updateWeapon(newWeapon) {
+      this.weapon = newWeapon;
     }
 
     shoot(overwriteDirection = null) {

@@ -32,6 +32,10 @@ export default{
         barrel: {
           maxRange: 300,
           maxDamage: 100
+        },
+        treasureChest: {
+          reloadTreasureMin: 20,
+          reloadTreasureMax: 60
         }
     }
 }

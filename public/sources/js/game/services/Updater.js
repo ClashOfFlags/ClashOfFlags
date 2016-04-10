@@ -20,6 +20,7 @@ export default class Updater {
         this.playerGroup = this.objects.get('playerGroup');
         this.bulletGroup = this.objects.get('bulletGroup');
         this.baseGroup = this.objects.get('bases');
+        this.treasureChests = this.objects.get('treasureChests');
     }
 
     isHero(player) {
@@ -98,6 +99,11 @@ export default class Updater {
         this.game.physics.arcade.collide(this.playerGroup, this.obstacleLayer);
 
         this.game.physics.arcade.overlap(this.playerGroup, this.baseGroup, this.playerEntersBaseWithFlag, null, this);
+        this.game.physics.arcade.collide(this.playerGroup, this.treasureChests, this.collectTreasure, null, this);
+    }
+
+    collectTreasure(player, treasureChest) {
+      treasureChest.collect(player);
     }
 
     playerEntersBaseWithFlag(player, base) {
