@@ -15,6 +15,8 @@ export default class NetworkService {
         this.registerEvent('PlayerHandshakeEvent', this.onPlayerHandshake);
         this.registerEvent('PlayerPositionEvent', this.onPlayerPosition);
         this.registerEvent('PlayerShootEvent', this.onPlayerShoot);
+        this.registerEvent('TreasureChestStatusEvent', this.onTreasureChestStatus);
+        this.registerEvent('PlayerUpdateWeaponEvent', this.onPlayerUpdateWeapon);
         this.registerEvent('PlayerDamageEvent', this.onPlayerDamage);
         this.registerEvent('AskForExp', this.answerWithExp);
         this.registerEvent('AnswerWithExp', this.onAnswerWithExp);
@@ -25,7 +27,11 @@ export default class NetworkService {
         });
 
         eventSystem().on('treasureChest.newStatus', (payload) => {
-            // payload.treasureChest.setStatus(payload.newStatus);
+          this.sendTreasureChestStatus(payload);
+        });
+
+        eventSystem().on('updateWeapon', (payload) => {
+          this.sendPlayerUpdateWeapon(payload);
         });
 
          eventSystem().on('player_dead', (payload) => {
@@ -115,6 +121,14 @@ export default class NetworkService {
 
         console.log('sendShoot', payload);
         this.broadcast('PlayerShootEvent', payload);
+    }
+
+    sendTreasureChestStatus(payload) {
+        this.broadcast('TreasureChestStatusEvent', payload);
+    }
+
+    sendPlayerUpdateWeapon(payload) {
+        this.broadcast('PlayerUpdateWeaponEvent', payload);
     }
 
     sendDamage(player, damage) {
@@ -214,6 +228,16 @@ export default class NetworkService {
         }
 
         player.shoot(event.direction);
+    }
+
+    onTreasureChestStatus(payload){
+      console.log(payload);
+      this.objects.get('treasureChest.' + payload.id).setStatus(payload.newStatus);
+    }
+
+    onPlayerUpdateWeapon(payload){
+      // console.log(payload);
+      // payload.player.number.weapon.updateWeapon(payload.weapon);
     }
 
     onPlayerDamage(event) {

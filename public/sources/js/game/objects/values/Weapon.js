@@ -25,7 +25,7 @@ export default class Weapon {
     }
 
     updateWeapon(newWeapon) {
-      this.weapon = newWeapon;
+      this.weapon = newWeapon;     
     }
 
     shoot(overwriteDirection = null) {

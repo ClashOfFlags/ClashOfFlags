@@ -102,13 +102,17 @@ export default class Creator {
 
     createTreasureChest() {
         var group = this.game.add.group();
+        var id = 1;
         group.enableBody = true;
 
         var result = this.objects.byType('treasureChest', 'objectsLayer');
         result.forEach(function (element) {
             var sprite = new TreasureChest(this.game, element.x, element.y, 'treasureChest_full');
-            sprite.anchor.setTo(0.5, 0.5);            
+            sprite.anchor.setTo(0.5, 0.5);
+            sprite.setID(id);
             group.add(sprite);
+            this.objects.set('treasureChest.' + id, sprite);
+            id++;
         }, this);
 
         this.objects.set('treasureChests', group);

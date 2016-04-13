@@ -6,7 +6,7 @@ export default class TreasureChest extends Sprite{
   boot() {
     this.enableArcadePhysics();
     this.body.immovable = true;
-    this.status = 'full';
+    this.setStatus('full');
   }
 
   setStatus(newStatus) {
@@ -14,26 +14,42 @@ export default class TreasureChest extends Sprite{
     this.loadTexture('treasureChest_' + this.status, 0, true);
   }
 
+  setID(id){
+    this.id = id;
+  }
+
   collect(player){
     if(this.status === 'full'){
-      this.status = 'empty';
-      this.loadTexture('treasureChest_' + this.status, 0, true);
-      player.weapon.updateWeapon('fireball_red');
+      this.setStatus('empty');
 
-        eventSystem().emit('treasureChest.newStatus', {
-           treasureChest: this,
-           newStatus: this.status
-       });
+      eventSystem().emit('treasureChest.newStatus', {
+        id: this.id,
+        newStatus: this.status
+      });
 
+       this.updateWeapon(player, 'fireball_red');
 
       var realoadTreasure = this.game.rnd.integerInRange(config.game.treasureChest.reloadTreasureMin, config.game.treasureChest.reloadTreasureMax);
       this.game.time.events.add(Phaser.Timer.SECOND * realoadTreasure, this.realoadTreasure, this);
     }
   }
 
+  updateWeapon(player, weapon) {
+    player.weapon.updateWeapon(weapon);
+
+    // eventSystem().emit('player.updateWeapon', {
+    //    player: player,
+    //    newWeapon: weapon
+    // });
+  }
+
   realoadTreasure() {
-    this.status = 'full';
-    this.loadTexture('treasureChest_' + this.status, 0, true);
+    this.setStatus('full');
+
+    eventSystem().emit('treasureChest.newStatus', {
+       id: this.id,
+       newStatus: this.status
+    });
   }
 
 }
