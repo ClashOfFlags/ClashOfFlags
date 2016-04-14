@@ -402,7 +402,6 @@ export default class Creator {
         bases.forEach(function (element) {
             var base = new Base(this.game, element.x, element.y, 'gold');
             base.setTeam(element.properties.team);
-            console.log(base);
             baseGroup.add(base);
         }, this);
         this.objects.set('bases', baseGroup);
