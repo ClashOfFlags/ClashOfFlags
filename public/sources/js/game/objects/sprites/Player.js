@@ -132,6 +132,7 @@ export default class Player extends Sprite {
         this.flag = flag;
         this.addExp(4);
         this.showCarryingFlag();
+        this.statEntry('flag.collected');
     }
 
     releaseFlag() {
@@ -139,6 +140,7 @@ export default class Player extends Sprite {
         this.flag.respawn();
         this.flag = null;
         this.addExp(10);
+        this.statEntry('flag.captured');
     }
 
     setDirection(newDirection) {
@@ -296,11 +298,7 @@ export default class Player extends Sprite {
            team: this.team.name
         });
 
-        eventSystem().emit('stat.entry', {
-            player: this,
-            key: 'player.dead',
-            team: this.team.name
-        });
+        this.statEntry('player.dead');
     }
 
     resetPlayer() {
@@ -377,6 +375,14 @@ export default class Player extends Sprite {
             case 4: return 8;
             default: return 1;
         }
+    }
+
+    statEntry(key) {
+        eventSystem().emit('stat.entry', {
+            player: this,
+            key: key,
+            team: this.team.name
+        });
     }
 
 }
