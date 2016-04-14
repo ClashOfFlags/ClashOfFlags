@@ -7,9 +7,10 @@ export default class Weapon {
         this.game = game;
         this.player = player;
         this.weapon = 'fireball';
+        this.munition = 1;
         this.nextShotAt = Date.now() + config.game.weapons[this.weapon].shotDelay;
 
-        // this.currentWeapon();
+        this.currentWeapon();
 
     }
 
@@ -25,7 +26,11 @@ export default class Weapon {
     }
 
     updateWeapon(newWeapon) {
-      this.weapon = newWeapon;     
+      this.weapon = newWeapon;
+
+      if(newWeapon === "fireball_red") {
+        this.munition = 20;
+      }
     }
 
     shoot(overwriteDirection = null) {
@@ -67,5 +72,25 @@ export default class Weapon {
         eventSystem().emit('bullet.shoot', {
            bullet: bullet
        });
+
+       if(this.munition > 1) {
+         this.munition--;
+
+         if(this.munition <= 1) {
+           this.sendUpdateWeapon('fireball');
+         }
+       }
+
+       console.log('munition', this.munition);
+    }
+
+    sendUpdateWeapon(weapon, source = "user") {
+      this.updateWeapon(weapon);
+
+      eventSystem().emit('player.updateWeapon', {
+         player: this.player.number,
+         newWeapon: weapon,
+         source: source
+      });
     }
 }

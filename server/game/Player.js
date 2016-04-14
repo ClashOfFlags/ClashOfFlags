@@ -33,14 +33,14 @@ module.exports = class Player {
             userService.saveExp(payload.token, payload.exp);
         });
         
-        this.socket.on('exp:get', payload => {
+        this.socket.on('exp:get', (payload, callback) => {
             if(!payload.token) {
                 return;
             } 
             
             userService.getExp(payload.token)
                 .then(exp => {
-                    this.emit('exp:get', { exp: exp }); 
+                    callback(exp);
                 });
         });
     }

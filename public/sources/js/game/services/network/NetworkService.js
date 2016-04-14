@@ -20,17 +20,23 @@ export default class NetworkService {
         this.registerEvent('PlayerDamageEvent', this.onPlayerDamage);
         this.registerEvent('AskForExp', this.answerWithExp);
         this.registerEvent('AnswerWithExp', this.onAnswerWithExp);
-        this.registerEvent('exp:get', this.onExpGet);
+        this.registerEvent('FlagCollected', this.onFlagCollected);
 
         eventSystem().on('bullet.shoot', (payload) => {
             this.objects.get('bulletGroup').add(payload.bullet);
         });
 
         eventSystem().on('treasureChest.newStatus', (payload) => {
+          if (payload.source == "network") {
+              return;
+          }
           this.sendTreasureChestStatus(payload);
         });
 
-        eventSystem().on('updateWeapon', (payload) => {
+        eventSystem().on('player.updateWeapon', (payload) => {
+          if (payload.source == "network") {
+              return;
+          }
           this.sendPlayerUpdateWeapon(payload);
         });
 
@@ -56,6 +62,13 @@ export default class NetworkService {
             this.sendPosition(payload.player);
         });
 
+        eventSystem().on('flag.getscollected', (payload) => {
+            if (payload.source == "network") {
+                return;
+            }
+            this.sendFlagCollected(payload);
+        });
+
         eventSystem().on('player.exp', payload => {
             const player = payload.player;
             const hero = this.objects.get('hero');
@@ -74,6 +87,12 @@ export default class NetworkService {
         eventSystem().on('login', () => {
             this.getExp();
         });
+    }
+
+
+
+    sendFlagCollected(payload) {
+        this.broadcast('FlagCollected', payload);
     }
 
     connect() {
@@ -160,7 +179,12 @@ export default class NetworkService {
 
         const token = this.authService.token();
 
-        this.emit('exp:get', { token: token });
+        this.socket.emit('exp:get', { token: token }, exp => {
+            const hero = this.objects.get('hero');
+
+            hero.setExp(exp);
+            this.answerWithExp();
+        });
     }
 
     askForExp() {
@@ -191,6 +215,15 @@ export default class NetworkService {
 
         this.getExp();
         this.askForExp();
+    }
+
+    onFlagCollected(event) {
+        var flagObject = this.objects.get('flags.' + event.flag);
+        flagObject.collected = true;
+        flagObject.visible = false;
+
+        const player = this.teamManager.findPlayer(event.player);
+        player.getFlag(this);
     }
 
     onPlayerPosition(event) {
@@ -231,26 +264,18 @@ export default class NetworkService {
     }
 
     onTreasureChestStatus(payload){
-      console.log(payload);
       this.objects.get('treasureChest.' + payload.id).setStatus(payload.newStatus);
     }
 
     onPlayerUpdateWeapon(payload){
-      // console.log(payload);
-      // payload.player.number.weapon.updateWeapon(payload.weapon);
+      const player = this.teamManager.findPlayer(payload.player);
+      player.weapon.updateWeapon(payload.newWeapon);
     }
 
     onPlayerDamage(event) {
         const player = this.teamManager.findPlayer(event.player);
 
         player.setHealth(event.health);
-    }
-
-    onExpGet(event) {
-        const hero = this.objects.get('hero');
-
-        hero.setExp(event.exp);
-        this.answerWithExp();
     }
 
     onAnswerWithExp(event) {
