@@ -120,7 +120,6 @@ export default class Updater {
 
     bulletHitBarrel(bullet, barrel) {
         this.bulletHitObstacle(bullet);
-        barrel.kill();
 
         this.createExplosionAnimation({
             x: barrel.x,
@@ -156,6 +155,8 @@ export default class Updater {
                 bullet.shooter.killedPlayer();
             }
         });
+
+        barrel.kill();
     }
 
     createExplosionAnimation(data) {
@@ -176,16 +177,18 @@ export default class Updater {
     }
 
     bulletHitObstacle(bullet) {
-        this.createExplosionAnimation({
-            x: bullet.x,
-            y: bullet.y,
-            key: bullet.weapon + '_hit',
-            frameName: bullet.weapon + '_hit_000',
-            frameNameMax: 9,
-            frameSpeed: 100,
-            repeat: false,
-            scale: 1
-        });
+        if(!bullet.shooter.isAlien()){
+          this.createExplosionAnimation({
+              x: bullet.x,
+              y: bullet.y,
+              key: bullet.weapon + '_hit',
+              frameName: bullet.weapon + '_hit_000',
+              frameNameMax: 9,
+              frameSpeed: 100,
+              repeat: false,
+              scale: 1
+          });
+      }
         bullet.kill();
     }
 
@@ -194,7 +197,8 @@ export default class Updater {
             return;
         }
 
-        this.createExplosionAnimation({
+        if(!bullet.shooter.isAlien()){
+          this.createExplosionAnimation({
             x: bullet.x,
             y: bullet.y,
             key: bullet.weapon + '_hit',
@@ -203,7 +207,8 @@ export default class Updater {
             frameSpeed: 100,
             repeat: false,
             scale: 1
-        });
+          });
+        }
 
         bullet.kill();
 

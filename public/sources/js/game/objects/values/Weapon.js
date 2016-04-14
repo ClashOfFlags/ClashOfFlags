@@ -42,46 +42,16 @@ export default class Weapon {
 
         this.nextShotAt = Date.now() + config.game.weapons[this.weapon].shotDelay;
 
-        this.player.loadTexture('player_'+this.player.team.name+'_'+this.player.playerSprite+'_shoot', 0, true);
-        this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.player.stopShooting, this.player);
-
-        var bullet = new Bullet(this.game, this.player.body.center.x, this.player.body.center.y, this.weapon);
-        bullet.setTeam(this.player.team);
-        bullet.setShooter(this.player);
-        bullet.setWeapon(this.weapon);
-        bullet.animations.add(this.weapon, Phaser.Animation.generateFrameNames(this.weapon + '_000', 1, 6), 60, true);
-        bullet.animations.play(this.weapon);
-        bullet.anchor.setTo(0.5, 0.5);
-
-        if (shootDirection === direction.BOTTOM) {
-            bullet.body.velocity.y = config.game.weapons[this.weapon].bulletSpeed;
-            bullet.angle = 180;
-        } else if (shootDirection === direction.TOP) {
-            bullet.angle = 0;
-            bullet.body.velocity.y = -config.game.weapons[this.weapon].bulletSpeed;
-        } else if (shootDirection === direction.RIGHT) {
-            bullet.angle = 90;
-            bullet.body.velocity.x = config.game.weapons[this.weapon].bulletSpeed;
-        } else if (shootDirection === direction.LEFT) {
-            bullet.angle = -90;
-            bullet.body.velocity.x = -config.game.weapons[this.weapon].bulletSpeed;
+        if(this.player.isAlien()){
+          this.player.loadTexture(this.player.team.name+'_alien_shoot', 0, true);
+        }else {
+          this.player.loadTexture('player_'+this.player.team.name+'_'+this.player.playerSprite+'_shoot', 0, true);
         }
 
-        this.player.bulletsShot++;
+        this.game.time.events.add(Phaser.Timer.SECOND * 0.2, this.player.stopShooting, this.player);
 
-        eventSystem().emit('bullet.shoot', {
-           bullet: bullet
-       });
+        this.createBullet(shootDirection);
 
-       if(this.munition > 1) {
-         this.munition--;
-
-         if(this.munition <= 1) {
-           this.sendUpdateWeapon('fireball');
-         }
-       }
-
-       console.log('munition', this.munition);
     }
 
     sendUpdateWeapon(weapon, source = "user") {
@@ -92,5 +62,45 @@ export default class Weapon {
          newWeapon: weapon,
          source: source
       });
+    }
+
+    createBullet(shootDirection) {
+      var bullet = new Bullet(this.game, this.player.body.center.x, this.player.body.center.y, this.weapon);
+      bullet.setTeam(this.player.team);
+      bullet.setShooter(this.player);
+      bullet.setWeapon(this.weapon);
+      bullet.anchor.setTo(0.5, 0.5);
+
+      if (shootDirection === direction.BOTTOM) {
+          bullet.body.velocity.y = config.game.weapons[this.weapon].bulletSpeed;
+          bullet.angle = 180;
+      } else if (shootDirection === direction.TOP) {
+          bullet.angle = 0;
+          bullet.body.velocity.y = -config.game.weapons[this.weapon].bulletSpeed;
+      } else if (shootDirection === direction.RIGHT) {
+          bullet.angle = 90;
+          bullet.body.velocity.x = config.game.weapons[this.weapon].bulletSpeed;
+      } else if (shootDirection === direction.LEFT) {
+          bullet.angle = -90;
+          bullet.body.velocity.x = -config.game.weapons[this.weapon].bulletSpeed;
+      }
+
+      if(!this.player.isAlien()){
+        bullet.animations.add(this.weapon, Phaser.Animation.generateFrameNames(this.weapon + '_000', 1, 6), 60, true);
+        bullet.animations.play(this.weapon);
+      }
+
+      this.player.bulletsShot++;
+      eventSystem().emit('bullet.shoot', {
+         bullet: bullet
+     });
+
+     if(this.munition > 1) {
+       this.munition--;
+
+       if(this.munition <= 1) {
+         this.sendUpdateWeapon('fireball');
+       }
+     }
     }
 }
