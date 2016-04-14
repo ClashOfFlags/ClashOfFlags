@@ -82,6 +82,7 @@ export default class NetworkService {
             }
 
             this.sendExp(hero);
+            this.answerWithExp();
         });
 
         eventSystem().on('login', () => {
@@ -94,7 +95,7 @@ export default class NetworkService {
     sendFlagCollected(flag) {
         const payload = {
             flag: flag
-        }
+        };
 
         this.broadcast('FlagCollected', payload);
     }
@@ -204,6 +205,12 @@ export default class NetworkService {
         });
     }
 
+    statEntry(key, team) {
+        this.socket.volatile.emit('stat-entry', {
+            key: key,
+            team: team
+        });
+    }
     /* Send Functions */
 
     /* Receive Functions */
