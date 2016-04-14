@@ -20,6 +20,12 @@ export default{
             lifetime: 1,
             shotDelay: 400,
             power: 40
+          },
+          'alien': {
+            bulletSpeed: 700,
+            lifetime: 0.1,
+            shotDelay: 400,
+            power: 35
           }
         },
         splatter: {

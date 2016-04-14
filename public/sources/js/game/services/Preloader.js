@@ -33,6 +33,8 @@ export default class Preloader {
       this.game.load.atlas('fireball', this.paths.imageWeapon('fireball.png'), this.paths.imageWeapon('fireball.json'));
       this.game.load.atlas('fireball_red_hit', this.paths.imageWeapon('fireball_red_hit.png'), this.paths.imageWeapon('fireball_red_hit.json'));
       this.game.load.atlas('fireball_red', this.paths.imageWeapon('fireball_red.png'), this.paths.imageWeapon('fireball_red.json'));
+      this.game.load.image('alien', this.paths.imageWeapon('alien.png'));
+      this.game.load.image('alien_hit', this.paths.imageWeapon('alien_hit.png'));
     }
 
     loadAnimation() {
@@ -52,6 +54,14 @@ export default class Preloader {
     loadPlayer() {
       this.game.load.image('red_dead', this.paths.imagePlayers('red_dead.png'));
       this.game.load.image('blue_dead', this.paths.imagePlayers('blue_dead.png'));
+
+      this.game.load.image('red_alien_dead', this.paths.imagePlayers('red_alien_dead.png'));
+      this.game.load.spritesheet('red_alien', this.paths.imagePlayers('red_alien.png'), 47, 27);
+      this.game.load.image('red_alien_shoot', this.paths.imagePlayers('red_alien_shoot.png'));
+
+      this.game.load.image('blue_alien_dead', this.paths.imagePlayers('blue_alien_dead.png'));
+      this.game.load.spritesheet('blue_alien', this.paths.imagePlayers('blue_alien.png'), 48, 27);
+      this.game.load.image('blue_alien_shoot', this.paths.imagePlayers('blue_alien_shoot.png'));
 
       for (var i = 0; i < 2; i++) {
         var color = (i===0)? "red" : "blue";

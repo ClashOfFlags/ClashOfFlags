@@ -22,11 +22,37 @@ export default class TreasureChest extends Sprite{
     if(this.status === 'full'){
 
       this.updateStatus('empty');
-       this.updateWeapon(player, 'fireball_red');
+
+      this.bonus(player);
+
 
       var realoadTreasure = this.game.rnd.integerInRange(config.game.treasureChest.reloadTreasureMin, config.game.treasureChest.reloadTreasureMax);
       this.game.time.events.add(Phaser.Timer.SECOND * realoadTreasure, this.realoadTreasure, this);
     }
+  }
+
+  bonus(player) {
+    var bonus = this.game.rnd.integerInRange(0, 2);
+
+    if(bonus === 0){
+      this.setAlienFor(player);
+    }else if(bonus === 1){
+      this.updateWeapon(player, 'fireball_red');
+    }else {
+      this.updateWeapon(player, 'fireball_red');
+    }
+
+  }
+
+  setAlienFor(player) {
+    player.alien = true;
+    player.speed = 600;
+    player.loadTexture(player.team.name+'_alien', 0, true);
+    this.updateWeapon(player, 'alien');
+
+    eventSystem().emit('player.alien', {
+       player: player.number
+    });
   }
 
   updateStatus(status, source = "user") {

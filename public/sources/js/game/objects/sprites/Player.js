@@ -62,7 +62,12 @@ export default class Player extends Sprite {
     }
 
     changeSpriteToNormal() {
+      if(this.isAlien()){
+        this.loadTexture(this.team.name+'_alien', 0, true);
+      }else {
         this.loadTexture('player_'+this.team.name+'_'+this.playerSprite, 0, true);
+      }
+
     }
 
     updateName() {
@@ -127,11 +132,16 @@ export default class Player extends Sprite {
       this.loadTexture('player_'+this.team.name+'_'+this.playerSprite, 0, true);
     }
 
+    isAlien() {
+      return this.alien === true;
+    }
+
     getFlag(flag) {
         this.carryingFlag = true;
         this.flag = flag;
         this.addExp(4);
         this.showCarryingFlag();
+        this.statEntry('flag.collected');
     }
 
     releaseFlag() {
@@ -139,6 +149,7 @@ export default class Player extends Sprite {
         this.flag.respawn();
         this.flag = null;
         this.addExp(10);
+        this.statEntry('flag.captured');
     }
 
     setDirection(newDirection) {
@@ -279,7 +290,8 @@ export default class Player extends Sprite {
     }
 
     dead() {
-        new Splatter(this.game, this.x, this.y, this.team.name + '_dead');
+        var splatterSprite = this.isAlien() ? this.team.name + '_alien_dead' : this.team.name + '_dead';
+        new Splatter(this.game, this.x, this.y, splatterSprite);
         this.visible = false;
         this.name.visible = false;
         this.healthbar.visible = false;
@@ -290,11 +302,19 @@ export default class Player extends Sprite {
           this.flag.respawn();
         }
 
+        if(this.isAlien()){
+          this.alien = false;
+          this.checkNewPlayerSprite();
+          this.weapon.updateWeapon('fireball');
+        }
+
         this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
 
         eventSystem().emit('player_dead', {
            team: this.team.name
-       });
+        });
+
+        this.statEntry('player.dead');
     }
 
     resetPlayer() {
@@ -324,7 +344,9 @@ export default class Player extends Sprite {
 
         if(newRanks > 0) {
             this.createRankSprite();
-            this.checkNewPlayerSprite();
+            if(!this.isAlien()){
+              this.checkNewPlayerSprite();
+            }
         }
     }
 
@@ -371,6 +393,14 @@ export default class Player extends Sprite {
             case 4: return 8;
             default: return 1;
         }
+    }
+
+    statEntry(key) {
+        eventSystem().emit('stat.entry', {
+            player: this,
+            key: key,
+            team: this.team.name
+        });
     }
 
 }

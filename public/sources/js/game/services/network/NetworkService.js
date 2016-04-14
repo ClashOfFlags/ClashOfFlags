@@ -17,6 +17,7 @@ export default class NetworkService {
         this.registerEvent('PlayerShootEvent', this.onPlayerShoot);
         this.registerEvent('TreasureChestStatusEvent', this.onTreasureChestStatus);
         this.registerEvent('PlayerUpdateWeaponEvent', this.onPlayerUpdateWeapon);
+        this.registerEvent('PlayerAlienEvent', this.onPlayerAlien);
         this.registerEvent('PlayerDamageEvent', this.onPlayerDamage);
         this.registerEvent('AskForExp', this.answerWithExp);
         this.registerEvent('AnswerWithExp', this.onAnswerWithExp);
@@ -38,6 +39,10 @@ export default class NetworkService {
               return;
           }
           this.sendPlayerUpdateWeapon(payload);
+        });
+
+        eventSystem().on('player.alien', (payload) => {
+          this.sendPlayerAlien(payload);
         });
 
          eventSystem().on('player_dead', (payload) => {
@@ -82,6 +87,18 @@ export default class NetworkService {
             }
 
             this.sendExp(hero);
+            this.answerWithExp();
+        });
+
+        eventSystem().on('stat.entry', payload => {
+            const player = payload.player;
+            const hero = this.objects.get('hero');
+            
+            if(player !== hero) {
+                return;
+            }
+            
+            this.statEntry(payload.key, payload.team);
         });
 
         eventSystem().on('login', () => {
@@ -91,7 +108,11 @@ export default class NetworkService {
 
 
 
-    sendFlagCollected(payload) {
+    sendFlagCollected(flag) {
+        const payload = {
+            flag: flag
+        };
+        
         this.broadcast('FlagCollected', payload);
     }
 
@@ -150,6 +171,10 @@ export default class NetworkService {
         this.broadcast('PlayerUpdateWeaponEvent', payload);
     }
 
+    sendPlayerAlien(payload) {
+        this.broadcast('PlayerAlienEvent', payload);
+    }
+
     sendDamage(player, damage) {
         const payload = {
             player: player.number,
@@ -200,6 +225,12 @@ export default class NetworkService {
         });
     }
 
+    statEntry(key, team) {
+        this.socket.emit('stat-entry', {
+            key: key,
+            team: team
+        });
+    }
     /* Send Functions */
 
     /* Receive Functions */
@@ -270,6 +301,14 @@ export default class NetworkService {
     onPlayerUpdateWeapon(payload){
       const player = this.teamManager.findPlayer(payload.player);
       player.weapon.updateWeapon(payload.newWeapon);
+    }
+
+    onPlayerAlien(payload){
+      const player = this.teamManager.findPlayer(payload.player);
+      player.alien = true;
+      player.speed = 600;
+      player.loadTexture(player.team.name+'_alien', 0, true);
+      player.weapon.updateWeapon('alien');
     }
 
     onPlayerDamage(event) {

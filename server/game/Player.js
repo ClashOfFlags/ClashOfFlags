@@ -1,6 +1,7 @@
 'use strict';
 
 const userService = require('../services/userService');
+const statisticRepository = require('../repositories/statisticRepository');
 let playerId = 0; // Not optimal, should be changed later
 
 module.exports = class Player {
@@ -42,6 +43,10 @@ module.exports = class Player {
                 .then(exp => {
                     callback(exp);
                 });
+        });
+        
+        this.socket.on('stat-entry', payload => {
+            statisticRepository.createEntry(payload.key, payload.team);
         });
     }
 
