@@ -86,17 +86,22 @@
                                     target: "#chart__flags_captured",
                                     x_accessor: "date",
                                     y_accessor: "value",
+                                    interpolation: 'basic',
                                     legend: ['Red captures','Blue captures']
                                 });
 
                                 MG.data_graphic({
                                     title: "Kill Locations",
                                     data: result.killLocations,
-                                    width: 600,
+                                    width: 400,
                                     height: 400,
+                                    chart_type: 'point',
                                     target: "#chart__kill_locations",
                                     x_accessor: "x",
-                                    y_accessor: "y"
+                                    y_accessor: "y",
+                                    color_accessor: 'v',
+                                    color_type: 'category',
+                                    color_range: ['red', 'blue']
                                 });
                             });
                 });
