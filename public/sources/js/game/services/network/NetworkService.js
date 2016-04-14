@@ -20,6 +20,7 @@ export default class NetworkService {
         this.registerEvent('PlayerDamageEvent', this.onPlayerDamage);
         this.registerEvent('AskForExp', this.answerWithExp);
         this.registerEvent('AnswerWithExp', this.onAnswerWithExp);
+        this.registerEvent('FlagCollected', this.onFlagCollected);
 
         eventSystem().on('bullet.shoot', (payload) => {
             this.objects.get('bulletGroup').add(payload.bullet);
@@ -61,6 +62,13 @@ export default class NetworkService {
             this.sendPosition(payload.player);
         });
 
+        eventSystem().on('flag.getscollected', (payload) => {
+            if (payload.source == "network") {
+                return;
+            }
+            this.sendFlagCollected(payload.flag);
+        });
+
         eventSystem().on('player.exp', payload => {
             const player = payload.player;
             const hero = this.objects.get('hero');
@@ -79,6 +87,16 @@ export default class NetworkService {
         eventSystem().on('login', () => {
             this.getExp();
         });
+    }
+
+
+
+    sendFlagCollected(flag) {
+        const payload = {
+            flag: flag
+        }
+
+        this.broadcast('FlagCollected', payload);
     }
 
     connect() {
@@ -201,6 +219,11 @@ export default class NetworkService {
 
         this.getExp();
         this.askForExp();
+    }
+
+    onFlagCollected(event) {
+        var flagObject = this.objects.get('flags.' + event.flag);
+        console.log('finmich', flagObject);
     }
 
     onPlayerPosition(event) {

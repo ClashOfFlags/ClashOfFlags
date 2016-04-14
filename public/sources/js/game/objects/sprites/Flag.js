@@ -15,12 +15,18 @@ export default class Flag extends Sprite{
 
     }
 
-    collectFlag(player) {
+    collectFlag(player, source = "user") {
         if(player.team.name != this.team && player.carryingFlag == false && this.collected == false) {
             this.collected = true;
             this.visible = false;
             player.getFlag(this);
         }
+
+        eventSystem().emit('flag.getscollected', {
+            flag: this.team,
+            source: source
+        });
+
     }
 
     respawn() {
