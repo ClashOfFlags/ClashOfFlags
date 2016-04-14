@@ -24,6 +24,7 @@ export default class Flag extends Sprite{
 
         eventSystem().emit('flag.getscollected', {
             flag: this.team,
+            player: player.number,
             source: source
         });
 
