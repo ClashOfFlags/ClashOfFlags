@@ -242,7 +242,7 @@ export default class NetworkService {
 
     onPlayerUpdateWeapon(payload){
       const player = this.teamManager.findPlayer(payload.player);
-      player.weapon.updateWeapon(payload.weapon);
+      player.weapon.updateWeapon(payload.newWeapon);
     }
 
     onPlayerDamage(event) {
