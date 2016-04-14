@@ -344,7 +344,7 @@ export default class Player extends Sprite {
 
         if(newRanks > 0) {
             this.createRankSprite();
-            if(!isAlien()){
+            if(!this.isAlien()){
               this.checkNewPlayerSprite();
             }
         }
