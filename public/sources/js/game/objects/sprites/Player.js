@@ -294,7 +294,13 @@ export default class Player extends Sprite {
 
         eventSystem().emit('player_dead', {
            team: this.team.name
-       });
+        });
+
+        eventSystem().emit('stat.entry', {
+            player: this,
+            key: 'player.dead',
+            team: this.team.name
+        });
     }
 
     resetPlayer() {

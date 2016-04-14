@@ -85,6 +85,17 @@ export default class NetworkService {
             this.answerWithExp();
         });
 
+        eventSystem().on('stat.entry', payload => {
+            const player = payload.player;
+            const hero = this.objects.get('hero');
+            
+            if(player !== hero) {
+                return;
+            }
+            
+            this.statEntry(payload.key, payload.team);
+        });
+
         eventSystem().on('login', () => {
             this.getExp();
         });
@@ -206,7 +217,7 @@ export default class NetworkService {
     }
 
     statEntry(key, team) {
-        this.socket.volatile.emit('stat-entry', {
+        this.socket.emit('stat-entry', {
             key: key,
             team: team
         });

@@ -10,7 +10,10 @@ class StatisticRepository {
             team: team
         });
         
-        return entry.save();
+        return entry.save()
+            .then(savedEntry => {
+                console.log(savedEntry);
+            });
     }
     
 }
