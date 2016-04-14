@@ -9,6 +9,7 @@
             <a class="nav-item nav-link" v-link="{ path: '/login' }" v-if="!authService.loggedIn">Login</a>
             <a class="nav-item nav-link" v-link="{ path: '/register' }" v-if="!authService.loggedIn">Register</a>
             <a class="nav-item nav-link" v-link="{ path: '/about' }">About</a>
+            <a class="nav-item nav-link" v-link="{ path: '/statistics' }">Statistics</a>
             <a class="nav-item nav-link" href="" v-if="authService.loggedIn" @click="logout($event)">Logout</a>
         </div>
         <div class="nav navbar-nav pull-sm-right" v-if="authService.loggedIn">

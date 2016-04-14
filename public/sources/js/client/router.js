@@ -6,6 +6,7 @@ import Login from './components/views/Login.vue';
 import Register from './components/views/Register.vue';
 import About from './components/views/About.vue';
 import Verify from './components/views/Verify.vue';
+import Statistics from './components/views/Statistics.vue';
 /* Views */
 
 const routerOptions = {
@@ -34,6 +35,9 @@ router.map({
     },
     '/verify/:token': {
         component: Verify
+    },
+    'statistics': {
+        component: Statistics
     }
 });
 

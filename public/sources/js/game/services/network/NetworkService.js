@@ -66,7 +66,7 @@ export default class NetworkService {
             if (payload.source == "network") {
                 return;
             }
-            this.sendFlagCollected(payload.flag);
+            this.sendFlagCollected(payload);
         });
 
         eventSystem().on('player.exp', payload => {
@@ -107,7 +107,7 @@ export default class NetworkService {
         const payload = {
             flag: flag
         };
-
+        
         this.broadcast('FlagCollected', payload);
     }
 
@@ -241,7 +241,11 @@ export default class NetworkService {
 
     onFlagCollected(event) {
         var flagObject = this.objects.get('flags.' + event.flag);
-        console.log('finmich', flagObject);
+        flagObject.collected = true;
+        flagObject.visible = false;
+
+        const player = this.teamManager.findPlayer(event.player);
+        player.getFlag(this);
     }
 
     onPlayerPosition(event) {
