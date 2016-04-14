@@ -15,6 +15,10 @@ class StatisticRepository {
                 console.log(savedEntry);
             });
     }
+
+    all() {
+        return StatEntry.find({});
+    }
     
 }
 
