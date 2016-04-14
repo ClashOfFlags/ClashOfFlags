@@ -27,10 +27,16 @@ export default class NetworkService {
         });
 
         eventSystem().on('treasureChest.newStatus', (payload) => {
+          if (payload.source == "network") {
+              return;
+          }
           this.sendTreasureChestStatus(payload);
         });
 
-        eventSystem().on('updateWeapon', (payload) => {
+        eventSystem().on('player.updateWeapon', (payload) => {
+          if (payload.source == "network") {
+              return;
+          }
           this.sendPlayerUpdateWeapon(payload);
         });
 
@@ -231,13 +237,12 @@ export default class NetworkService {
     }
 
     onTreasureChestStatus(payload){
-      console.log(payload);
       this.objects.get('treasureChest.' + payload.id).setStatus(payload.newStatus);
     }
 
     onPlayerUpdateWeapon(payload){
-      // console.log(payload);
-      // payload.player.number.weapon.updateWeapon(payload.weapon);
+      const player = this.teamManager.findPlayer(payload.player);
+      player.weapon.updateWeapon(payload.weapon);
     }
 
     onPlayerDamage(event) {

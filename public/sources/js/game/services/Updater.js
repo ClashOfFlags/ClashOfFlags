@@ -103,6 +103,9 @@ export default class Updater {
     }
 
     collectTreasure(player, treasureChest) {
+      if(!this.isHero(player)) {
+          return;
+      }
       treasureChest.collect(player);
     }
 

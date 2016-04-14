@@ -20,13 +20,8 @@ export default class TreasureChest extends Sprite{
 
   collect(player){
     if(this.status === 'full'){
-      this.setStatus('empty');
 
-      eventSystem().emit('treasureChest.newStatus', {
-        id: this.id,
-        newStatus: this.status
-      });
-
+      this.updateStatus('empty');
        this.updateWeapon(player, 'fireball_red');
 
       var realoadTreasure = this.game.rnd.integerInRange(config.game.treasureChest.reloadTreasureMin, config.game.treasureChest.reloadTreasureMax);
@@ -34,22 +29,28 @@ export default class TreasureChest extends Sprite{
     }
   }
 
-  updateWeapon(player, weapon) {
+  updateStatus(status, source = "user") {
+    this.setStatus(status);
+
+    eventSystem().emit('treasureChest.newStatus', {
+      id: this.id,
+      newStatus: this.status,
+      source: source
+    });
+  }
+
+  updateWeapon(player, weapon, source = "user") {
     player.weapon.updateWeapon(weapon);
 
-    // eventSystem().emit('player.updateWeapon', {
-    //    player: player,
-    //    newWeapon: weapon
-    // });
+    eventSystem().emit('player.updateWeapon', {
+       player: player.number,
+       newWeapon: weapon,
+       source: source
+    });
   }
 
   realoadTreasure() {
-    this.setStatus('full');
-
-    eventSystem().emit('treasureChest.newStatus', {
-       id: this.id,
-       newStatus: this.status
-    });
+    this.updateStatus('empty');
   }
 
 }
