@@ -1,8 +1,14 @@
 <template>
     <br>
     <div class="row">
-        <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4 center-block">
-            <div id="chart__kills"></div>
+        <div class="col-xs-12">
+            <div id="chart__kills" class="teams_statistic"></div>
+        </div>
+        <div class="col-xs-12">
+            <div id="chart__flags_collected" class="teams_statistic"></div>
+        </div>
+        <div class="col-xs-12">
+            <div id="chart__flags_captured" class="teams_statistic"></div>
         </div>
     </div>
 </template>
@@ -20,33 +26,65 @@
                 jQuery(function ($) {
                     api.statistics()
                             .then(result => {
-                                var data = [
-                                    {'date': new Date('2015-04-01'), 'value': 12},
-                                    {'date': new Date('2015-04-02'), 'value': 18},
-                                    {'date': new Date('2015-04-010'), 'value': 98}
-                                ];
-
+                                console.log('some result');
                                 console.log(result);
 
                                 var kills = [];
                                 for (var i = 0; i < result.kills.length; i++) {
+                                    console.log(result.kills[i]);
                                     kills[i] = MG.convert.date(result.kills[i], 'date');
                                 }
 
-                                console.log(kills);
+                                var captured = [];
+                                for (var i = 0; i < result.flagsCaptured.length; i++) {
+                                    console.log(result.flagsCaptured[i]);
+
+                                    captured[i] = MG.convert.date(result.flagsCaptured[i], 'date');
+                                }
+
+                                var collected = [];
+                                for (var i = 0; i < result.flagsCollected.length; i++) {
+                                    console.log(result.flagsCollected[i]);
+                                    collected[i] = MG.convert.date(result.flagsCollected[i], 'date');
+                                }
+
+                                console.log(kills, captured, collected);
 
                                 MG.data_graphic({
                                     title: "Kills",
-                                    description: "Daily kills for each team.",
+                                    description: "Hourly kills for each team.",
                                     data: kills,
                                     width: 600,
                                     height: 400,
                                     target: "#chart__kills",
                                     x_accessor: "date",
                                     y_accessor: "value",
-                                    legend: ['Kills Red','Kills Blue']
+                                    legend: ['Red kills','Blue kills']
                                 });
 
+                                MG.data_graphic({
+                                    title: "Flag collections",
+                                    description: "Hourly captures for each team.",
+                                    data: collected,
+                                    width: 600,
+                                    height: 400,
+                                    target: "#chart__flags_collected",
+                                    x_accessor: "date",
+                                    y_accessor: "value",
+                                    legend: ['Red collections','Blue collections']
+                                });
+
+                                MG.data_graphic({
+                                    title: "Flag captures",
+                                    description: "Hourly captures for each team.",
+                                    data: captured,
+                                    width: 600,
+                                    height: 400,
+                                    target: "#chart__flags_captured",
+                                    x_accessor: "date",
+                                    y_accessor: "value",
+                                    legend: ['Red captures','Blue captures']
+                                });
                             });
                 });
             }
