@@ -87,6 +87,18 @@ export default class NetworkService {
             }
 
             this.sendExp(hero);
+            this.answerWithExp();
+        });
+
+        eventSystem().on('stat.entry', payload => {
+            const player = payload.player;
+            const hero = this.objects.get('hero');
+            
+            if(player !== hero) {
+                return;
+            }
+            
+            this.statEntry(payload.key, payload.team);
         });
 
         eventSystem().on('login', () => {
@@ -96,7 +108,11 @@ export default class NetworkService {
 
 
 
-    sendFlagCollected(payload) {
+    sendFlagCollected(flag) {
+        const payload = {
+            flag: flag
+        };
+        
         this.broadcast('FlagCollected', payload);
     }
 
@@ -209,6 +225,12 @@ export default class NetworkService {
         });
     }
 
+    statEntry(key, team) {
+        this.socket.emit('stat-entry', {
+            key: key,
+            team: team
+        });
+    }
     /* Send Functions */
 
     /* Receive Functions */
