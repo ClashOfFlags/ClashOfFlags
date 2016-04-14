@@ -60,6 +60,7 @@ export default class PlayerFactory extends AbstractFactory {
         player.healthbar = this.game.add.sprite(0,0, healthBMD);
         player.updateHealthbar();
 
+
         /* Rank */
         player.createRankSprite();
         player.checkNewPlayerSprite();

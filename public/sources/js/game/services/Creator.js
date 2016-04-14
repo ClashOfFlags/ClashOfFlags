@@ -398,9 +398,9 @@ export default class Creator {
     createBases() {
         var baseGroup = this.game.add.group();
         baseGroup.enableBody = true;
-        var bases = this.objects.byProperties({'type': 'base'}, 'objectsLayer');
+        var bases = this.objects.byProperties({'type': 'gold'}, 'objectsLayer');
         bases.forEach(function (element) {
-            var base = new Base(this.game, element.x, element.y, 'basearea');
+            var base = new Base(this.game, element.x, element.y, 'gold');
             base.setTeam(element.properties.team);
             console.log(base);
             baseGroup.add(base);
