@@ -37,15 +37,14 @@
 
                                 MG.data_graphic({
                                     title: "Kills",
-                                    description: "Yearly UFO sightings from 1945 to 2010.",
+                                    description: "Daily kills for each team.",
                                     data: kills,
                                     width: 600,
                                     height: 400,
                                     target: "#chart__kills",
                                     x_accessor: "date",
                                     y_accessor: "value",
-                                    legend: ['Kills Red','Kills Blue'],
-                                    interpolate: "monotone"
+                                    legend: ['Kills Red','Kills Blue']
                                 });
 
                             });
