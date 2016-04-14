@@ -10,6 +10,9 @@
         <div class="col-xs-12">
             <div id="chart__flags_captured" class="teams_statistic"></div>
         </div>
+        <div class="col-xs-12">
+            <div id="chart__kill_locations" class="teams_statistic"></div>
+        </div>
     </div>
 </template>
 
@@ -84,6 +87,16 @@
                                     x_accessor: "date",
                                     y_accessor: "value",
                                     legend: ['Red captures','Blue captures']
+                                });
+
+                                MG.data_graphic({
+                                    title: "Kill Locations",
+                                    data: result.killLocations,
+                                    width: 600,
+                                    height: 400,
+                                    target: "#chart__kill_locations",
+                                    x_accessor: "x",
+                                    y_accessor: "y"
                                 });
                             });
                 });

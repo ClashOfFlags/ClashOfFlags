@@ -2,6 +2,10 @@ $team1-color: red;
 $team2-color: blue;
 
 .teams_statistic {
+  svg{
+    overflow: visible !important;
+  }
+
   .mg-area1-color {
     fill: $team1-color;
   }
