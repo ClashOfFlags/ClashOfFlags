@@ -75,7 +75,6 @@ module.exports = class Room {
                 return i;
             }
         }
-
         return null;
     }
 };
