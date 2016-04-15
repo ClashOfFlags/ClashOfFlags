@@ -1,0 +1,36 @@
+$team1-color: red;
+$team2-color: blue;
+
+.teams_statistic {
+  svg{
+    overflow: visible !important;
+  }
+
+  .mg-area1-color {
+    fill: $team1-color;
+  }
+
+
+  .mg-line1-color {
+    stroke: $team1-color;
+  }
+
+  .mg-line1-legend-color {
+    color: $team1-color;
+    fill: $team1-color;
+  }
+
+  .mg-area2-color {
+    fill: $team2-color;
+  }
+
+  .mg-line2-color {
+    stroke: $team2-color;
+  }
+
+  .mg-line2-legend-color {
+    color: $team2-color;
+    fill: $team2-color;
+  }
+
+}
