@@ -38,9 +38,21 @@ module.exports = class Lobby {
     addPlayer(player) {
         this.players.push(player);
 
-        var room = this.getFreeRoomOrCreateNew();
+        var room = null;
+
+        if (!player.targetRoomName) {
+            room = this.getFreeRoomOrCreateNew();
+        } else {
+            room = this.findFreeRoomWithNameOrFindNext(player.targetRoomName);
+        }
+
+
         player.tellRoom(room);
         room.addPlayer(player);
+    }
+
+    findFreeRoomWithNameOrFindNext(roomNickName){
+        //TODO @Marc
     }
 
     getFreeRoomOrCreateNew() {

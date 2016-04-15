@@ -12,6 +12,7 @@ module.exports = class Player {
         this.roomSlot = 1;
         this.lobby = lobby;
         this.socket = socket;
+        this.targetRoomName = false;
 
         this.init();
     }
