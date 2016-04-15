@@ -59,4 +59,23 @@ module.exports = class Room {
 
         return count;
     }
+
+    removePlayer(player) {
+        var slotId = this.findRoomSlot(player);
+        this.roomSlots[slotId] = null;
+    }
+
+    findRoomSlot(player) {
+        for (var i in this.roomSlots) {
+            var playerSlot = this.roomSlots[i];
+
+            if (!playerSlot) continue;
+
+            if (playerSlot.id == player.id) {
+                return i;
+            }
+        }
+
+        return null;
+    }
 };

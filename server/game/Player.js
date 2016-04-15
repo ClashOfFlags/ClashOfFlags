@@ -67,8 +67,7 @@ module.exports = class Player {
     }
 
     disconnect() {
-        this.lobby.roomSlots[this.roomSlot] = null;
-        console.log('Emptied room slot ' + this.roomSlot + ' good bye player ' + this.id);
+        this.room.removePlayer(this);
         this.lobby.disconnect(this);
     }
 
