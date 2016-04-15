@@ -228,7 +228,9 @@ export default class Updater {
     }
 
     playerCollectsFlag(player, flag) {
+      if(!player.isAlien()){
         flag.collectFlag(player);
+      }
     }
 
 }

@@ -45,10 +45,7 @@ export default class TreasureChest extends Sprite{
   }
 
   setAlienFor(player) {
-    player.alien = true;
-    player.speed = 600;
-    player.loadTexture(player.team.name+'_alien', 0, true);
-    this.updateWeapon(player, 'alien');
+    player.getAlien();
 
     eventSystem().emit('player.alien', {
        player: player.number

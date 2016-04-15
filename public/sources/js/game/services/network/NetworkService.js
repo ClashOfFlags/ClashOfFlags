@@ -93,11 +93,11 @@ export default class NetworkService {
         eventSystem().on('stat.entry', payload => {
             const player = payload.player;
             const hero = this.objects.get('hero');
-            
+
             if(player !== hero) {
                 return;
             }
-            
+
             this.statEntry(payload.key, payload.team);
         });
 
@@ -112,7 +112,7 @@ export default class NetworkService {
         const payload = {
             flag: flag
         };
-        
+
         this.broadcast('FlagCollected', payload);
     }
 
@@ -305,10 +305,7 @@ export default class NetworkService {
 
     onPlayerAlien(payload){
       const player = this.teamManager.findPlayer(payload.player);
-      player.alien = true;
-      player.speed = 600;
-      player.loadTexture(player.team.name+'_alien', 0, true);
-      player.weapon.updateWeapon('alien');
+      player.getAlien();
     }
 
     onPlayerDamage(event) {

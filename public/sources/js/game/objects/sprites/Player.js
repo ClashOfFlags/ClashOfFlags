@@ -303,9 +303,7 @@ export default class Player extends Sprite {
         }
 
         if(this.isAlien()){
-          this.alien = false;
-          this.checkNewPlayerSprite();
-          this.weapon.updateWeapon('fireball');
+          this.resetAlien();
         }
 
         this.game.time.events.add(Phaser.Timer.SECOND * config.game.player.waitForRespawn, this.resetPlayer, this);
@@ -315,6 +313,20 @@ export default class Player extends Sprite {
         });
 
         this.statEntry('player.dead');
+    }
+
+    getAlien() {
+      this.alien = true;
+      this.speed = 600;
+      this.loadTexture(player.team.name+'_alien', 0, true);
+      this.weapon.updateWeapon(player, 'alien');
+    }
+
+    resetAlien() {
+      this.speed = 400;
+      this.alien = false;
+      this.checkNewPlayerSprite();
+      this.weapon.updateWeapon('fireball');
     }
 
     resetPlayer() {
