@@ -5,24 +5,13 @@ const eventBus = require('../events/event-bus');
 const SocketConnectEvent = require('../events/SocketConnectEvent');
 const Player = require('./Player');
 
+let nextRoomId = 0;
+
 module.exports = class Lobby {
 
     constructor() {
         this.players = [];
-
-        //TODO: Move this to a room object
-        this.roomSlots = {
-            1: null,
-            2: null,
-            3: null,
-            4: null,
-            5: null,
-            6: null,
-            7: null,
-            8: null,
-            9: null,
-            10: null
-        };
+        this.rooms = [];
 
         this.registerSocketConnectEvent();
     }
@@ -34,7 +23,6 @@ module.exports = class Lobby {
             socket.on('PlayerConnectEvent', () => {
                 const player = new Player(this, socket);
 
-                // Add the player to a room slot TODO: Move this to room class
                 player.roomSlot = this.freeRoomSlot();
                 this.roomSlots[player.roomSlot] = player;
 
@@ -46,13 +34,43 @@ module.exports = class Lobby {
         });
     }
 
+
     addPlayer(player) {
-        this.players.forEach(otherPlayer => {
-            player.addPlayer(otherPlayer);
-            otherPlayer.addPlayer(player);
+        this.players.push(player);
+
+        var room = this.getFreeRoomOrCreateNew();
+        player.tellRoom(room);
+        room.addPlayer(player);
+    }
+
+    getFreeRoomOrCreateNew() {
+        var freeRoom = this.getFreeRoom();
+
+        if (freeRoom) {
+            return freeRoom;
+        }
+
+        return this.makeRoom()
+    }
+
+    getFreeRoom() {
+        var freeRooms = _.filter(this.rooms, (room) => {
+            return !room.isFull();
         });
 
-        this.players.push(player);
+        if (freeRooms.length == 0) {
+            return null;
+        }
+
+        return freeRooms[0];
+    }
+
+    makeRoom() {
+        var room = new Room(nextRoomId);
+
+        nextRoomId = nextRoomId + 1;
+
+        return room;
     }
 
     disconnect(player) {
@@ -63,31 +81,5 @@ module.exports = class Lobby {
         });
     }
 
-    //TODO: Move this to a room object
-    freeRoomSlot() {
-        var playersInRedTeam = this.usedSlots(1,5);
-        var playersInBlueTeam = this.usedSlots(6,10);
-
-        console.log(playersInRedTeam, playersInBlueTeam);
-
-        for (var i in this.roomSlots) {
-            if (!this.roomSlots[i] && (
-                    (playersInBlueTeam >= playersInRedTeam && i <= 5) || (playersInRedTeam >= playersInBlueTeam && i > 5)
-                ))
-                return i;
-        }
-
-        return false;
-    }
-
-    usedSlots(from, to) {
-        var count = 0;
-        for (var i in this.roomSlots) {
-            if (this.roomSlots[i] && from <= i && to >= i)
-                count++;
-        }
-
-        return count;
-    }
 
 }

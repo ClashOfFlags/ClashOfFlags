@@ -1,5 +1,7 @@
 <template>
     <br>
+
+
     <div class="row">
         <div class="col-xs-12">
             <div id="chart__kills" class="teams_statistic"></div>
@@ -101,7 +103,8 @@
                                     y_accessor: "y",
                                     color_accessor: 'v',
                                     color_type: 'category',
-                                    color_range: ['red', 'blue']
+                                    color_domain: ['red', 'blue'],
+                                    color_range: ['red', 'blue', 'black']
                                 });
                             });
                 });

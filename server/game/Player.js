@@ -58,6 +58,10 @@ module.exports = class Player {
         this.emit('PlayerConnectEvent', {id: player.id, slot: player.roomSlot});
     }
 
+    tellRoom(room){
+        this.emit('RoomJoinEvent', {id: room.id, nickname: room.nickname});
+    }
+
     removePlayer(player) {
         this.emit('PlayerDisconnectEvent', {id: player.id, slot: player.roomSlot});
     }

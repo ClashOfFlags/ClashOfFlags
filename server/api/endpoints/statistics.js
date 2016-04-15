@@ -8,6 +8,9 @@ module.exports = {
 };
 
 function* handle() {
+    return testData();
+
+
     const stats = yield statisticRepository.all();
     const killsRed = {};
     const killsBlue = {};
@@ -17,21 +20,22 @@ function* handle() {
     const flagsCapturedBlue = {};
 
     stats.forEach(stat => {
-        if(stat.key === 'player.dead') {
+        if (stat.key === 'player.dead') {
             addToTeam(stat, killsRed, killsBlue);
             return;
         }
 
-        if(stat.key === 'flag.collected') {
+        if (stat.key === 'flag.collected') {
             addToTeam(stat, flagsCollectedRed, flagsCollectedBlue);
             return;
         }
 
-        if(stat.key === 'flag.captured') {
+        if (stat.key === 'flag.captured') {
             addToTeam(stat, flagsCapturedRed, flagsCapturedBlue);
             return;
         }
     });
+
 
     return {
         kills: [
@@ -57,7 +61,7 @@ function addToTeam(stat, red, blue) {
     const team = teams[stat.team];
     const date = moment(stat.createdAt).format('YYYY-MM-DD');
 
-    if(!team[date]) {
+    if (!team[date]) {
         team[date] = 0;
     }
 
@@ -112,19 +116,19 @@ function testData() {
                 {'date': '2016-04-02', 'value': 3},
                 {'date': '2016-04-03', 'value': 2},
                 {'date': '2016-04-09', 'value': 10},
-                {'date': '2016-04-10', 'value': 78}
+                {'date': '2016-04-10', 'value': 40}
             ]
         ],
         killLocations: [
             [
-                {u: 'blue', x: 370, y: 800 - 10},
-                {u: 'blue', x: 400, y: 800 - 600},
-                {u: 'blue', x: 800, y: 800 - 700},
-                {u: 'blue', x: 500, y: 800 - 90},
-                {u: 'blue', x: 390, y: 800 - 10},
-                {u: 'red', x: 200, y: 800 - 20},
-                {u: 'red', x: 420, y: 800 - 700},
-                {u: 'red', x: 780, y: 800 - 90}
+                {v: 'blue', x: 370, y: 800 - 10},
+                {v: 'blue', x: 400, y: 800 - 600},
+                {v: 'blue', x: 800, y: 800 - 700},
+                {v: 'blue', x: 500, y: 800 - 90},
+                {v: 'blue', x: 390, y: 800 - 10},
+                {v: 'red', x: 200, y: 800 - 20},
+                {v: 'red', x: 420, y: 800 - 700},
+                {v: 'red', x: 780, y: 800 - 90}
             ]
         ]
     };
