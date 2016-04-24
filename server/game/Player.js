@@ -25,24 +25,24 @@ class Player {
         });
 
         this.socket.on('exp:set', payload => {
-            if(!payload.token || !payload.exp) {
+            if (!payload.token || !payload.exp) {
                 return;
             }
 
             userService.saveExp(payload.token, payload.exp);
         });
-        
+
         this.socket.on('exp:get', (payload, callback) => {
-            if(!payload.token) {
+            if (!payload.token) {
                 return;
-            } 
-            
+            }
+
             userService.getExp(payload.token)
                 .then(exp => {
                     callback(exp);
                 });
         });
-        
+
         this.socket.on('stat-entry', payload => {
             statisticRepository.createEntry(payload.key, payload.team);
         });
@@ -56,8 +56,14 @@ class Player {
         this.emit('PlayerConnectEvent', {id: player.id, slot: player.roomSlot});
     }
 
-    tellRoom(room){
-        this.emit('RoomJoinEvent', {id: room.id, nickname: room.nickname});
+    tellRoom(room) {
+        this.emit('RoomJoinEvent', {
+            id: room.id,
+            redTickets: room.redTickets,
+            blueTickets: room.blueTickets,
+            redFlags: room.redFlags,
+            blueFlags: room.blueFlags
+        });
     }
 
     removePlayer(player) {

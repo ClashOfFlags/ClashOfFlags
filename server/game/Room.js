@@ -9,6 +9,10 @@ class Room {
     constructor(id) {
         this.id = id;
         this.players = [];
+        this.redTickets = 300;
+        this.blueTickets = 300;
+        this.redFlags = 3;
+        this.blueFlags = 3;
 
         this.roomSlots = {
             1: null,
@@ -35,6 +39,7 @@ class Room {
 
         player.socket.join(this.id);
         this.players.push(player);
+        player.tellRoom(this);
         player.socket.on('disconnect', () => this.onPlayerDisconnect(player));
     }
 
@@ -75,7 +80,7 @@ class Room {
 
     close() {
         const event = new RoomCloseEvent(this);
-        
+
         eventBus.fire(event);
     }
 
