@@ -3,7 +3,7 @@
 const userService = require('../services/userService');
 const statisticRepository = require('../repositories/statisticRepository');
 
-module.exports = class Player {
+class Player {
 
     constructor(id, socket) {
         this.id = id;
@@ -70,3 +70,5 @@ module.exports = class Player {
     }
 
 }
+
+module.exports = Player;

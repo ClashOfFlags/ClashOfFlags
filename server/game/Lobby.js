@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const eventBus = require('../events/event-bus');
 const SocketConnectEvent = require('../events/SocketConnectEvent');
+const RoomCloseEvent = require('../events/RoomCloseEvent');
 const Player = require('./Player');
 const idService = require('../services/idService');
 
@@ -11,18 +12,17 @@ class Lobby {
     constructor() {
         this.rooms = [];
 
-        this.registerSocketConnectEvent();
+        this.registerEvents();
     }
 
-    registerSocketConnectEvent() {
+    registerEvents() {
         eventBus.register(SocketConnectEvent, event => this.onSocketConnect(event));
+        eventBus.register(RoomCloseEvent, event => this.onRoomClose(event));
     }
 
     onSocketConnect(event) {
-        this.registerSocketEvents(event.socket);
-    }
-
-    registerSocketEvents(socket) {
+        const socket = event.socket;
+        
         socket.on('PlayerConnectEvent', data => this.onPlayerConnect(socket, data));
     }
 
@@ -32,7 +32,7 @@ class Lobby {
         const playerId = idService.nextPlayerId();
         const player = new Player(playerId, socket);
 
-        room.join(player);
+        room.addPlayer(player);
     }
 
     findRoomForPlayer(targetRoomId = null) {
@@ -86,6 +86,12 @@ class Lobby {
         return _.filter(this.rooms, room => {
             return !room.isFull();
         });
+    }
+
+    onRoomClose(event) {
+        const room = event.room;
+
+        _.remove(this.rooms, {id: room.id});
     }
 
 }

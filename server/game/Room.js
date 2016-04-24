@@ -1,7 +1,11 @@
 'use strict';
 
+const io = require('../socket').io;
+const eventBus = require('../events/event-bus');
+const RoomCloseEvent = require('../events/RoomCloseEvent');
+
 class Room {
-    
+
     constructor(id) {
         this.id = id;
         this.players = [];
@@ -21,16 +25,28 @@ class Room {
     }
 
     isFull() {
-
+        return this.players.length === 10;
     }
 
     addPlayer(player) {
-        this.players.forEach(otherPlayer => {
-            player.addPlayer(otherPlayer);
-            otherPlayer.addPlayer(player);
-        });
+        const roomSlot = this.freeRoomSlot();
+        this.roomSlots[roomSlot] = player;
+        player.roomSlot = roomSlot;
 
+        player.socket.join(this.id);
         this.players.push(player);
+        player.socket.on('disconnect', () => this.onPlayerDisconnect(player));
+    }
+
+    onPlayerDisconnect(player) {
+        this.roomSlots[player.roomSlot] = null;
+
+        _.remove(this.players, {id: player.id});
+        io.to(this.id).emit('PlayerDisconnectEvent', {id: player.id});
+
+        if(this.players.length === 0) {
+            this.close();
+        }
     }
 
     freeRoomSlot() {
@@ -57,23 +73,12 @@ class Room {
         return count;
     }
 
-    removePlayer(player) {
-        var slotId = this.findRoomSlot(player);
-        this.roomSlots[slotId] = null;
+    close() {
+        const event = new RoomCloseEvent(this);
+        
+        eventBus.fire(event);
     }
 
-    findRoomSlot(player) {
-        for (var i in this.roomSlots) {
-            var playerSlot = this.roomSlots[i];
-
-            if (!playerSlot) continue;
-
-            if (playerSlot.id == player.id) {
-                return i;
-            }
-        }
-        return null;
-    }
 }
 
 module.exports = Room;
