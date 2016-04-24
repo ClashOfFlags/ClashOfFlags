@@ -1,11 +1,10 @@
 'use strict';
 
-const natoAlphabetGenerator = require('../services/natoAlphabetGenerator');
-
-module.exports = class Room {
+class Room {
+    
     constructor(id) {
-        this.players = [];
         this.id = id;
+        this.players = [];
 
         this.roomSlots = {
             1: null,
@@ -19,8 +18,6 @@ module.exports = class Room {
             9: null,
             10: null
         };
-
-        this.nickname = natoAlphabetGenerator.generate();
     }
 
     isFull() {
@@ -77,4 +74,6 @@ module.exports = class Room {
         }
         return null;
     }
-};
+}
+
+module.exports = Room;

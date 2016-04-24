@@ -2,17 +2,14 @@
 
 const userService = require('../services/userService');
 const statisticRepository = require('../repositories/statisticRepository');
-let playerId = 0; // Not optimal, should be changed later
 
 module.exports = class Player {
 
-    constructor(lobby, socket) {
-        this.id = playerId++;
-        this.team = "";
-        this.roomSlot = 1;
-        this.lobby = lobby;
+    constructor(id, socket) {
+        this.id = id;
         this.socket = socket;
-        this.targetRoomName = false;
+        this.team = '';
+        this.roomSlot = 1;
 
         this.init();
     }
