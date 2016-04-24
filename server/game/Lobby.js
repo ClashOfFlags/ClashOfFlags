@@ -7,7 +7,7 @@ const RoomCloseEvent = require('../events/RoomCloseEvent');
 const Player = require('./Player');
 const idService = require('../services/idService');
 
-class Lobby {
+module.exports = class Lobby {
 
     constructor() {
         this.rooms = [];
@@ -35,7 +35,7 @@ class Lobby {
         room.addPlayer(player);
     }
 
-    findRoomForPlayer(targetRoomId = null) {
+    findRoomForPlayer(targetRoomId) {
         let room = null;
 
         if (targetRoomId) {
@@ -94,6 +94,4 @@ class Lobby {
         _.remove(this.rooms, {id: room.id});
     }
 
-}
-
-module.exports = Lobby;
+};

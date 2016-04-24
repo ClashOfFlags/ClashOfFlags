@@ -4,7 +4,7 @@ const io = require('../socket').io;
 const eventBus = require('../events/event-bus');
 const RoomCloseEvent = require('../events/RoomCloseEvent');
 
-class Room {
+module.exports = class Room {
 
     constructor(id) {
         this.id = id;
@@ -39,7 +39,7 @@ class Room {
 
         player.socket.join(this.id);
         this.players.push(player);
-        player.tellRoom(this);
+        player.tellRoom(this, roomSlot);
         player.socket.on('disconnect', () => this.onPlayerDisconnect(player));
     }
 
@@ -47,9 +47,9 @@ class Room {
         this.roomSlots[player.roomSlot] = null;
 
         _.remove(this.players, {id: player.id});
-        io.to(this.id).emit('PlayerDisconnectEvent', {id: player.id});
+        io.to(this.id).emit('PlayerDisconnectEvent', {id: player.id, slot: player.roomSlot});
 
-        if(this.players.length === 0) {
+        if (this.players.length === 0) {
             this.close();
         }
     }
@@ -84,6 +84,4 @@ class Room {
         eventBus.fire(event);
     }
 
-}
-
-module.exports = Room;
+};

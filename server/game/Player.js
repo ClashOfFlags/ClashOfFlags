@@ -3,13 +3,14 @@
 const userService = require('../services/userService');
 const statisticRepository = require('../repositories/statisticRepository');
 
-class Player {
+module.exports = class Player {
 
     constructor(id, socket) {
         this.id = id;
         this.socket = socket;
         this.team = '';
-        this.roomSlot = 1;
+        this.roomSlot = null;
+        this.room = null;
 
         this.init();
     }
@@ -56,9 +57,14 @@ class Player {
         this.emit('PlayerConnectEvent', {id: player.id, slot: player.roomSlot});
     }
 
-    tellRoom(room) {
+    tellRoom(room, roomSlot) {
+        this.room = room;
+        this.roomSlot = roomSlot;
+
         this.emit('RoomJoinEvent', {
-            id: room.id,
+            roomId: room.id,
+            slot: roomSlot,
+            playerId: this.id,
             redTickets: room.redTickets,
             blueTickets: room.blueTickets,
             redFlags: room.redFlags,
@@ -66,15 +72,4 @@ class Player {
         });
     }
 
-    removePlayer(player) {
-        this.emit('PlayerDisconnectEvent', {id: player.id, slot: player.roomSlot});
-    }
-
-    disconnect() {
-        this.room.removePlayer(this);
-        this.lobby.disconnect(this);
-    }
-
-}
-
-module.exports = Player;
+};

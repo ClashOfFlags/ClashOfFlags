@@ -2,7 +2,7 @@
 
 const Event = require('./Event');
 
-class RoomCloseEvent extends Event {
+module.exports = class RoomCloseEvent extends Event {
 
     constructor(room) {
         super('RoomCloseEvent');
@@ -10,6 +10,4 @@ class RoomCloseEvent extends Event {
         this.room = room;
     }
 
-}
-
-module.exports = RoomCloseEvent;
+};
