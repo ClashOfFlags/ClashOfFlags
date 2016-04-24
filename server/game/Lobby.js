@@ -10,28 +10,49 @@ let nextRoomId = 0;
 module.exports = class Lobby {
 
     constructor() {
-        this.players = [];
         this.rooms = [];
 
         this.registerSocketConnectEvent();
     }
 
     registerSocketConnectEvent() {
-        eventBus.register(SocketConnectEvent, event => {
-            const socket = event.socket;
+        eventBus.register(SocketConnectEvent, event => this.onSocketConnect(event));
+    }
 
-            socket.on('PlayerConnectEvent', () => {
-                const player = new Player(this, socket);
+    onSocketConnect(event) {
+        this.registerSocketEvents(event.socket);
+    }
 
-                player.roomSlot = this.freeRoomSlot();
-                this.roomSlots[player.roomSlot] = player;
+    registerSocketEvents(socket) {
+        socket.on('PlayerConnectEvent', (data, callback) => this.onPlayerConnect(data, callback));
+    }
 
-                console.log('Player connected! ID ' + player.id);
-                player.socket.emit('PlayerHandshakeEvent', {id: player.id, slot: player.roomSlot});
+    onPlayerConnect(data, callback) {
+        const room = this.findRoom(data.targetRoomId);
+        
+        const player = new Player(this, socket);
 
-                this.addPlayer(player);
-            });
-        });
+        player.roomSlot = this.freeRoomSlot();
+        this.roomSlots[player.roomSlot] = player;
+
+        console.log('Player connected! ID ' + player.id);
+        player.socket.emit('PlayerHandshakeEvent', {id: player.id, slot: player.roomSlot});
+
+        this.addPlayer(player);
+    }
+    
+    findRoom(targetRoomId = null) {
+        let room = null;
+        
+        if(targetRoomId) {
+            room = this.getRoomById(targetRoomId);
+        }
+        
+        if(room === null || room.isFull()) {
+            room = this.getFreeRoomOrCreateNew();
+        }
+        
+        return room;
     }
 
     addPlayer(player) {
@@ -93,4 +114,4 @@ module.exports = class Lobby {
     }
 
 
-}
+};
