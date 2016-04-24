@@ -17,7 +17,7 @@ module.exports = class Lobby {
     }
 
     registerSocketConnectEvent() {
-        eventBus.register(new SocketConnectEvent(), event => {
+        eventBus.register(SocketConnectEvent, event => {
             const socket = event.socket;
 
             socket.on('PlayerConnectEvent', () => {
@@ -33,7 +33,6 @@ module.exports = class Lobby {
             });
         });
     }
-
 
     addPlayer(player) {
         this.players.push(player);

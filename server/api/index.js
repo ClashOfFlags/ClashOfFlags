@@ -12,7 +12,7 @@ endpoints.forEach(endpoint => {
     replaceEndpointRules(endpoint);
 });
 
-eventBus.register(new SocketConnectEvent(), onSocketConnect);
+eventBus.register(SocketConnectEvent, onSocketConnect);
 
 function onSocketConnect(event) {
     const socket = event.socket;
