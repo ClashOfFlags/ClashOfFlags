@@ -73,7 +73,7 @@ export default class TreasureChest extends Sprite{
   }
 
   realoadTreasure() {
-    this.updateStatus('empty');
+    this.updateStatus('full');
   }
 
 }
