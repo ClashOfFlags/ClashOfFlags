@@ -312,7 +312,7 @@ export default class Player extends Sprite {
            team: this.team.name
         });
 
-        this.statEntry('player.dead');
+        this.statEntry('player.dead', {x: this.x, y: this.y});
     }
 
     getAlien() {
@@ -407,10 +407,13 @@ export default class Player extends Sprite {
         }
     }
 
-    statEntry(key) {
+    statEntry(key, options) {
+        if(typeof options === 'undefined') options = {};
+
         eventSystem().emit('stat.entry', {
             player: this,
             key: key,
+            options: options,
             team: this.team.name
         });
     }

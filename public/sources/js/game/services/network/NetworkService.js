@@ -28,27 +28,27 @@ export default class NetworkService {
         });
 
         eventSystem().on('treasureChest.newStatus', (payload) => {
-          if (payload.source == "network") {
-              return;
-          }
-          this.sendTreasureChestStatus(payload);
+            if (payload.source == "network") {
+                return;
+            }
+            this.sendTreasureChestStatus(payload);
         });
 
         eventSystem().on('player.updateWeapon', (payload) => {
-          if (payload.source == "network") {
-              return;
-          }
-          this.sendPlayerUpdateWeapon(payload);
+            if (payload.source == "network") {
+                return;
+            }
+            this.sendPlayerUpdateWeapon(payload);
         });
 
         eventSystem().on('player.alien', (payload) => {
-          this.sendPlayerAlien(payload);
+            this.sendPlayerAlien(payload);
         });
 
-         eventSystem().on('player_dead', (payload) => {
-              this.teamManager.teams[payload.team].points--;
-              this.objects.get('points.' + payload.team).setText(this.teamManager.teams[payload.team].points + '/' + this.teamManager.maxPoints);
-          });
+        eventSystem().on('player_dead', (payload) => {
+            this.teamManager.teams[payload.team].points--;
+            this.objects.get('points.' + payload.team).setText(this.teamManager.teams[payload.team].points + '/' + this.teamManager.maxPoints);
+        });
 
         eventSystem().on('player.change_direction:after', (payload) => {
             console.log(' ' + payload.source);
@@ -78,11 +78,11 @@ export default class NetworkService {
             const player = payload.player;
             const hero = this.objects.get('hero');
 
-            if(player !== hero) {
+            if (player !== hero) {
                 return;
             }
 
-            if(!this.authService.isLoggedIn()) {
+            if (!this.authService.isLoggedIn()) {
                 return;
             }
 
@@ -94,11 +94,11 @@ export default class NetworkService {
             const player = payload.player;
             const hero = this.objects.get('hero');
 
-            if(player !== hero) {
+            if (player !== hero) {
                 return;
             }
 
-            this.statEntry(payload.key, payload.team);
+            this.statEntry(payload.key, payload.team, payload.options);
         });
 
         eventSystem().on('login', () => {
@@ -196,13 +196,13 @@ export default class NetworkService {
     }
 
     getExp() {
-        if(!this.authService.isLoggedIn()) {
+        if (!this.authService.isLoggedIn()) {
             return;
         }
 
         const token = this.authService.token();
 
-        this.socket.emit('exp:get', { token: token }, exp => {
+        this.socket.emit('exp:get', {token: token}, exp => {
             const hero = this.objects.get('hero');
 
             hero.setExp(exp);
@@ -223,12 +223,14 @@ export default class NetworkService {
         });
     }
 
-    statEntry(key, team) {
+    statEntry(key, team, options) {
         this.socket.emit('stat-entry', {
             key: key,
-            team: team
+            team: team,
+            options: options
         });
     }
+
     /* Send Functions */
 
     /* Receive Functions */
@@ -297,18 +299,18 @@ export default class NetworkService {
         player.shoot(event.direction);
     }
 
-    onTreasureChestStatus(payload){
-      this.objects.get('treasureChest.' + payload.id).setStatus(payload.newStatus);
+    onTreasureChestStatus(payload) {
+        this.objects.get('treasureChest.' + payload.id).setStatus(payload.newStatus);
     }
 
-    onPlayerUpdateWeapon(payload){
-      const player = this.teamManager.findPlayer(payload.player);
-      player.weapon.updateWeapon(payload.newWeapon);
+    onPlayerUpdateWeapon(payload) {
+        const player = this.teamManager.findPlayer(payload.player);
+        player.weapon.updateWeapon(payload.newWeapon);
     }
 
-    onPlayerAlien(payload){
-      const player = this.teamManager.findPlayer(payload.player);
-      player.getAlien();
+    onPlayerAlien(payload) {
+        const player = this.teamManager.findPlayer(payload.player);
+        player.getAlien();
     }
 
     onPlayerDamage(event) {
