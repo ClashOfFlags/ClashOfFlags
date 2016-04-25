@@ -8,6 +8,10 @@ module.exports = {
 };
 
 function* handle() {
+    const stats = yield statisticRepository.all();
+
+    console.log(stats);
+
     return testData();
 
 
