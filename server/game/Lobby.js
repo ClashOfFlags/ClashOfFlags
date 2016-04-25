@@ -6,6 +6,7 @@ const SocketConnectEvent = require('../events/SocketConnectEvent');
 const RoomCloseEvent = require('../events/RoomCloseEvent');
 const Player = require('./Player');
 const idService = require('../services/idService');
+const Room = require('./Room');
 
 module.exports = class Lobby {
 
@@ -31,11 +32,14 @@ module.exports = class Lobby {
             data = {};
         }
 
+        console.log('A player connected to the lobby! Data:', data);
+
         const targetRoomId = data.targetRoomId;
         const room = this.findRoomForPlayer(targetRoomId);
         const playerId = idService.nextPlayerId();
         const player = new Player(playerId, socket);
 
+        console.log('Found room', room.id, 'for player ', playerId);
         room.addPlayer(player);
     }
 
@@ -43,10 +47,12 @@ module.exports = class Lobby {
         let room = null;
 
         if (targetRoomId) {
+            console.log('Target room ID provided, finding room...');
             room = this.getRoomById(targetRoomId);
         }
 
         if (room === null || room.isFull()) {
+            console.log('Room was null or full, getting free room or creating a new one...');
             room = this.getFreeRoomOrCreateNew();
         }
 
@@ -63,6 +69,8 @@ module.exports = class Lobby {
         if (room) {
             return room;
         }
+
+        console.log('Could not find a free room, creating a new one... Hang tight.');
 
         return this.createNewRoom();
     }
@@ -82,6 +90,7 @@ module.exports = class Lobby {
         const room = new Room(roomId);
 
         this.rooms.push(room);
+        console.log('Created room with ID ' + roomId + ', there are ' + this.rooms.length + ' rooms now.');
 
         return room;
     }

@@ -21,7 +21,7 @@ class IdService {
         for (;;) {
             const roomId = this.generateRoomId();
 
-            if (this.usedRoomIds[roomId]) {
+            if (!this.usedRoomIds[roomId]) {
                 this.usedRoomIds[roomId] = true;
 
                 return roomId;
