@@ -39,7 +39,7 @@ module.exports = class Lobby {
         const playerId = idService.nextPlayerId();
         const player = new Player(playerId, socket);
 
-        console.log('Found room', room.id, 'for player ', playerId);
+        console.log('Found room ' + room.id + ' for player ' + playerId);
         room.addPlayer(player);
     }
 
@@ -104,7 +104,9 @@ module.exports = class Lobby {
     onRoomClose(event) {
         const room = event.room;
 
+        console.log('Lobby received RoomCloseEvent, removing room ' + room.id);
         _.remove(this.rooms, {id: room.id});
+        console.log('There are ' + this.rooms.length + ' rooms left.');
     }
 
 };

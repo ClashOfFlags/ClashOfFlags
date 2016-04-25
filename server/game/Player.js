@@ -16,11 +16,6 @@ module.exports = class Player {
     }
 
     init() {
-        // 'disconnect' Event name from socket.io
-        this.socket.on('disconnect', () => {
-            this.disconnect();
-        });
-
         this.socket.on('broadcast', payload => {
             this.socket.broadcast.emit(payload.event, payload.data);
         });

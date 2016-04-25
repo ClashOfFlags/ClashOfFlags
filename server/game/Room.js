@@ -3,6 +3,7 @@
 const io = require('../socket').io;
 const eventBus = require('../events/event-bus');
 const RoomCloseEvent = require('../events/RoomCloseEvent');
+const _ = require('lodash');
 
 module.exports = class Room {
 
@@ -44,12 +45,13 @@ module.exports = class Room {
     }
 
     onPlayerDisconnect(player) {
+        console.log('Player ' + player.id + ' disconnected from room ' + this.id + ' and cleared slot ' + player.roomSlot + ', nice.');
         this.roomSlots[player.roomSlot] = null;
-
         _.remove(this.players, {id: player.id});
-        io.to(this.id).emit('PlayerDisconnectEvent', {id: player.id, slot: player.roomSlot});
+        io.sockets.to(this.id).emit('PlayerDisconnectEvent', {id: player.id, slot: player.roomSlot});
 
         if (this.players.length === 0) {
+            console.log('No more players left in room ' + this.id + ', closing...');
             this.close();
         }
     }
