@@ -27,6 +27,10 @@ module.exports = class Lobby {
     }
 
     onPlayerConnect(socket, data) {
+        if(!data) {
+            data = {};
+        }
+
         const targetRoomId = data.targetRoomId;
         const room = this.findRoomForPlayer(targetRoomId);
         const playerId = idService.nextPlayerId();

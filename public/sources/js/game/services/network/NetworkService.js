@@ -45,10 +45,9 @@ export default class NetworkService {
             this.sendPlayerAlien(payload);
         });
 
-        eventSystem().on('player_dead', (payload) => {
-            this.teamManager.teams[payload.team].points--;
-            this.objects.get('points.' + payload.team).setText(this.teamManager.teams[payload.team].points + '/' + this.teamManager.maxPoints);
-        });
+         eventSystem().on('player_dead', (payload) => {
+             this.objects.get('points.' + payload.team).setText(this.teamManager.teams[payload.team].points + '/' + this.teamManager.maxPoints);
+          });
 
         eventSystem().on('player.change_direction:after', (payload) => {
             console.log(' ' + payload.source);
@@ -249,6 +248,8 @@ export default class NetworkService {
             hero: player
         });
 
+        this.objects.get('points.red').setText(event.redTickets + '/300');
+        this.objects.get('points.blue').setText(event.blueTickets + '/300');
         this.getExp();
         this.askForExp();
     }
