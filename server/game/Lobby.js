@@ -3,95 +3,95 @@
 const _ = require('lodash');
 const eventBus = require('../events/event-bus');
 const SocketConnectEvent = require('../events/SocketConnectEvent');
+const RoomCloseEvent = require('../events/RoomCloseEvent');
 const Player = require('./Player');
-
-let nextRoomId = 0;
+const idService = require('../services/idService');
 
 module.exports = class Lobby {
 
     constructor() {
-        this.players = [];
         this.rooms = [];
 
-        this.registerSocketConnectEvent();
+        this.registerEvents();
     }
 
-    registerSocketConnectEvent() {
-        eventBus.register(new SocketConnectEvent(), event => {
-            const socket = event.socket;
-
-            socket.on('PlayerConnectEvent', () => {
-                const player = new Player(this, socket);
-
-                player.roomSlot = this.freeRoomSlot();
-                this.roomSlots[player.roomSlot] = player;
-
-                console.log('Player connected! ID ' + player.id);
-                player.socket.emit('PlayerHandshakeEvent', {id: player.id, slot: player.roomSlot});
-
-                this.addPlayer(player);
-            });
-        });
+    registerEvents() {
+        eventBus.register(SocketConnectEvent, event => this.onSocketConnect(event));
+        eventBus.register(RoomCloseEvent, event => this.onRoomClose(event));
     }
 
+    onSocketConnect(event) {
+        const socket = event.socket;
+        
+        socket.on('PlayerConnectEvent', data => this.onPlayerConnect(socket, data));
+    }
 
-    addPlayer(player) {
-        this.players.push(player);
+    onPlayerConnect(socket, data) {
+        const targetRoomId = data.targetRoomId;
+        const room = this.findRoomForPlayer(targetRoomId);
+        const playerId = idService.nextPlayerId();
+        const player = new Player(playerId, socket);
 
-        var room = null;
-
-        if (!player.targetRoomName) {
-            room = this.getFreeRoomOrCreateNew();
-        } else {
-            room = this.findFreeRoomWithNameOrFindNext(player.targetRoomName);
-        }
-
-
-        player.tellRoom(room);
         room.addPlayer(player);
     }
 
-    findFreeRoomWithNameOrFindNext(roomNickName){
-        //TODO @Marc
-    }
+    findRoomForPlayer(targetRoomId) {
+        let room = null;
 
-    getFreeRoomOrCreateNew() {
-        var freeRoom = this.getFreeRoom();
-
-        if (freeRoom) {
-            return freeRoom;
+        if (targetRoomId) {
+            room = this.getRoomById(targetRoomId);
         }
 
-        return this.makeRoom()
-    }
-
-    getFreeRoom() {
-        var freeRooms = _.filter(this.rooms, (room) => {
-            return !room.isFull();
-        });
-
-        if (freeRooms.length == 0) {
-            return null;
+        if (room === null || room.isFull()) {
+            room = this.getFreeRoomOrCreateNew();
         }
-
-        return freeRooms[0];
-    }
-
-    makeRoom() {
-        var room = new Room(nextRoomId);
-
-        nextRoomId = nextRoomId + 1;
 
         return room;
     }
 
-    disconnect(player) {
-        _.remove(this.players, {id: player.id});
+    getRoomById(roomId) {
+        return _.find(this.rooms, {id: roomId});
+    }
 
-        this.players.forEach(otherPlayer => {
-            otherPlayer.removePlayer(player);
+    getFreeRoomOrCreateNew() {
+        const room = this.getFreeRoom();
+
+        if (room) {
+            return room;
+        }
+
+        return this.createNewRoom();
+    }
+
+    getFreeRoom() {
+        const freeRooms = this.freeRooms();
+
+        if (freeRooms.length === 0) {
+            return null;
+        }
+
+        return _.sample(freeRooms);
+    }
+
+    createNewRoom() {
+        const roomId = idService.nextRoomId();
+        const room = new Room(roomId);
+
+        this.rooms.push(room);
+
+        return room;
+    }
+
+    freeRooms() {
+        return _.filter(this.rooms, room => {
+            return !room.isFull();
         });
     }
 
+    onRoomClose(event) {
+        const room = event.room;
 
-}
+        _.remove(this.rooms, {id: room.id});
+    }
+
+};

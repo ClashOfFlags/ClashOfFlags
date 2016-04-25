@@ -6,7 +6,9 @@ class EventBus {
         this.eventListenersMap = {};
     }
 
-    register(event, listener) {
+    register(eventClass, listener) {
+        const event = new eventClass();
+
         this.guardEvent(event);
 
         const listeners = this.getListenersFor(event);

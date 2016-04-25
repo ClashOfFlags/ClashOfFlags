@@ -1,11 +1,18 @@
 'use strict';
 
-const natoAlphabetGenerator = require('../services/natoAlphabetGenerator');
+const io = require('../socket').io;
+const eventBus = require('../events/event-bus');
+const RoomCloseEvent = require('../events/RoomCloseEvent');
 
 module.exports = class Room {
+
     constructor(id) {
-        this.players = [];
         this.id = id;
+        this.players = [];
+        this.redTickets = 300;
+        this.blueTickets = 300;
+        this.redFlags = 3;
+        this.blueFlags = 3;
 
         this.roomSlots = {
             1: null,
@@ -19,21 +26,32 @@ module.exports = class Room {
             9: null,
             10: null
         };
-
-        this.nickname = natoAlphabetGenerator.generate();
     }
 
     isFull() {
-
+        return this.players.length === 10;
     }
 
     addPlayer(player) {
-        this.players.forEach(otherPlayer => {
-            player.addPlayer(otherPlayer);
-            otherPlayer.addPlayer(player);
-        });
+        const roomSlot = this.freeRoomSlot();
+        this.roomSlots[roomSlot] = player;
+        player.roomSlot = roomSlot;
 
+        player.socket.join(this.id);
         this.players.push(player);
+        player.tellRoom(this, roomSlot);
+        player.socket.on('disconnect', () => this.onPlayerDisconnect(player));
+    }
+
+    onPlayerDisconnect(player) {
+        this.roomSlots[player.roomSlot] = null;
+
+        _.remove(this.players, {id: player.id});
+        io.to(this.id).emit('PlayerDisconnectEvent', {id: player.id, slot: player.roomSlot});
+
+        if (this.players.length === 0) {
+            this.close();
+        }
     }
 
     freeRoomSlot() {
@@ -60,21 +78,10 @@ module.exports = class Room {
         return count;
     }
 
-    removePlayer(player) {
-        var slotId = this.findRoomSlot(player);
-        this.roomSlots[slotId] = null;
+    close() {
+        const event = new RoomCloseEvent(this);
+
+        eventBus.fire(event);
     }
 
-    findRoomSlot(player) {
-        for (var i in this.roomSlots) {
-            var playerSlot = this.roomSlots[i];
-
-            if (!playerSlot) continue;
-
-            if (playerSlot.id == player.id) {
-                return i;
-            }
-        }
-        return null;
-    }
 };
