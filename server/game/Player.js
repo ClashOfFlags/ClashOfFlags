@@ -2,17 +2,15 @@
 
 const userService = require('../services/userService');
 const statisticRepository = require('../repositories/statisticRepository');
-let playerId = 0; // Not optimal, should be changed later
 
 module.exports = class Player {
 
-    constructor(lobby, socket) {
-        this.id = playerId++;
-        this.team = "";
-        this.roomSlot = 1;
-        this.lobby = lobby;
+    constructor(id, socket) {
+        this.id = id;
         this.socket = socket;
-        this.targetRoomName = false;
+        this.team = '';
+        this.roomSlot = null;
+        this.room = null;
 
         this.init();
     }
@@ -28,24 +26,24 @@ module.exports = class Player {
         });
 
         this.socket.on('exp:set', payload => {
-            if(!payload.token || !payload.exp) {
+            if (!payload.token || !payload.exp) {
                 return;
             }
 
             userService.saveExp(payload.token, payload.exp);
         });
-        
+
         this.socket.on('exp:get', (payload, callback) => {
-            if(!payload.token) {
+            if (!payload.token) {
                 return;
-            } 
-            
+            }
+
             userService.getExp(payload.token)
                 .then(exp => {
                     callback(exp);
                 });
         });
-        
+
         this.socket.on('stat-entry', payload => {
             statisticRepository.createEntry(payload.key, payload.team);
         });
@@ -59,17 +57,19 @@ module.exports = class Player {
         this.emit('PlayerConnectEvent', {id: player.id, slot: player.roomSlot});
     }
 
-    tellRoom(room){
-        this.emit('RoomJoinEvent', {id: room.id, nickname: room.nickname});
+    tellRoom(room, roomSlot) {
+        this.room = room;
+        this.roomSlot = roomSlot;
+
+        this.emit('RoomJoinEvent', {
+            roomId: room.id,
+            slot: roomSlot,
+            playerId: this.id,
+            redTickets: room.redTickets,
+            blueTickets: room.blueTickets,
+            redFlags: room.redFlags,
+            blueFlags: room.blueFlags
+        });
     }
 
-    removePlayer(player) {
-        this.emit('PlayerDisconnectEvent', {id: player.id, slot: player.roomSlot});
-    }
-
-    disconnect() {
-        this.room.removePlayer(this);
-        this.lobby.disconnect(this);
-    }
-
-}
+};

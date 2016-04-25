@@ -36,7 +36,7 @@ router.map({
     '/verify/:token': {
         component: Verify
     },
-    'statistics': {
+    '/statistics': {
         component: Statistics
     }
 });

@@ -10,4 +10,4 @@ module.exports = class SocketConnectEvent extends Event {
         this.socket = socket;
     }
 
-}
+};

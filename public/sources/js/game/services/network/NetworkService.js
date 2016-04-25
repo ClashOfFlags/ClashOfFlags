@@ -12,7 +12,7 @@ export default class NetworkService {
     }
 
     registerEvents() {
-        this.registerEvent('PlayerHandshakeEvent', this.onPlayerHandshake);
+        this.registerEvent('RoomJoinEvent', this.onRoomJoin);
         this.registerEvent('PlayerPositionEvent', this.onPlayerPosition);
         this.registerEvent('PlayerShootEvent', this.onPlayerShoot);
         this.registerEvent('TreasureChestStatusEvent', this.onTreasureChestStatus);
@@ -105,8 +105,6 @@ export default class NetworkService {
             this.getExp();
         });
     }
-
-
 
     sendFlagCollected(flag) {
         const payload = {
@@ -234,7 +232,12 @@ export default class NetworkService {
     /* Send Functions */
 
     /* Receive Functions */
-    onPlayerHandshake(networkPlayer) {
+    onRoomJoin(event) {
+        const networkPlayer = {
+            id: event.playerId,
+            slot: event.slot
+        };
+
         eventSystem().emit('network.handshake:before', networkPlayer);
 
         const player = this.teamManager.allPlayers()[networkPlayer.slot];
