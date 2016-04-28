@@ -269,7 +269,7 @@ export default class NetworkService {
 
         console.log('Joined room ' + roomId);
 
-        if (roomId !== targetRoomId) {
+        if (targetRoomId && roomId !== targetRoomId) {
             console.log('Given room id ' + roomId + ' does not match ' + targetRoomId + ', target room seems to be full or closed.');
             toastr.warning('You have joined a different room', 'Target room was full or has been closed');
         }
