@@ -410,6 +410,13 @@ export default class Player extends Sprite {
     statEntry(key, options) {
         if(typeof options === 'undefined') options = {};
 
+        console.log('send stat entry', {
+            player: this,
+            key: key,
+            options: options,
+            team: this.team.name
+        });
+
         eventSystem().emit('stat.entry', {
             player: this,
             key: key,

@@ -29,6 +29,7 @@
         route: {
             activate() {
                 jQuery(function ($) {
+
                     api.statistics()
                             .then(result => {
                                 console.log('some result');

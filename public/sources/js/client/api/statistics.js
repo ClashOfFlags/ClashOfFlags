@@ -1,7 +1,7 @@
 import socket from '../socket';
 
-export default verify;
+export default statistics;
 
-function verify() {
+function statistics() {
     return socket.emit('statistics');
 }

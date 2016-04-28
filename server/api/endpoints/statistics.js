@@ -9,23 +9,26 @@ module.exports = {
 
 function* handle() {
     const stats = yield statisticRepository.all();
-
-    console.log(stats);
-
-    return testData();
-
-
-    const stats = yield statisticRepository.all();
     const killsRed = {};
     const killsBlue = {};
     const flagsCollectedRed = {};
     const flagsCollectedBlue = {};
     const flagsCapturedRed = {};
     const flagsCapturedBlue = {};
+    const killLocations = [];
 
     stats.forEach(stat => {
         if (stat.key === 'player.dead') {
             addToTeam(stat, killsRed, killsBlue);
+
+            if(stat.options && stat.options.x) {
+                killLocations.push({
+                    v: stat.team,
+                    x: Math.round(stat.options.x),
+                    y: Math.round((6400 - stat.options.y))
+                });
+
+            }
             return;
         }
 
@@ -38,23 +41,39 @@ function* handle() {
             addToTeam(stat, flagsCapturedRed, flagsCapturedBlue);
             return;
         }
+
     });
 
 
-    return {
+    var data = {
         kills: [
-            killsRed,
-            killsBlue
+            dailyObjectToArray(killsRed),
+            dailyObjectToArray(killsBlue)
         ],
         flagsCollected: [
-            flagsCollectedRed,
-            flagsCollectedBlue
+            dailyObjectToArray(flagsCollectedRed),
+            dailyObjectToArray(flagsCollectedBlue)
         ],
         flagsCaptured: [
-            flagsCapturedRed,
-            flagsCapturedBlue
-        ]
+            dailyObjectToArray(flagsCapturedRed),
+            dailyObjectToArray(flagsCapturedBlue)
+        ],
+        killLocations: killLocations
     };
+
+    console.log(data);
+
+    return data;
+}
+
+function dailyObjectToArray(object) {
+    var array = [];
+
+    for (var i in object) {
+        array.push({date: i, value: object[i]});
+    }
+
+    return array;
 }
 
 function addToTeam(stat, red, blue) {
