@@ -243,7 +243,7 @@ export default class Creator {
         this.objects.set('points.' + teamName, text);
 
         for (var i = 0; i < 3; i++) {
-          var flag = this.game.add.sprite((teamName === "red") ? 300 + 30 * i: 410 + 30 * i, 5, 'flag_' + teamName);
+          var flag = this.game.add.sprite((teamName === "red") ? 300 + 30 * i: 470 - 30 * i, 5, 'flag_' + teamName);
           flag.fixedToCamera = true;
           this.objects.set('statusFlag' + i + '.' + teamName, flag);
         }

@@ -18,6 +18,7 @@ export default class NetworkService {
         this.registerEvent('TreasureChestStatusEvent', this.onTreasureChestStatus);
         this.registerEvent('PlayerUpdateWeaponEvent', this.onPlayerUpdateWeapon);
         this.registerEvent('PlayerAlienEvent', this.onPlayerAlien);
+        this.registerEvent('RemoveFlagFromStatusBar', this.onRemoveFlagFromStatusBar);
         this.registerEvent('PlayerDamageEvent', this.onPlayerDamage);
         this.registerEvent('AskForExp', this.answerWithExp);
         this.registerEvent('AnswerWithExp', this.onAnswerWithExp);
@@ -158,6 +159,10 @@ export default class NetworkService {
 
         console.log('sendShoot', payload);
         this.broadcast('PlayerShootEvent', payload);
+    }
+
+    sendremoveFlagFromStatusBar(payload) {
+      this.broadcast('RemoveFlagFromStatusBar', payload);
     }
 
     sendTreasureChestStatus(payload) {
@@ -319,6 +324,11 @@ export default class NetworkService {
     onPlayerAlien(payload) {
         const player = this.teamManager.findPlayer(payload.player);
         player.getAlien();
+    }
+
+    onRemoveFlagFromStatusBar(payload) {
+      console.log("payload.flag: ", payload.flag);
+        this.objects.get(payload.flag).visible = false;
     }
 
     onPlayerDamage(event) {

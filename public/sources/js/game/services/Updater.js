@@ -114,6 +114,21 @@ export default class Updater {
             if(player.team.name == base.team) {
                 console.log('Flagge abgeben');
                 player.releaseFlag();
+                var color = (player.team.name === "red")? "blue" : "red";
+                var flag;
+                if(this.objects.get('statusFlag0.' + color).visible === true){
+                  this.objects.get('statusFlag0.' + color).visible = false;
+                  flag = 'statusFlag0.' + color;
+                }else if(this.objects.get('statusFlag1.' + color).visible === true){
+                  this.objects.get('statusFlag1.' + color).visible = false;
+                  flag = 'statusFlag1.' + color;
+                }else if(this.objects.get('statusFlag2.' + color).visible === true){
+                  this.objects.get('statusFlag2.' + color).visible = false;
+                  flag = 'statusFlag2.' + color;
+                }
+                this.network.sendremoveFlagFromStatusBar({
+                  flag:flag
+                })
             }
         }
     }
