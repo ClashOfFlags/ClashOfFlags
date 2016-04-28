@@ -48,10 +48,6 @@ module.exports = class Player {
         this.socket.emit(event, data);
     }
 
-    addPlayer(player) {
-        this.emit('PlayerConnectEvent', {id: player.id, slot: player.roomSlot});
-    }
-
     tellRoom(room, roomSlot) {
         this.room = room;
         this.roomSlot = roomSlot;
