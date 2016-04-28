@@ -47,7 +47,8 @@ export default class Preloader {
     loadMap() {
       this.game.load.spritesheet('torch', this.paths.imageMap('torch.png'), 64, 64);
       this.game.load.spritesheet('water', this.paths.imageMap('water.png'), 32, 32);
-      this.game.load.spritesheet('flag', this.paths.imageMap('flag.png'), 64, 64);
+      this.game.load.spritesheet('flag_red', this.paths.imageMap('flag_red.png'), 64, 64);
+      this.game.load.spritesheet('flag_blue', this.paths.imageMap('flag_blue.png'), 64, 64);
       this.game.load.spritesheet('waterStone', this.paths.imageMap('waterStone.png'), 32, 32);
     }
 
