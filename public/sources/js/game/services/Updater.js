@@ -8,6 +8,10 @@ export default class Updater {
         this.objects = this.$container.ObjectsService;
         this.network = $container.NetworkService;
         this.teamManager = $container.TeamManager;
+
+        eventSystem().on('game_over', event => {
+            this.gameOver(event.winner);
+        });
     }
 
     readObjects() {
@@ -126,10 +130,10 @@ export default class Updater {
         }
     }
 
-    gameOver(color) {
+    gameOver(winner) {
         this.game.input.enabled = false;
         this.game.physics.arcade.isPaused = true;
-        this.objects.get('gameOverText').setText('Game Over!\n ' + color + ' wins the game!');
+        this.objects.get('gameOverText').setText('Game Over!\n ' + winner + ' wins the game!');
         this.objects.get('gameOverText').visible = true;
         this.game.time.events.add(Phaser.Timer.SECOND * config.game.reloadPage.wait, this.reloadPage, this);
     }

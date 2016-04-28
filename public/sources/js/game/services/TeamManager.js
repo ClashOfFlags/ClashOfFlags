@@ -8,19 +8,40 @@ export default class TeamManager {
         this.hero = null;
         this.maxTickets = 300;
     }
-    
+
     updateTickets(redTickets, blueTickets) {
         this.objects.get('points.red').setText(redTickets + '/' + this.maxTickets);
         this.objects.get('points.blue').setText(blueTickets + '/' + this.maxTickets);
+        this.checkGameOver(redTickets, blueTickets);
     }
-    
+
     updateFlags(redFlags, blueFlags) {
-        for(let i = 0; i < 3; i++) {
+        for (let i = 0; i < 3; i++) {
             const redFlag = this.objects.get('statusFlag' + i + '.red');
             const blueFlag = this.objects.get('statusFlag' + i + '.blue');
             redFlag.visible = redFlags >= redFlag.minFlags;
             blueFlag.visible = blueFlags >= blueFlag.minFlags;
         }
+
+        this.checkGameOver(redFlags, blueFlags);
+    }
+
+    checkGameOver(redValue, blueValue) {
+        let winner = false;
+
+        if (redValue <= 0) {
+            winner = 'blue';
+        }
+
+        if (blueValue <= 0) {
+            winner = 'red';
+        }
+
+        if (!winner) {
+            return;
+        }
+
+        eventSystem().emit('game_over', {winner: winner});
     }
 
     add(team) {
