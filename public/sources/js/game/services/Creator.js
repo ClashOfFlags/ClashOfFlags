@@ -203,7 +203,7 @@ export default class Creator {
             var flags = this.objects.byProperties({'type': 'flag_' + teamName}, 'objectsLayer');
 
             flags.forEach(function (element) {
-                var flag = new Flag(this.game, element.x, element.y, 'flag');
+                var flag = new Flag(this.game, element.x, element.y, 'flag_' + teamName);
                 flag.setTeam(teamName);
                 flag.setSpawn(element.x, element.y);
                 flagGroup.add(flag);
@@ -243,7 +243,7 @@ export default class Creator {
         this.objects.set('points.' + teamName, text);
 
         for (var i = 0; i < 3; i++) {
-          var flag = this.game.add.sprite((teamName === "red") ? 300 + 30 * i: 410 + 30 * i, 5, 'flag');
+          var flag = this.game.add.sprite((teamName === "red") ? 300 + 30 * i: 410 + 30 * i, 5, 'flag_' + teamName);
           flag.fixedToCamera = true;
           this.objects.set('statusFlag' + i + '.' + teamName, flag);
         }
