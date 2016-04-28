@@ -38,7 +38,7 @@ export default class Bootstrapper {
         this.bottle.service('InputService', InputService, 'game', '$container');
         this.bottle.service('PathService', PathService);
         this.bottle.service('ObjectsService', ObjectsService, 'game');
-        this.bottle.service('NetworkService', NetworkService, '$container');
+        this.bottle.service('NetworkService', NetworkService, 'game','$container');
         this.bottle.service('PlayerFactory', PlayerFactory, 'game', '$container');
         this.bottle.service('Preloader', Preloader, 'game', '$container');
         this.bottle.service('TeamManager', TeamManager, 'game', '$container');

@@ -42,6 +42,9 @@ export default{
         treasureChest: {
           reloadTreasureMin: 20,
           reloadTreasureMax: 60
+        },
+        reloadPage: {
+          wait: 5
         }
     }
 }

@@ -32,6 +32,7 @@ export default class Creator {
         this.createStatusbar();
         this.createTutorialHints();
         this.createBases();
+        this.createGameOverText();
 
 
         eventSystem().on('network.handshake:after', (payload) => {
@@ -405,5 +406,13 @@ export default class Creator {
             baseGroup.add(base);
         }, this);
         this.objects.set('bases', baseGroup);
+    }
+
+    createGameOverText() {
+      var style = { font: "50px Arial", fill: "#fff", align: "center"};
+      var text = this.game.add.text(150, 200, "", style);
+      text.fixedToCamera = true;
+      this.objects.set('gameOverText', text);
+      text.visible = false;
     }
 }

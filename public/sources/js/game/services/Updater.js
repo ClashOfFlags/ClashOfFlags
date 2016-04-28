@@ -1,3 +1,4 @@
+import config from '../setup/config';
 export default class Updater {
 
     constructor(game, $container) {
@@ -116,6 +117,7 @@ export default class Updater {
                 player.releaseFlag();
                 var color = (player.team.name === "red")? "blue" : "red";
                 var flag;
+                var gameOver = false;
                 if(this.objects.get('statusFlag0.' + color).visible === true){
                   this.objects.get('statusFlag0.' + color).visible = false;
                   flag = 'statusFlag0.' + color;
@@ -125,12 +127,31 @@ export default class Updater {
                 }else if(this.objects.get('statusFlag2.' + color).visible === true){
                   this.objects.get('statusFlag2.' + color).visible = false;
                   flag = 'statusFlag2.' + color;
+                  gameOver = true;
                 }
                 this.network.sendremoveFlagFromStatusBar({
-                  flag:flag
+                  flag:flag,
+                  color:player.team.name,
+                  gameOver:gameOver
                 })
+
+                if(gameOver){
+                  this.gameOver(player.team.name);
+                }
             }
         }
+    }
+
+    gameOver(color) {
+      this.game.input.enabled = false;
+      this.game.physics.arcade.isPaused = true;
+      this.objects.get('gameOverText').setText('Game Over!\n '+color+' wins the game!');
+      this.objects.get('gameOverText').visible = true;
+      this.game.time.events.add(Phaser.Timer.SECOND * config.game.reloadPage.wait, this.reloadPage, this);
+    }
+
+    reloadPage() {
+      window.location.reload();
     }
 
     bulletHitBarrel(bullet, barrel) {

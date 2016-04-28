@@ -1,6 +1,8 @@
+import config from '../../setup/config';
 export default class NetworkService {
 
-    constructor($container) {
+  constructor(game, $container) {
+        this.game = game;
         this.$container = $container;
         this.objects = $container.ObjectsService;
         this.playerFactory = $container.PlayerFactory;
@@ -327,9 +329,20 @@ export default class NetworkService {
     }
 
     onRemoveFlagFromStatusBar(payload) {
-      console.log("payload.flag: ", payload.flag);
+      console.log("onRemoveFlagFromStatusBar", payload);
         this.objects.get(payload.flag).visible = false;
+        if(payload.gameOver) {
+          this.game.input.enabled = false;
+          this.game.physics.arcade.isPaused = true;
+          this.objects.get('gameOverText').setText('Game Over!\n '+payload.color+' wins the game!');
+          this.objects.get('gameOverText').visible = true;
+          this.game.time.events.add(Phaser.Timer.SECOND * config.game.reloadPage.wait, this.reloadPage, this);
+        }
     }
+
+  reloadPage() {
+    window.location.reload();
+  }
 
     onPlayerDamage(event) {
         const player = this.teamManager.findPlayer(event.player);
