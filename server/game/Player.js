@@ -17,7 +17,7 @@ module.exports = class Player {
 
     init() {
         this.socket.on('broadcast', payload => {
-            this.socket.broadcast.emit(payload.event, payload.data);
+            this.socket.broadcast.to(this.room).emit(payload.event, payload.data);
         });
 
         this.socket.on('exp:set', payload => {
