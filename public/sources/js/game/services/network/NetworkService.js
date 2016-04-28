@@ -27,6 +27,7 @@ export default class NetworkService {
         this.registerEvent('FlagCollected', this.onFlagCollected);
         this.registerEvent('TicketsChangedEvent', this.onTicketsChanged);
         this.registerEvent('FlagsChangedEvent', this.onFlagsChanged);
+        this.registerEvent('ReleaseFlagEvent', this.onReleaseFlag);
 
         eventSystem().on('bullet.shoot', (payload) => {
             this.objects.get('bulletGroup').add(payload.bullet);
@@ -55,8 +56,7 @@ export default class NetworkService {
         });
 
         eventSystem().on('flag_captured', payload => {
-            console.log('flag_captured', payload);
-            this.sendFlagCaptured(payload.team);
+            this.sendFlagCaptured(payload.player, payload.team);
         });
 
         eventSystem().on('player.change_direction:after', (payload) => {
@@ -249,8 +249,9 @@ export default class NetworkService {
         this.emit('PlayerDeadEvent', {team: team});
     }
 
-    sendFlagCaptured(team) {
-        this.emit('FlagCapturedEvent', {team: team});
+    sendFlagCaptured(player, team) {
+        this.emit('FlagCapturedEvent', {team: team}); // for the server
+        this.broadcast('ReleaseFlagEvent', {player: player.slot}); // for the other clients
     }
 
     /* Send Functions */
@@ -298,9 +299,16 @@ export default class NetworkService {
         var flagObject = this.objects.get('flags.' + event.flag);
         flagObject.collected = true;
         flagObject.visible = false;
-
+        const flag = flagObject.children[0];
         const player = this.teamManager.findPlayer(event.player);
-        player.getFlag(flagObject);
+
+        player.getFlag(flag);
+    }
+
+    onReleaseFlag(event) {
+        const player = this.teamManager.findPlayer(event.player);
+
+        player.releaseFlag();
     }
 
     onPlayerPosition(event) {

@@ -146,7 +146,6 @@ export default class Player extends Sprite {
 
     releaseFlag() {
         this.carryingFlag = false;
-        console.log(this.flag);
         this.flag.respawn();
         this.flag = null;
         this.addExp(10);

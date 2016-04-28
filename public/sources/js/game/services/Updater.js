@@ -111,7 +111,9 @@ export default class Updater {
     }
 
     playerEntersBaseWithFlag(player, base) {
-        console.log(player.carryingFlag, player.team.name, base.team);
+        if (!this.isHero(player)) {
+            return;
+        }
 
         if (player.carryingFlag) {
             if (player.team.name == base.team) {
@@ -119,7 +121,7 @@ export default class Updater {
                 player.releaseFlag();
                 const team = (player.team.name === "red") ? "blue" : "red";
 
-                eventSystem().emit('flag_captured', {team: team});
+                eventSystem().emit('flag_captured', {player: player, team: team});
             }
         }
     }
@@ -245,10 +247,8 @@ export default class Updater {
         }
     }
 
-    playerCollectsFlag(player, flagGroup) {
+    playerCollectsFlag(player, flag) {
         if (!player.isAlien()) {
-            const flag = flagGroup.children[0];
-            
             flag.collectFlag(player);
         }
     }
