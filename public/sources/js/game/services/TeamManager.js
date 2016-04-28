@@ -1,9 +1,21 @@
 export default class TeamManager {
+
     constructor(game, $container) {
         this.game = game;
         this.$container = $container;
+        this.objects = this.$container.ObjectsService;
         this.teams = {};
         this.hero = null;
+        this.maxTickets = 300;
+    }
+    
+    updateTickets(redTickets, blueTickets) {
+        this.objects.get('points.red').setText(redTickets + '/' + this.maxTickets);
+        this.objects.get('points.blue').setText(blueTickets + '/' + this.maxTickets);
+    }
+    
+    updateFlags() {
+        
     }
 
     add(team) {
@@ -25,10 +37,7 @@ export default class TeamManager {
             }
         }
 
-
-
         return players;
-
     }
 
     findFreePlayer() {
@@ -43,4 +52,5 @@ export default class TeamManager {
 
         return null;
     }
+
 }

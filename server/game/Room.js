@@ -10,10 +10,12 @@ module.exports = class Room {
     constructor(id) {
         this.id = id;
         this.players = [];
-        this.redTickets = 300;
-        this.blueTickets = 300;
-        this.redFlags = 3;
-        this.blueFlags = 3;
+        this.maxTickets = 300;
+        this.maxFlags = 3;
+        this.redTickets = this.maxTickets;
+        this.blueTickets = this.maxTickets;
+        this.redFlags = this.maxFlags;
+        this.blueFlags = this.maxFlags;
 
         this.roomSlots = {
             1: null,
@@ -83,6 +85,19 @@ module.exports = class Room {
         const event = new RoomCloseEvent(this);
 
         eventBus.fire(event);
+    }
+
+    playerDied(team) {
+        if(team === 'red') {
+            this.redTickets--;
+        } else if(team === 'blue') {
+            this.blueTickets--;
+        }
+
+        socket.io.broadast.to(this.id).emit('TicketsChangedEvent', {
+            redTickets: this.redTickets,
+            blueTickets: this.blueTickets
+        });
     }
 
 };

@@ -1,4 +1,5 @@
 import config from '../../setup/config';
+
 export default class NetworkService {
 
     constructor(game, $container) {
@@ -25,6 +26,7 @@ export default class NetworkService {
         this.registerEvent('AskForExp', this.answerWithExp);
         this.registerEvent('AnswerWithExp', this.onAnswerWithExp);
         this.registerEvent('FlagCollected', this.onFlagCollected);
+        this.registerEvent('TicketsChangedEvent', this.onTicketsChanged);
 
         eventSystem().on('bullet.shoot', (payload) => {
             this.objects.get('bulletGroup').add(payload.bullet);
@@ -49,7 +51,7 @@ export default class NetworkService {
         });
 
         eventSystem().on('player_dead', (payload) => {
-            this.objects.get('points.' + payload.team).setText(this.teamManager.teams[payload.team].points + '/' + this.teamManager.maxPoints);
+            this.sendPlayerDead(payload.team);
         });
 
         eventSystem().on('player.change_direction:after', (payload) => {
@@ -245,6 +247,10 @@ export default class NetworkService {
             options: options
         });
     }
+    
+    sendPlayerDead(team) {
+        this.socket.emit('PlayerDeadEvent', { team: team });
+    }
 
     /* Send Functions */
 
@@ -277,8 +283,10 @@ export default class NetworkService {
         const newUrl = window.location.origin + window.location.pathname + '?room=' + roomId;
 
         window.history.pushState({path: newUrl}, '', newUrl);
-        this.objects.get('points.red').setText(event.redTickets + '/300');
-        this.objects.get('points.blue').setText(event.blueTickets + '/300');
+        
+        this.teamManager.maxTickets = event.maxTickets;
+        
+        this.teamManager.updateTickets(event.redTickets, event.blueTickets);
         this.getExp();
         this.askForExp();
     }
@@ -369,6 +377,10 @@ export default class NetworkService {
         const player = this.teamManager.findPlayer(event.player);
 
         player.setExp(event.exp);
+    }
+    
+    onTicketsChanged(event) {
+        this.teamManager.updateTickets(event.redTickets, event.blueTickets);
     }
 
     targetRoomId() {

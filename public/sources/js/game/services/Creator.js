@@ -239,7 +239,7 @@ export default class Creator {
 
       for (var teamName in this.teamManager.teams) {
         var style = { font: "23px Arial", fill: (teamName === "red") ? "#f00" : "#00f", align: "center"};
-        var text = this.game.add.text((teamName === "red") ? 150 : 600, 5, this.teamManager.teams[teamName].points + "/" + this.teamManager.maxPoints, style);
+        var text = this.game.add.text((teamName === "red") ? 150 : 600, 5, '', style);
         text.fixedToCamera = true;
         this.objects.set('points.' + teamName, text);
 

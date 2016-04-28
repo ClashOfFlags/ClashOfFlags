@@ -38,6 +38,10 @@ module.exports = class Player {
                     callback(exp);
                 });
         });
+        
+        this.socket.on('PlayerDeadEvent', payload => {
+             this.room.playerDied(payload.team);
+        });
 
         this.socket.on('stat-entry', payload => {
             statisticRepository.createEntry(payload.key, payload.team, payload.options);
@@ -56,6 +60,7 @@ module.exports = class Player {
             roomId: room.id,
             slot: roomSlot,
             playerId: this.id,
+            maxTickets: room.maxTickets,
             redTickets: room.redTickets,
             blueTickets: room.blueTickets,
             redFlags: room.redFlags,
