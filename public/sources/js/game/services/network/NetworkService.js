@@ -1,7 +1,7 @@
 import config from '../../setup/config';
 export default class NetworkService {
 
-  constructor(game, $container) {
+    constructor(game, $container) {
         this.game = game;
         this.$container = $container;
         this.objects = $container.ObjectsService;
@@ -117,7 +117,16 @@ export default class NetworkService {
     }
 
     connect() {
-        this.emit('PlayerConnectEvent');
+        const data = {};
+        const targetRoomId = this.targetRoomId();
+
+        if (targetRoomId) {
+            data.targetRoomId = targetRoomId;
+
+            console.log('Trying to join target room with id ' + targetRoomId);
+        }
+
+        this.emit('PlayerConnectEvent', data);
     }
 
     /* Convenience Functions */
@@ -164,7 +173,7 @@ export default class NetworkService {
     }
 
     sendremoveFlagFromStatusBar(payload) {
-      this.broadcast('RemoveFlagFromStatusBar', payload);
+        this.broadcast('RemoveFlagFromStatusBar', payload);
     }
 
     sendTreasureChestStatus(payload) {
@@ -256,8 +265,14 @@ export default class NetworkService {
         });
 
         const roomId = event.roomId;
+        const targetRoomId = this.targetRoomId();
 
         console.log('Joined room ' + roomId);
+
+        if (roomId !== targetRoomId) {
+            console.log('Given room id ' + roomId + ' does not match ' + targetRoomId + ', target room seems to be full or closed.');
+            toastr.info('You have joined an other room', 'Target room was full or has been closed');
+        }
 
         const newUrl = window.location.origin + window.location.pathname + '?room=' + roomId;
 
@@ -329,20 +344,20 @@ export default class NetworkService {
     }
 
     onRemoveFlagFromStatusBar(payload) {
-      console.log("onRemoveFlagFromStatusBar", payload);
+        console.log("onRemoveFlagFromStatusBar", payload);
         this.objects.get(payload.flag).visible = false;
-        if(payload.gameOver) {
-          this.game.input.enabled = false;
-          this.game.physics.arcade.isPaused = true;
-          this.objects.get('gameOverText').setText('Game Over!\n '+payload.color+' wins the game!');
-          this.objects.get('gameOverText').visible = true;
-          this.game.time.events.add(Phaser.Timer.SECOND * config.game.reloadPage.wait, this.reloadPage, this);
+        if (payload.gameOver) {
+            this.game.input.enabled = false;
+            this.game.physics.arcade.isPaused = true;
+            this.objects.get('gameOverText').setText('Game Over!\n ' + payload.color + ' wins the game!');
+            this.objects.get('gameOverText').visible = true;
+            this.game.time.events.add(Phaser.Timer.SECOND * config.game.reloadPage.wait, this.reloadPage, this);
         }
     }
 
-  reloadPage() {
-    window.location.reload();
-  }
+    reloadPage() {
+        window.location.reload();
+    }
 
     onPlayerDamage(event) {
         const player = this.teamManager.findPlayer(event.player);
@@ -354,6 +369,17 @@ export default class NetworkService {
         const player = this.teamManager.findPlayer(event.player);
 
         player.setExp(event.exp);
+    }
+
+    targetRoomId() {
+        const search = window.location.search;
+        const searchSplit = search.split('=');
+
+        if (searchSplit.length !== 2) {
+            return null;
+        }
+
+        return searchSplit[1];
     }
 
 }

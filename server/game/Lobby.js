@@ -51,7 +51,7 @@ module.exports = class Lobby {
             room = this.getRoomById(targetRoomId);
         }
 
-        if (room === null || room.isFull()) {
+        if (!room || room.isFull()) {
             console.log('Room was null or full, getting free room or creating a new one...');
             room = this.getFreeRoomOrCreateNew();
         }
