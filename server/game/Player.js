@@ -40,7 +40,7 @@ module.exports = class Player {
         });
 
         this.socket.on('stat-entry', payload => {
-            statisticRepository.createEntry(payload.key, payload.team);
+            statisticRepository.createEntry(payload.key, payload.team, payload.options);
         });
     }
 
