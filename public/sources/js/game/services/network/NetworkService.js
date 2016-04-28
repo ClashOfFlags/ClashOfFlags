@@ -271,7 +271,7 @@ export default class NetworkService {
 
         if (roomId !== targetRoomId) {
             console.log('Given room id ' + roomId + ' does not match ' + targetRoomId + ', target room seems to be full or closed.');
-            toastr.info('You have joined an other room', 'Target room was full or has been closed');
+            toastr.warning('You have joined an other room', 'Target room was full or has been closed');
         }
 
         const newUrl = window.location.origin + window.location.pathname + '?room=' + roomId;
