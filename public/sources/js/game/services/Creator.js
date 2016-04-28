@@ -177,7 +177,7 @@ export default class Creator {
                 .position(spawn)
                 .team(team)
                 .number(playerNumber)
-                .key('player_'+team.name+'_pistol')
+                .key('player_' + team.name + '_pistol')
                 .make();
 
             this.objects.set('player.' + playerNumber, player);
@@ -229,171 +229,172 @@ export default class Creator {
     }
 
     createStatusbar() {
-      var graphics = this.game.add.graphics();
-      graphics.beginFill(0xffffff);
-      graphics.drawRect(0, 40, 800, 3);
-      graphics.drawRect(400, 0, 3, 40);
-      graphics.endFill();
-      graphics.fixedToCamera = true;
-      window.graphics = graphics;
+        var graphics = this.game.add.graphics();
+        graphics.beginFill(0xffffff);
+        graphics.drawRect(0, 40, 800, 3);
+        graphics.drawRect(400, 0, 3, 40);
+        graphics.endFill();
+        graphics.fixedToCamera = true;
+        window.graphics = graphics;
 
-      for (var teamName in this.teamManager.teams) {
-        var style = { font: "23px Arial", fill: (teamName === "red") ? "#f00" : "#00f", align: "center"};
-        var text = this.game.add.text((teamName === "red") ? 150 : 600, 5, '', style);
-        text.fixedToCamera = true;
-        this.objects.set('points.' + teamName, text);
+        for (var teamName in this.teamManager.teams) {
+            var style = {font: "23px Arial", fill: (teamName === "red") ? "#f00" : "#00f", align: "center"};
+            var text = this.game.add.text((teamName === "red") ? 150 : 600, 5, '', style);
+            text.fixedToCamera = true;
+            this.objects.set('points.' + teamName, text);
 
-        for (var i = 0; i < 3; i++) {
-          var flag = this.game.add.sprite((teamName === "red") ? 300 + 30 * i: 470 - 30 * i, 5, 'flag_' + teamName);
-          flag.fixedToCamera = true;
-          this.objects.set('statusFlag' + i + '.' + teamName, flag);
+            for (var i = 0; i < 3; i++) {
+                var flag = this.game.add.sprite((teamName === "red") ? 300 + 30 * i : 470 - 30 * i, 5, 'flag_' + teamName);
+                flag.fixedToCamera = true;
+                flag.minFlags = 3 - i;
+                this.objects.set('statusFlag' + i + '.' + teamName, flag);
+            }
         }
-      }
     }
 
-    createTutorialHints(){
-      this.createMoveHint();
-      this.createShootHint();
-      this.createMapHint();
+    createTutorialHints() {
+        this.createMoveHint();
+        this.createShootHint();
+        this.createMapHint();
     }
 
     createMapHint() {
-      var graphics = this.game.add.graphics();
-      var mapHint = this.game.add.group();
-      var style = { font: "18px Arial", fill: "#fff"};
+        var graphics = this.game.add.graphics();
+        var mapHint = this.game.add.group();
+        var style = {font: "18px Arial", fill: "#fff"};
 
-      var startHintX = 250;
-      var startHintY = 470;
+        var startHintX = 250;
+        var startHintY = 470;
 
-      graphics.beginFill(0xffffff);
-      graphics.drawRect(startHintX, startHintY, 510, 60);
-      graphics.endFill();
+        graphics.beginFill(0xffffff);
+        graphics.drawRect(startHintX, startHintY, 510, 60);
+        graphics.endFill();
 
-      var text = this.game.add.text(startHintX + 10, startHintY + 5, "There are two teams in this game. \nYou have to steal all the flags out of the enemy‘s base.", style);
-      text.fixedToCamera = true;
-      mapHint.add(text);
+        var text = this.game.add.text(startHintX + 10, startHintY + 5, "There are two teams in this game. \nYou have to steal all the flags out of the enemy‘s base.", style);
+        text.fixedToCamera = true;
+        mapHint.add(text);
 
-      graphics.beginFill(0xff0000);
-      graphics.drawCircle(110, 410, 60);
-      graphics.endFill();
+        graphics.beginFill(0xff0000);
+        graphics.drawCircle(110, 410, 60);
+        graphics.endFill();
 
-      graphics.beginFill(0x0000ff);
-      graphics.drawCircle(110, 570, 60);
-      graphics.endFill();
+        graphics.beginFill(0x0000ff);
+        graphics.drawCircle(110, 570, 60);
+        graphics.endFill();
 
-      var startX = 160;
-      var startY = 430;
-      var width = 30;
-      var height = 120;
+        var startX = 160;
+        var startY = 430;
+        var width = 30;
+        var height = 120;
 
-      graphics.beginFill(0xffff00);
-      graphics.moveTo(startX, startY);
-      graphics.lineTo(startX - width, startY + height/4);
-      graphics.lineTo(startX - width / 2, startY + height/4);
-      graphics.lineTo(startX - width / 2, startY + height - height/4);
-      graphics.lineTo(startX - width, startY + height - height/4);
-      graphics.lineTo(startX, startY + height);
-      graphics.lineTo(startX + width, startY + height - height/4);
-      graphics.lineTo(startX + width / 2, startY + height - height/4);
-      graphics.lineTo(startX + width / 2, startY + height/4);
-      graphics.lineTo(startX + width, startY + height/4);
-      graphics.endFill();
+        graphics.beginFill(0xffff00);
+        graphics.moveTo(startX, startY);
+        graphics.lineTo(startX - width, startY + height / 4);
+        graphics.lineTo(startX - width / 2, startY + height / 4);
+        graphics.lineTo(startX - width / 2, startY + height - height / 4);
+        graphics.lineTo(startX - width, startY + height - height / 4);
+        graphics.lineTo(startX, startY + height);
+        graphics.lineTo(startX + width, startY + height - height / 4);
+        graphics.lineTo(startX + width / 2, startY + height - height / 4);
+        graphics.lineTo(startX + width / 2, startY + height / 4);
+        graphics.lineTo(startX + width, startY + height / 4);
+        graphics.endFill();
 
-      graphics.alpha = 0.5;
-      graphics.fixedToCamera = true;
-      window.graphics = graphics;
-      mapHint.add(graphics);
+        graphics.alpha = 0.5;
+        graphics.fixedToCamera = true;
+        window.graphics = graphics;
+        mapHint.add(graphics);
 
-      this.objects.set('mapHint', mapHint);
+        this.objects.set('mapHint', mapHint);
 
-      mapHint.visible = false;
+        mapHint.visible = false;
     }
 
     createShootHint() {
-      var graphics = this.game.add.graphics();
-      var shootHint = this.game.add.group();
-      var style = { font: "18px Arial", fill: "#fff"};
+        var graphics = this.game.add.graphics();
+        var shootHint = this.game.add.group();
+        var style = {font: "18px Arial", fill: "#fff"};
 
-      var startHintX = 10;
-      var startHintY = 60;
+        var startHintX = 10;
+        var startHintY = 60;
 
-      graphics.beginFill(0xffffff);
-      graphics.drawRect(startHintX, startHintY, 250, 90);
-      graphics.endFill();
+        graphics.beginFill(0xffffff);
+        graphics.drawRect(startHintX, startHintY, 250, 90);
+        graphics.endFill();
 
-      var text = this.game.add.text(90, startHintY + 5, "shoot with", style);
-      text.fixedToCamera = true;
-      shootHint.add(text);
+        var text = this.game.add.text(90, startHintY + 5, "shoot with", style);
+        text.fixedToCamera = true;
+        shootHint.add(text);
 
-      graphics.beginFill(0xffff00);
-      graphics.drawRect(startHintX + 10, startHintY + 40, 230, 30);
-      graphics.endFill();
+        graphics.beginFill(0xffff00);
+        graphics.drawRect(startHintX + 10, startHintY + 40, 230, 30);
+        graphics.endFill();
 
-      var text = this.game.add.text(110, startHintY + 45, "space", style);
-      text.fixedToCamera = true;
-      shootHint.add(text);
+        var text = this.game.add.text(110, startHintY + 45, "space", style);
+        text.fixedToCamera = true;
+        shootHint.add(text);
 
-      graphics.alpha = 0.5;
-      graphics.fixedToCamera = true;
-      window.graphics = graphics;
-      shootHint.add(graphics);
+        graphics.alpha = 0.5;
+        graphics.fixedToCamera = true;
+        window.graphics = graphics;
+        shootHint.add(graphics);
 
-      this.objects.set('shootHint', shootHint);
+        this.objects.set('shootHint', shootHint);
 
-      shootHint.visible = false;
+        shootHint.visible = false;
     }
 
     createMoveHint() {
-      var graphics = this.game.add.graphics();
-      var moveHint = this.game.add.group();
-      var style = { font: "18px Arial", fill: "#fff"};
+        var graphics = this.game.add.graphics();
+        var moveHint = this.game.add.group();
+        var style = {font: "18px Arial", fill: "#fff"};
 
-      var startHintX = 10;
-      var startHintY = 60;
+        var startHintX = 10;
+        var startHintY = 60;
 
-      graphics.beginFill(0xffffff);
-      graphics.drawRect(startHintX, startHintY, 250, 150);
-      graphics.endFill();
-
-      var keyWidth = 30;
-      var keyStartY = startHintX + 160;
-      var keyStartX;
-
-      for (var i = 0; i < 2; i++) {
-        keyStartX = 130 * i + startHintX + 10;
-        graphics.beginFill(0xffff00);
-        graphics.drawRect(keyStartX, keyStartY, keyWidth, keyWidth);
-        var text = this.game.add.text(keyStartX + ((i === 0)? 8: 7), keyStartY + 2, (i === 0)? "A": "←", style);
-        text.fixedToCamera = true;
-        moveHint.add(text);
-        graphics.drawRect(keyStartX + keyWidth + 5, keyStartY, keyWidth, keyWidth);
-        var text = this.game.add.text(keyStartX + ((i === 0)? 8: 10) + keyWidth + 5, keyStartY + 2, (i === 0)? "S": "↓", style);
-        text.fixedToCamera = true;
-        moveHint.add(text);
-        graphics.drawRect(keyStartX + keyWidth + 5, keyStartY - keyWidth - 5, keyWidth, keyWidth);
-        var text = this.game.add.text(keyStartX + ((i === 0)? 7: 10) + keyWidth +5, keyStartY + 2 - keyWidth - 5, (i === 0)? "W": "↑", style);
-        text.fixedToCamera = true;
-        moveHint.add(text);
-        graphics.drawRect(keyStartX + keyWidth * 2 + 10, keyStartY, keyWidth, keyWidth);
-        var text = this.game.add.text(keyStartX + 7 + keyWidth * 2 + 10, keyStartY + 2, (i === 0)? "D": "→", style);
-        text.fixedToCamera = true;
-        moveHint.add(text);
+        graphics.beginFill(0xffffff);
+        graphics.drawRect(startHintX, startHintY, 250, 150);
         graphics.endFill();
-      }
 
-      var text = this.game.add.text(90, startHintY + 5, "move with", style);
-      text.fixedToCamera = true;
-      moveHint.add(text);
-      var text = this.game.add.text(130, startHintY + 40, "or", style);
-      text.fixedToCamera = true;
-      moveHint.add(text);
+        var keyWidth = 30;
+        var keyStartY = startHintX + 160;
+        var keyStartX;
 
-      graphics.alpha = 0.5;
-      graphics.fixedToCamera = true;
-      window.graphics = graphics;
-      moveHint.add(graphics);
+        for (var i = 0; i < 2; i++) {
+            keyStartX = 130 * i + startHintX + 10;
+            graphics.beginFill(0xffff00);
+            graphics.drawRect(keyStartX, keyStartY, keyWidth, keyWidth);
+            var text = this.game.add.text(keyStartX + ((i === 0) ? 8 : 7), keyStartY + 2, (i === 0) ? "A" : "←", style);
+            text.fixedToCamera = true;
+            moveHint.add(text);
+            graphics.drawRect(keyStartX + keyWidth + 5, keyStartY, keyWidth, keyWidth);
+            var text = this.game.add.text(keyStartX + ((i === 0) ? 8 : 10) + keyWidth + 5, keyStartY + 2, (i === 0) ? "S" : "↓", style);
+            text.fixedToCamera = true;
+            moveHint.add(text);
+            graphics.drawRect(keyStartX + keyWidth + 5, keyStartY - keyWidth - 5, keyWidth, keyWidth);
+            var text = this.game.add.text(keyStartX + ((i === 0) ? 7 : 10) + keyWidth + 5, keyStartY + 2 - keyWidth - 5, (i === 0) ? "W" : "↑", style);
+            text.fixedToCamera = true;
+            moveHint.add(text);
+            graphics.drawRect(keyStartX + keyWidth * 2 + 10, keyStartY, keyWidth, keyWidth);
+            var text = this.game.add.text(keyStartX + 7 + keyWidth * 2 + 10, keyStartY + 2, (i === 0) ? "D" : "→", style);
+            text.fixedToCamera = true;
+            moveHint.add(text);
+            graphics.endFill();
+        }
 
-      this.objects.set('moveHint', moveHint);
+        var text = this.game.add.text(90, startHintY + 5, "move with", style);
+        text.fixedToCamera = true;
+        moveHint.add(text);
+        var text = this.game.add.text(130, startHintY + 40, "or", style);
+        text.fixedToCamera = true;
+        moveHint.add(text);
+
+        graphics.alpha = 0.5;
+        graphics.fixedToCamera = true;
+        window.graphics = graphics;
+        moveHint.add(graphics);
+
+        this.objects.set('moveHint', moveHint);
     }
 
     createBases() {
@@ -409,10 +410,10 @@ export default class Creator {
     }
 
     createGameOverText() {
-      var style = { font: "50px Arial", fill: "#fff", align: "center"};
-      var text = this.game.add.text(150, 200, "", style);
-      text.fixedToCamera = true;
-      this.objects.set('gameOverText', text);
-      text.visible = false;
+        var style = {font: "50px Arial", fill: "#fff", align: "center"};
+        var text = this.game.add.text(150, 200, "", style);
+        text.fixedToCamera = true;
+        this.objects.set('gameOverText', text);
+        text.visible = false;
     }
 }

@@ -14,8 +14,13 @@ export default class TeamManager {
         this.objects.get('points.blue').setText(blueTickets + '/' + this.maxTickets);
     }
     
-    updateFlags() {
-        
+    updateFlags(redFlags, blueFlags) {
+        for(let i = 0; i < 3; i++) {
+            const redFlag = this.objects.get('statusFlag' + i + '.red');
+            const blueFlag = this.objects.get('statusFlag' + i + '.blue');
+            redFlag.visible = redFlags >= redFlag.minFlags;
+            blueFlag.visible = blueFlags >= blueFlag.minFlags;
+        }
     }
 
     add(team) {

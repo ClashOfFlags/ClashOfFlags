@@ -88,15 +88,28 @@ module.exports = class Room {
     }
 
     playerDied(team) {
-        if(team === 'red') {
+        if (team === 'red') {
             this.redTickets--;
-        } else if(team === 'blue') {
+        } else if (team === 'blue') {
             this.blueTickets--;
         }
 
         socket.io.sockets.to(this.id).emit('TicketsChangedEvent', {
             redTickets: this.redTickets,
             blueTickets: this.blueTickets
+        });
+    }
+
+    flagCaptured(team) {
+        if(team === 'red') {
+            this.redFlags--;
+        } else if(team === 'blue') {
+            this.blueFlags--;
+        }
+
+        socket.io.sockets.to(this.id).emit('FlagsChangedEvent', {
+            redFlags: this.redFlags,
+            blueFlags: this.blueFlags
         });
     }
 

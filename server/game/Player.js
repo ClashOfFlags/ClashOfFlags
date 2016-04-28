@@ -42,6 +42,10 @@ module.exports = class Player {
         this.socket.on('PlayerDeadEvent', payload => {
             this.room.playerDied(payload.team);
         });
+        
+        this.socket.on('FlagCapturedEvent', payload => {
+            this.room.flagCaptured(payload.team);
+        });
 
         this.socket.on('stat-entry', payload => {
             statisticRepository.createEntry(payload.key, payload.team, payload.options);

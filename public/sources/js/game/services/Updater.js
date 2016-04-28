@@ -53,34 +53,34 @@ export default class Updater {
         const players = this.teamManager.allPlayers();
 
         _.forIn(players, player => {
-            if(player.team.name === this.player.team.name){
-              var teamPlayer = player;
-              var color = '#0AFF12';
+            if (player.team.name === this.player.team.name) {
+                var teamPlayer = player;
+                var color = '#0AFF12';
 
-              if (teamPlayer.carryingFlag === true) {
-                  color = '#0000FF';
-              }
+                if (teamPlayer.carryingFlag === true) {
+                    color = '#0000FF';
+                }
 
-              if (teamPlayer === this.player) {
-                  color = '#FFFF00';
-              }
-
-              this.miniMapOverlay.rect(
-                  Math.floor(teamPlayer.x / 64) * this.miniMapSize,
-                  Math.floor(teamPlayer.y / 64) * this.miniMapSize,
-                  this.miniMapSize * 2, this.miniMapSize * 2, color);
-              this.miniMapOverlay.dirty = true;
-          }else{
-            if (player.carryingFlag === true) {
-                color = '#FF0000';
+                if (teamPlayer === this.player) {
+                    color = '#FFFF00';
+                }
 
                 this.miniMapOverlay.rect(
-                    Math.floor(player.x / 64) * this.miniMapSize,
-                    Math.floor(player.y / 64) * this.miniMapSize,
+                    Math.floor(teamPlayer.x / 64) * this.miniMapSize,
+                    Math.floor(teamPlayer.y / 64) * this.miniMapSize,
                     this.miniMapSize * 2, this.miniMapSize * 2, color);
                 this.miniMapOverlay.dirty = true;
+            } else {
+                if (player.carryingFlag === true) {
+                    color = '#FF0000';
+
+                    this.miniMapOverlay.rect(
+                        Math.floor(player.x / 64) * this.miniMapSize,
+                        Math.floor(player.y / 64) * this.miniMapSize,
+                        this.miniMapSize * 2, this.miniMapSize * 2, color);
+                    this.miniMapOverlay.dirty = true;
+                }
             }
-          }
         });
     }
 
@@ -104,54 +104,34 @@ export default class Updater {
     }
 
     collectTreasure(player, treasureChest) {
-      if(!this.isHero(player)) {
-          return;
-      }
-      treasureChest.collect(player);
+        if (!this.isHero(player)) {
+            return;
+        }
+        treasureChest.collect(player);
     }
 
     playerEntersBaseWithFlag(player, base) {
-        if(player.carryingFlag) {
-            if(player.team.name == base.team) {
+        if (player.carryingFlag) {
+            if (player.team.name == base.team) {
                 console.log('Flagge abgeben');
                 player.releaseFlag();
-                var color = (player.team.name === "red")? "blue" : "red";
-                var flag;
-                var gameOver = false;
-                if(this.objects.get('statusFlag0.' + color).visible === true){
-                  this.objects.get('statusFlag0.' + color).visible = false;
-                  flag = 'statusFlag0.' + color;
-                }else if(this.objects.get('statusFlag1.' + color).visible === true){
-                  this.objects.get('statusFlag1.' + color).visible = false;
-                  flag = 'statusFlag1.' + color;
-                }else if(this.objects.get('statusFlag2.' + color).visible === true){
-                  this.objects.get('statusFlag2.' + color).visible = false;
-                  flag = 'statusFlag2.' + color;
-                  gameOver = true;
-                }
-                this.network.sendremoveFlagFromStatusBar({
-                  flag:flag,
-                  color:player.team.name,
-                  gameOver:gameOver
-                })
+                const team = (player.team.name === "red") ? "blue" : "red";
 
-                if(gameOver){
-                  this.gameOver(player.team.name);
-                }
+                eventSystem().emit('flag_captured', {team: team});
             }
         }
     }
 
     gameOver(color) {
-      this.game.input.enabled = false;
-      this.game.physics.arcade.isPaused = true;
-      this.objects.get('gameOverText').setText('Game Over!\n '+color+' wins the game!');
-      this.objects.get('gameOverText').visible = true;
-      this.game.time.events.add(Phaser.Timer.SECOND * config.game.reloadPage.wait, this.reloadPage, this);
+        this.game.input.enabled = false;
+        this.game.physics.arcade.isPaused = true;
+        this.objects.get('gameOverText').setText('Game Over!\n ' + color + ' wins the game!');
+        this.objects.get('gameOverText').visible = true;
+        this.game.time.events.add(Phaser.Timer.SECOND * config.game.reloadPage.wait, this.reloadPage, this);
     }
 
     reloadPage() {
-      window.location.reload();
+        window.location.reload();
     }
 
     bulletHitBarrel(bullet, barrel) {
@@ -168,7 +148,7 @@ export default class Updater {
             scale: 1
         });
 
-        if(!this.isHero(bullet.shooter)) {
+        if (!this.isHero(bullet.shooter)) {
             return;
         }
 
@@ -178,7 +158,7 @@ export default class Updater {
             const distanceToBarrel = this.game.physics.arcade.distanceBetween(barrel, player);
             const barrelMaxRange = barrel.barrel.maxRange;
 
-            if(distanceToBarrel > barrelMaxRange) {
+            if (distanceToBarrel > barrelMaxRange) {
                 return;
             }
 
@@ -187,7 +167,7 @@ export default class Updater {
             player.damage(damage);
             this.network.sendDamage(player, damage);
 
-            if(player.isDead() && player.team.name !== bullet.shooter.team.name) {
+            if (player.isDead() && player.team.name !== bullet.shooter.team.name) {
                 bullet.shooter.killedPlayer();
             }
         });
@@ -213,18 +193,18 @@ export default class Updater {
     }
 
     bulletHitObstacle(bullet) {
-        if(!bullet.shooter.isAlien()){
-          this.createExplosionAnimation({
-              x: bullet.x,
-              y: bullet.y,
-              key: bullet.weapon + '_hit',
-              frameName: bullet.weapon + '_hit_000',
-              frameNameMax: 9,
-              frameSpeed: 100,
-              repeat: false,
-              scale: 1
-          });
-      }
+        if (!bullet.shooter.isAlien()) {
+            this.createExplosionAnimation({
+                x: bullet.x,
+                y: bullet.y,
+                key: bullet.weapon + '_hit',
+                frameName: bullet.weapon + '_hit_000',
+                frameNameMax: 9,
+                frameSpeed: 100,
+                repeat: false,
+                scale: 1
+            });
+        }
         bullet.kill();
     }
 
@@ -233,40 +213,40 @@ export default class Updater {
             return;
         }
 
-        if(!bullet.shooter.isAlien()){
-          this.createExplosionAnimation({
-            x: bullet.x,
-            y: bullet.y,
-            key: bullet.weapon + '_hit',
-            frameName: bullet.weapon + '_hit_000',
-            frameNameMax: 9,
-            frameSpeed: 100,
-            repeat: false,
-            scale: 1
-          });
+        if (!bullet.shooter.isAlien()) {
+            this.createExplosionAnimation({
+                x: bullet.x,
+                y: bullet.y,
+                key: bullet.weapon + '_hit',
+                frameName: bullet.weapon + '_hit_000',
+                frameNameMax: 9,
+                frameSpeed: 100,
+                repeat: false,
+                scale: 1
+            });
         }
 
         bullet.kill();
 
-        if(bullet.team.name === player.team.name) {
+        if (bullet.team.name === player.team.name) {
             return;
         }
 
         player.damage(bullet.power);
 
-        if(player.isDead()) {
+        if (player.isDead()) {
             bullet.shooter.killedPlayer();
         }
 
-        if(this.isHero(bullet.shooter)) {
+        if (this.isHero(bullet.shooter)) {
             this.network.sendDamage(player, bullet.power);
         }
     }
 
     playerCollectsFlag(player, flag) {
-      if(!player.isAlien()){
-        flag.collectFlag(player);
-      }
+        if (!player.isAlien()) {
+            flag.collectFlag(player);
+        }
     }
 
 }

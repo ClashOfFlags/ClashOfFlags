@@ -21,12 +21,12 @@ export default class NetworkService {
         this.registerEvent('TreasureChestStatusEvent', this.onTreasureChestStatus);
         this.registerEvent('PlayerUpdateWeaponEvent', this.onPlayerUpdateWeapon);
         this.registerEvent('PlayerAlienEvent', this.onPlayerAlien);
-        this.registerEvent('RemoveFlagFromStatusBar', this.onRemoveFlagFromStatusBar);
         this.registerEvent('PlayerDamageEvent', this.onPlayerDamage);
         this.registerEvent('AskForExp', this.answerWithExp);
         this.registerEvent('AnswerWithExp', this.onAnswerWithExp);
         this.registerEvent('FlagCollected', this.onFlagCollected);
         this.registerEvent('TicketsChangedEvent', this.onTicketsChanged);
+        this.registerEvent('FlagsChangedEvent', this.onFlagsChanged);
 
         eventSystem().on('bullet.shoot', (payload) => {
             this.objects.get('bulletGroup').add(payload.bullet);
@@ -52,6 +52,10 @@ export default class NetworkService {
 
         eventSystem().on('player_dead', (payload) => {
             this.sendPlayerDead(payload.team);
+        });
+
+        eventSystem().on('flag_captured', payload => {
+            this.sendFlagCaptured(payload.team);
         });
 
         eventSystem().on('player.change_direction:after', (payload) => {
@@ -174,10 +178,6 @@ export default class NetworkService {
         this.broadcast('PlayerShootEvent', payload);
     }
 
-    sendremoveFlagFromStatusBar(payload) {
-        this.broadcast('RemoveFlagFromStatusBar', payload);
-    }
-
     sendTreasureChestStatus(payload) {
         this.broadcast('TreasureChestStatusEvent', payload);
     }
@@ -247,9 +247,13 @@ export default class NetworkService {
             options: options
         });
     }
-    
+
     sendPlayerDead(team) {
-        this.emit('PlayerDeadEvent', { team: team });
+        this.emit('PlayerDeadEvent', {team: team});
+    }
+
+    sendFlagCaptured(team) {
+        this.emit('FlagCapturedEvent', {team: team});
     }
 
     /* Send Functions */
@@ -283,10 +287,11 @@ export default class NetworkService {
         const newUrl = window.location.origin + window.location.pathname + '?room=' + roomId;
 
         window.history.pushState({path: newUrl}, '', newUrl);
-        
+
         this.teamManager.maxTickets = event.maxTickets;
-        
+
         this.teamManager.updateTickets(event.redTickets, event.blueTickets);
+        this.teamManager.updateFlags(event.redFlags, event.blueFlags);
         this.getExp();
         this.askForExp();
     }
@@ -378,10 +383,15 @@ export default class NetworkService {
 
         player.setExp(event.exp);
     }
-    
+
     onTicketsChanged(event) {
-        console.log('TicketsChangedEvent', event);
+        console.log('onTicketsChanged', event);
         this.teamManager.updateTickets(event.redTickets, event.blueTickets);
+    }
+
+    onFlagsChanged(event) {
+        console.log('onFlagsChanged', event);
+        this.teamManager.updateFlags(event.redFlags, event.blueFlags);
     }
 
     targetRoomId() {
