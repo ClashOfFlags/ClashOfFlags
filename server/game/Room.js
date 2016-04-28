@@ -39,8 +39,14 @@ module.exports = class Room {
         player.roomSlot = roomSlot;
 
         player.socket.join(this.id);
-        this.players.push(player);
         player.tellRoom(this, roomSlot);
+
+        this.players.forEach(otherPlayer => {
+            player.addPlayer(otherPlayer);
+            otherPlayer.addPlayer(player);
+        });
+
+        this.players.push(player);
         player.socket.on('disconnect', () => this.onPlayerDisconnect(player));
     }
 
