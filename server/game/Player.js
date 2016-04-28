@@ -38,9 +38,9 @@ module.exports = class Player {
                     callback(exp);
                 });
         });
-        
+
         this.socket.on('PlayerDeadEvent', payload => {
-             this.room.playerDied(payload.team);
+            this.room.playerDied(payload.team);
         });
 
         this.socket.on('stat-entry', payload => {

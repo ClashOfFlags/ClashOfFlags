@@ -241,7 +241,7 @@ export default class NetworkService {
     }
 
     statEntry(key, team, options) {
-        this.socket.emit('stat-entry', {
+        this.emit('stat-entry', {
             key: key,
             team: team,
             options: options
@@ -249,7 +249,7 @@ export default class NetworkService {
     }
     
     sendPlayerDead(team) {
-        this.socket.emit('PlayerDeadEvent', { team: team });
+        this.emit('PlayerDeadEvent', { team: team });
     }
 
     /* Send Functions */
@@ -380,6 +380,7 @@ export default class NetworkService {
     }
     
     onTicketsChanged(event) {
+        console.log('TicketsChangedEvent', event);
         this.teamManager.updateTickets(event.redTickets, event.blueTickets);
     }
 

@@ -94,7 +94,7 @@ module.exports = class Room {
             this.blueTickets--;
         }
 
-        socket.io.broadast.to(this.id).emit('TicketsChangedEvent', {
+        socket.io.sockets.to(this.id).emit('TicketsChangedEvent', {
             redTickets: this.redTickets,
             blueTickets: this.blueTickets
         });
