@@ -48,7 +48,6 @@ module.exports = class Room {
         console.log('Player ' + player.id + ' disconnected from room ' + this.id + ' and cleared slot ' + player.roomSlot + ', nice.');
         this.roomSlots[player.roomSlot] = null;
         _.remove(this.players, {id: player.id});
-        socket.io.sockets.to(this.id).emit('PlayerDisconnectEvent', {id: player.id, slot: player.roomSlot});
 
         if (this.players.length === 0) {
             console.log('No more players left in room ' + this.id + ', closing...');
