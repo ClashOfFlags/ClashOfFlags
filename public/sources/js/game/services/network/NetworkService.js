@@ -55,6 +55,7 @@ export default class NetworkService {
         });
 
         eventSystem().on('flag_captured', payload => {
+            console.log('flag_captured', payload);
             this.sendFlagCaptured(payload.team);
         });
 
@@ -114,11 +115,7 @@ export default class NetworkService {
         });
     }
 
-    sendFlagCollected(flag) {
-        const payload = {
-            flag: flag
-        };
-
+    sendFlagCollected(payload) {
         this.broadcast('FlagCollected', payload);
     }
 
@@ -297,12 +294,13 @@ export default class NetworkService {
     }
 
     onFlagCollected(event) {
+        console.log('onFlagCollected', event);
         var flagObject = this.objects.get('flags.' + event.flag);
         flagObject.collected = true;
         flagObject.visible = false;
 
         const player = this.teamManager.findPlayer(event.player);
-        player.getFlag(this);
+        player.getFlag(flagObject);
     }
 
     onPlayerPosition(event) {

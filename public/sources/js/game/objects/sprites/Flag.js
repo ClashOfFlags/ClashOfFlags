@@ -20,14 +20,13 @@ export default class Flag extends Sprite{
             this.collected = true;
             this.visible = false;
             player.getFlag(this);
+
+            eventSystem().emit('flag.getscollected', {
+                flag: this.team,
+                player: player.number,
+                source: source
+            });
         }
-
-        eventSystem().emit('flag.getscollected', {
-            flag: this.team,
-            player: player.number,
-            source: source
-        });
-
     }
 
     respawn() {

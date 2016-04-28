@@ -111,6 +111,8 @@ export default class Updater {
     }
 
     playerEntersBaseWithFlag(player, base) {
+        console.log(player.carryingFlag, player.team.name, base.team);
+
         if (player.carryingFlag) {
             if (player.team.name == base.team) {
                 console.log('Flagge abgeben');
@@ -243,8 +245,10 @@ export default class Updater {
         }
     }
 
-    playerCollectsFlag(player, flag) {
+    playerCollectsFlag(player, flagGroup) {
         if (!player.isAlien()) {
+            const flag = flagGroup.children[0];
+            
             flag.collectFlag(player);
         }
     }
