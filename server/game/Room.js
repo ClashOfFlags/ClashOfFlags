@@ -94,6 +94,8 @@ module.exports = class Room {
             this.blueTickets--;
         }
 
+        this.checkGameOver();
+
         socket.io.sockets.to(this.id).emit('TicketsChangedEvent', {
             redTickets: this.redTickets,
             blueTickets: this.blueTickets
@@ -101,16 +103,24 @@ module.exports = class Room {
     }
 
     flagCaptured(team) {
-        if(team === 'red') {
+        if (team === 'red') {
             this.redFlags--;
-        } else if(team === 'blue') {
+        } else if (team === 'blue') {
             this.blueFlags--;
         }
+
+        this.checkGameOver();
 
         socket.io.sockets.to(this.id).emit('FlagsChangedEvent', {
             redFlags: this.redFlags,
             blueFlags: this.blueFlags
         });
+    }
+
+    checkGameOver() {
+        if (this.redFlags <= 0 || this.blueFlags <= 0 || this.redTickets <= 0 || this.blueTickets <= 0) {
+            this.close();
+        }
     }
 
 };
