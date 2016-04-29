@@ -55,10 +55,6 @@ export default class NetworkService {
             this.sendPlayerDead(payload.team);
         });
 
-        eventSystem().on('flag_captured', payload => {
-            this.sendFlagCaptured(payload.player, payload.team);
-        });
-
         eventSystem().on('player.change_direction:after', (payload) => {
             console.log(' ' + payload.source);
             if (payload.source == "network") {

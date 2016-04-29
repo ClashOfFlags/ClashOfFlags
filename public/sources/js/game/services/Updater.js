@@ -125,7 +125,7 @@ export default class Updater {
                 player.releaseFlag();
                 const team = (player.team.name === "red") ? "blue" : "red";
 
-                eventSystem().emit('flag_captured', {player: player, team: team});
+                this.network.sendFlagCaptured(player, team);
             }
         }
     }
