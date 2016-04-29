@@ -318,8 +318,8 @@ export default class Player extends Sprite {
     getAlien() {
       this.alien = true;
       this.speed = 600;
-      this.loadTexture(player.team.name+'_alien', 0, true);
-      this.weapon.updateWeapon(player, 'alien');
+      this.loadTexture(this.team.name+'_alien', 0, true);
+      this.weapon.updateWeapon(this.player, 'alien');
     }
 
     resetAlien() {
